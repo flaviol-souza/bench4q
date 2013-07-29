@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<web:web-app xmlns:app="http://geronimo.apache.org/xml/ns/j2ee/application-2.0" 
+xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
+xmlns:client="http://geronimo.apache.org/xml/ns/j2ee/application-client-2.0" 
+xmlns:conn="http://geronimo.apache.org/xml/ns/j2ee/connector-1.2" 
+xmlns:dep="http://geronimo.apache.org/xml/ns/deployment-1.2" 
+xmlns:ejb="http://openejb.apache.org/xml/ns/openejb-jar-2.2" 
+xmlns:jaspi="http://geronimo.apache.org/xml/ns/geronimo-jaspi" 
+xmlns:log="http://geronimo.apache.org/xml/ns/loginconfig-2.0" 
+xmlns:name="http://geronimo.apache.org/xml/ns/naming-1.2" 
+xmlns:pers="http://java.sun.com/xml/ns/persistence" 
+xmlns:pkgen="http://openejb.apache.org/xml/ns/pkgen-2.1" 
+xmlns:sec="http://geronimo.apache.org/xml/ns/security-2.0" 
+xmlns:web="http://geronimo.apache.org/xml/ns/j2ee/web-2.0.1">
+
+   <dep:environment>
+        <dep:moduleId>
+            <dep:groupId>default</dep:groupId>
+            <dep:artifactId>bench4q</dep:artifactId>
+            <dep:version>1.0</dep:version>
+            <dep:type>car</dep:type>
+        </dep:moduleId>
+        <dep:dependencies>
+        	<dep:dependency>
+        		<dep:groupId>console.dbpool</dep:groupId>
+        		<dep:artifactId>jdbc_DB21W</dep:artifactId>
+        	</dep:dependency>
+        </dep:dependencies>
+    </dep:environment>
+    
+    <web:context-root>/bench4q</web:context-root>
+
+    <!-- security settings, if any, go here -->
+
+    <name:resource-ref>
+        <name:ref-name>jdbc/MyDataSource</name:ref-name>
+        <name:resource-link>jdbc/DB21W</name:resource-link>
+    </name:resource-ref>
+</web:web-app>
