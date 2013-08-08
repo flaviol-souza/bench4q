@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/home/edwin/workspace/Bench4QTool/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="/home/edwin/workspace/Bench4QTool/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="/home/edwin/workspace/Bench4QTool/lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="/home/edwin/workspace/Bench4QTool/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/edwin/workspace/Bench4QTool/lib/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="/home/edwin/workspace/Bench4QTool/lib/jdom.jar"/>
+	<classpathentry kind="lib" path="/home/edwin/workspace/Bench4QTool/lib/jfreechart-1.0.13.jar"/>
+	<classpathentry kind="lib" path="/home/edwin/workspace/Bench4QTool/lib/picocontainer-1.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
