@@ -1,1 +1,5 @@
 /Bench4QTool/bin/
+/SUT/build/
+ClusterMon/bin/
+ServerMon/bin/
+DB2Generator/bin/
