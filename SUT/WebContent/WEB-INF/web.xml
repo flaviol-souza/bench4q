@@ -5,6 +5,11 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
   <display-name>bench4q</display-name>
   <description>Bench4Q</description>
+    <servlet>  
+        <servlet-name>NotifyStartup</servlet-name>  
+        <servlet-class>org.bench4Q.servlet.NotifyStartup</servlet-class>  
+        <load-on-startup>0</load-on-startup>  
+    </servlet>  
 	<servlet>
 		<servlet-name>home_servlet</servlet-name>
 		<servlet-class>
