@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.13.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/picocontainer-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.runtime_3.2.0.v20060603.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.jface.text_3.2.0.v20060605-1400.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.jface_3.2.0.I20060605-1400.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.osgi_3.2.0.v20060601.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.text_3.2.0.v20060605-1400.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/sqlitejdbc-v056.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

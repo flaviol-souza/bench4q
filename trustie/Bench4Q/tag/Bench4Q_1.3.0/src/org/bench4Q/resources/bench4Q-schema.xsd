@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="bench4Q">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="testName" type="xs:string" />
+				<xs:element name="testDescription" type="xs:string" />
+				<xs:element name="rbe" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="interval"
+								type="xs:double" />
+							<xs:element name="prepair"
+								type="xs:integer" />
+							<xs:element name="cooldown"
+								type="xs:integer" />
+							<xs:element name="out" type="xs:string" />
+							<xs:element name="tolerance"
+								type="xs:double" />
+							<xs:element name="retry" type="xs:integer" />
+							<xs:element name="thinktime"
+								type="xs:double" />
+							<xs:element name="mix">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration
+											value="shopping" />
+										<xs:enumeration
+											value="ordering" />
+										<xs:enumeration
+											value="browsing" />
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="slow" type="xs:double"
+								minOccurs="0" />
+							<xs:element name="getImage"
+								type="xs:boolean">
+							</xs:element>
+							<xs:element name="baseURL" type="xs:string" />
+							<xs:element name="ebs"
+								maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="baseLoad"
+											type="xs:integer" />
+										<xs:element name="randomLoad"
+											type="xs:integer" />
+										<xs:element name="rate"
+											type="xs:integer" />
+										<xs:element name="triggerTime"
+											type="xs:integer" />
+										<xs:element name="stdyTime"
+											type="xs:integer" />									
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+						<xs:attribute name="rbetype">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="open" />
+									<xs:enumeration value="closed" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

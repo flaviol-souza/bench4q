@@ -1,0 +1,347 @@
+<?xml version="1.0"?>
+<scenario>
+	<behaviors>
+		<plugins>
+			<use id="replayHttp" name="HttpInjector">
+				<params>
+					<param name="indepthload" value=""></param>
+					<param name="proxyuserpass" value=""></param>
+					<param name="useragent" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="proxyusername" value=""></param>
+					<param name="preemptiveauthentication" value=""></param>
+				</params>
+			</use>
+			<use id="replayTimer" name="ConstantTimer"></use>
+		</plugins>
+		<behavior id="session">
+			
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value="subject=BIOGRAPHIES"></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/new_products"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="31"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_33.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="47"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_756.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="0"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_471.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="15"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_883.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="0"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_228.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="1155"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value="I_ID=131"></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/product_detail"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="2371"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/home"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="31"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_602.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="62"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_24.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="0"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_139.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="16"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_454.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+			<timer use="replayTimer" name="sleep">
+				<params>
+					<param name="duration_arg" value="16"></param>
+				</params>
+			</timer>
+
+			<sample use="replayHttp" name="get">
+				<params>
+					<param name="password" value=""></param>
+					<param name="parameters" value=""></param>
+					<param name="realm" value=""></param>
+					<param name="proxyport" value=""></param>
+					<param name="proxyhost" value=""></param>
+					<param name="cookies" value=""></param>
+					<param name="proxypassword" value=""></param>
+					<param name="hostauth" value=""></param>
+					<param name="cookiepolicy" value=""></param>
+					<param name="uri" value="http://133.133.133.95:8080/bench4Q/Images/thumb_125.jpg"></param>
+					<param name="username" value=""></param>
+					<param name="redirect" value=""></param>
+					<param name="localaddress" value=""></param>
+					<param name="proxylogin" value=""></param>
+				</params>
+			</sample>
+
+
+		<!-- ^^^ Insert new recordings here.  (Do not remove this line.) -->
+
+		</behavior>
+	</behaviors>
+	<loadprofile></loadprofile>
+</scenario>
+

@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>The Bench4Q @version@</title>
+</head>
+<body>
+
+<h1>The Bench4Q</h1>
+<strong>A QoS Oriented B2C Benchmark</strong>
+
+<h2>What is TPC-W</h2>
+<p>TPC-W is a transactional web e-Commerce benchmark, introduced by the Transaction Processing Performance Council. TPC-W specifies an e-Commerce workload that simulates the activities of a retail website which produces heavy load on the backend database.</p>
+<p>The workload is performed in a controlled internet commerce environment that simulates the activities of a business oriented transactional web server. The workload exercises a breadth of system components associated with such environments.</p>
+
+<p>processed per second. Multiple web interactions are used to simulate the activity of a retail store, and each interaction is subject to a response time constraint. TPC-W simulates three different profiles by varying the ratio of browse to buy: primarily shopping (WIPS), browsing (WIPSb) and web-based ordering (WIPSo). The primary metrics are the WIPS rate, the associated price per WIPS ($/WIPS), and the availability date of the priced configuration.</p>
+<p>Users of the TPC-W benchmark can browse and order products from the website. In the case of TPC-W the products are books. The expected introduction or Home page is the first page user will see. It includes the company logo, promotional items and navigation options to the top best selling books, a list of new books, search pages, client's shopping cart, and order status pages. User can browse pages containing a list of new or best selling books grouped by subject, or perform searches against all books based upon a title, author or subject. A product page will give you detailed information for the book along with a picture of the book's front cover. User may order books by entering the order web pages. If user is a new customer s/he will have to fill out a customer registration page while for returning customers their information will be retrieved from the database and filled in automatically for them. User can change the quantity of the order or delete a book from the shopping cart. When user wishes to buy, s/he enters credit card information and submits the order. The system will obtain credit card authorization from a Payment Gateway Emulator (PGE), and present the user with an order confirmation page. At a later date user can view the status of his/her last order. Two additional web pages are provided for the system administrator to change book's front cover picture and price. This change is reflected in the new product book list. Essentially, the TPC-W benchmark provides basic functionality required of an Internet e-Commerce website.</p>
+<p>TPC-W benchmark specifies the application database schema, the set of 14 web interactions (web pages), and how their execution manipulates application data. It also specifies data consistency and transactional requirements, database scaling and population, and various other aspects, e.g., which web interactions must be covered by SSL. However, TPC-W neither provides sample implementation of the application, nor it prescribes any implementation methodic or limits it to a specific technology. Besides the application structure, TPC-W specifies all aspects of the workload profile, performance metrics of interest, and required structure of the official disclosure report.</p>
+
+<h2>What is Bench4Q</h2>
+<p>The QoS of Internetwares in B2C business are high threatened and it should be the responsibility of Internetware Middleware to guarantee this QoS. So a B2C benchmark is very critical to evaluate the capacity of QoS guarantee of Internetware Middleware. The existing B2C benchmark TPC-W is not competent to be such a benchmark. We design a QoS oriented B2C benchmark for Internetware Middleware, which is named Bench4Q. This benchmark has made many extensions of load simulation and metrics analysis of TPC-W specification. We have also implemented a Bench4Q Tool to assist to use Bench4Q.</p>
+<h3>Key features</h3>
+<p>It is distributed. Bench4Q Tool makes it easy to coordinate and monitor the activity of agents(which generate load) across a network from a central console.</p>
+<p>It has two test mode, open and closed. The open mode simulates a new customer when needed and can simulate unlimited customers. While the close mode can only simulate limited customers, a new customer can be simulated only when an old customer has been destroyed.</p>
+<p>Web tier relies on the session handling provided by the Servlet Container.</p>
+<p>It is fully J2EE-compliant and packaged; additional application server-specific deployment descriptors (DD) are provided for the Application Server.</p>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+package org.bench4Q.agent.rbe.trans;
+
+import org.bench4Q.agent.rbe.EB;
+import org.bench4Q.agent.rbe.RBE;
+import org.bench4Q.agent.rbe.communication.EBStats;
+import org.bench4Q.agent.rbe.util.CharSetStrPattern;
+import org.bench4Q.agent.rbe.util.StrStrPattern;
+import org.bench4Q.agent.rbe.util.URLUtil;
+
+/*
+ * TPC-W Administrative Request transition from the product detail page
+ *  to the admin request page.  Supplies the I_ID of the book being
+ *  changed.
+ *  */
+public class TransAdminReq extends Transition {
+
+	private static final StrStrPattern iid = new StrStrPattern("I_ID=");
+
+	public String request(EB eb, String html) {
+		String url;
+		int i, e, id;
+
+		/* Find the I_ID to add. */
+		i = iid.find(html);
+		if (i == -1) {
+			EBStats.getEBStats().error(2, "Unable to find I_ID i n admin request page.", "???");
+			return ("");
+		}
+		i = i + iid.length();
+
+		e = CharSetStrPattern.notDigit.find(html.substring(i));
+		if (e == -1) {
+			EBStats.getEBStats().error(2, "Unable to find end of I_ID in admin request page.", "???");
+			return ("");
+		}
+		e = e + i;
+		id = Integer.parseInt(html.substring(i, e));
+
+		url = EB.adminReqURL + "?" + URLUtil.field_iid + "=" + id;
+
+		return (eb.addIDs(url));
+	}
+}

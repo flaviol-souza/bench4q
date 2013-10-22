@@ -1,0 +1,56 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: ServerMonitorMFC - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x804 /fo"Release/ServerMonitorMFC.res" /d "NDEBUG" /d "_AFXDLL" "E:\workdir\2010 OW2比赛\ServerMonitorMFC\ServerMonitorMFC.rc"" 
+Creating temporary file "C:\DOCUME~1\ZHOUXI~1\LOCALS~1\Temp\RSP657.tmp" with contents
+[
+/nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_MBCS" /D "_USRDLL" /Fp"Release/ServerMonitorMFC.pch" /Yu"stdafx.h" /Fo"Release/" /Fd"Release/" /FD /c 
+"E:\workdir\2010 OW2比赛\ServerMonitorMFC\GetMonData.cpp"
+"E:\workdir\2010 OW2比赛\ServerMonitorMFC\org_bench4Q_servermonitor_ServerDataManager.cpp"
+"E:\workdir\2010 OW2比赛\ServerMonitorMFC\ServerMonData.cpp"
+"E:\workdir\2010 OW2比赛\ServerMonitorMFC\ServerMonitorMFC.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ZHOUXI~1\LOCALS~1\Temp\RSP657.tmp" 
+Creating temporary file "C:\DOCUME~1\ZHOUXI~1\LOCALS~1\Temp\RSP658.tmp" with contents
+[
+/nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_MBCS" /D "_USRDLL" /Fp"Release/ServerMonitorMFC.pch" /Yc"stdafx.h" /Fo"Release/" /Fd"Release/" /FD /c 
+"E:\workdir\2010 OW2比赛\ServerMonitorMFC\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ZHOUXI~1\LOCALS~1\Temp\RSP658.tmp" 
+Creating temporary file "C:\DOCUME~1\ZHOUXI~1\LOCALS~1\Temp\RSP659.tmp" with contents
+[
+/nologo /subsystem:windows /dll /incremental:no /pdb:"Release/ServerMonitorMFC.pdb" /machine:I386 /def:".\ServerMonitorMFC.def" /out:"Release/ServerMonitorMFC.dll" /implib:"Release/ServerMonitorMFC.lib" 
+".\Release\GetMonData.obj"
+".\Release\org_bench4Q_servermonitor_ServerDataManager.obj"
+".\Release\ServerMonData.obj"
+".\Release\ServerMonitorMFC.obj"
+".\Release\StdAfx.obj"
+".\Release\ServerMonitorMFC.res"
+]
+Creating command line "link.exe @C:\DOCUME~1\ZHOUXI~1\LOCALS~1\Temp\RSP659.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+StdAfx.cpp
+Compiling...
+GetMonData.cpp
+org_bench4Q_servermonitor_ServerDataManager.cpp
+ServerMonData.cpp
+ServerMonitorMFC.cpp
+E:\workdir\2010 OW2比赛\ServerMonitorMFC\ServerMonitorMFC.cpp(222) : warning C4018: '<' : signed/unsigned mismatch
+Generating Code...
+Linking...
+   Creating library Release/ServerMonitorMFC.lib and object Release/ServerMonitorMFC.exp
+
+
+
+<h3>Results</h3>
+ServerMonitorMFC.dll - 0 error(s), 1 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bench4Q xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="bench4Q-schema.xsd">
+  <testName />
+  <testDescription />
+  <rbe rbetype="closed">
+    <interval>1.0</interval>
+    <prepair>600</prepair>
+    <cooldown>300</cooldown>
+    <out>out</out>
+    <tolerance>1.0</tolerance>
+    <retry>0</retry>
+    <thinktime>1.0</thinktime>
+    <urlConnectionTimeOut>0</urlConnectionTimeOut>
+    <urlReadTimeOut>0</urlReadTimeOut>
+    <mix>shopping</mix>
+    <slow>1.0</slow>
+    <getImage>true</getImage>
+    <baseURL>http://localhost:8080/jaspte</baseURL>
+    <ebs>
+      <baseLoad>10</baseLoad>
+      <randomLoad>10</randomLoad>
+      <rate>0</rate>
+      <triggerTime>10</triggerTime>
+      <stdyTime>60</stdyTime>
+    </ebs>
+    <ebs>
+      <baseLoad>20</baseLoad>
+      <randomLoad>20</randomLoad>
+      <rate>0</rate>
+      <triggerTime>100</triggerTime>
+      <stdyTime>60</stdyTime>
+    </ebs>
+  </rbe>
+</bench4Q>
+

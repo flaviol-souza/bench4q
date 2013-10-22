@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Bench4Q
+Bundle-SymbolicName: ScriptBQ; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: scriptbq.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.console;bundle-version="3.4.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/ganymed-ssh2-build210.jar,
+ lib/httpcapture.jar,
+ .

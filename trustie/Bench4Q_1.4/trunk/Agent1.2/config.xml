@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Config">
+	<item value="1200" key="stdyTime"/>
+	<item value="0" key="prepairTime"/>
+	<item value="34343434" key="tenant"/>
+	<item value="30000" key="STOdelay"/>
+	<item value="0.01" key="thinkTime"/>
+	<item value="false" key="isScript"/>
+	<item value="http://133.133.133.95:8080/bench4Q" key="baseURL"/>
+	<item value="100" key="baseLoad"/>
+	<item value="60000" key="STOperiod"/>
+	<item value="0" key="cooldown"/>
+	<item value="shopping" key="mix"/>
+</section>
