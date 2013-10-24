@@ -1,6 +1,6 @@
 /**
  * =========================================================================
- * 					Bench4Q Server Cluster Monitor
+ * 						Bench4Q Server Monitor
  * =========================================================================
  * 
  * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
@@ -24,10 +24,6 @@
  */
 package org.bench4Q.servermonitor;
 
-/**
- * @author Administrator
- *
- */
 public class ServerDataWithTimeOfReceipt extends ServerData {
 
 	private static final long serialVersionUID = -4333012583324933330L;
@@ -35,6 +31,8 @@ public class ServerDataWithTimeOfReceipt extends ServerData {
 	/**
 	 * the time (on leader machine) the leader received this ServerData,
 	 * it can be converted to absolute time with Java's GregorianCalendar class
+	 * when using ServerMon (not ClusterMon), the machine on which ServerMon runs
+	 * is considered to be the leader
 	 */
 	private long receiptTimeMillis;
 

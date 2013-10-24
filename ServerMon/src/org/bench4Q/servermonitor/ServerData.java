@@ -1,6 +1,6 @@
 /**
  * =========================================================================
- * 					Bench4Q Server Cluster Monitor
+ * 						Bench4Q Server Monitor
  * =========================================================================
  * 
  * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
