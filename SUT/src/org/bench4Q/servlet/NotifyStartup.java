@@ -32,8 +32,9 @@ public class NotifyStartup extends HttpServlet {
 		PrintStream out = null;
 		try {
 			client = new Socket("bench4qdb", 8888);
-			out = new PrintStream(client.getOutputStream());  
-			String fromUser = "algo:8080";
+			out = new PrintStream(client.getOutputStream()); 
+			String hostname = java.net.InetAddress.getLocalHost().getHostName();
+        		String fromUser = "{\"hostname\":\""+hostname+"\"}"; 
 			out.print(fromUser);
 			out.close();
 		    client.close();
