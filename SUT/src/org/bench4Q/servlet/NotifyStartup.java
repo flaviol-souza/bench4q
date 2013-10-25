@@ -31,15 +31,15 @@ public class NotifyStartup extends HttpServlet {
 		Socket client = null;
 		PrintStream out = null;
 		try {
-			client = new Socket("bench4qdb", 8889);
+			client = new Socket("bench4qbalancer", 8889);
 			out = new PrintStream(client.getOutputStream()); 
 			String hostname = java.net.InetAddress.getLocalHost().getHostName();
-        		String fromUser = "{\"hostname\":\""+hostname+"\"}"; 
+        	String fromUser = "{\"hostname\":\""+hostname+"\"}"; 
 			out.print(fromUser);
 			out.close();
 		    client.close();
 		} catch (UnknownHostException ex) {
-			System.out.println("Couldn't connect to the server");
+			System.err.println("Couldn't connect to the server: "+ex.toString());
 		} catch (IOException ex) {
 			System.err.println(ex.toString());
 		}
