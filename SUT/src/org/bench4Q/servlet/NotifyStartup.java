@@ -31,7 +31,7 @@ public class NotifyStartup extends HttpServlet {
 		Socket client = null;
 		PrintStream out = null;
 		try {
-			client = new Socket("bench4qdb", 8889);
+			client = new Socket("bench4qbalancer", 8889);
 			out = new PrintStream(client.getOutputStream()); 
 			String hostname = java.net.InetAddress.getLocalHost().getHostName();
         		String fromUser = "{\"hostname\":\""+hostname+"\"}"; 
