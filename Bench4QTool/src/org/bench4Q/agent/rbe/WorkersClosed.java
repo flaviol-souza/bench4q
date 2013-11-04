@@ -143,7 +143,7 @@ public class WorkersClosed extends Workers {
 		}
 
 		for (EB eb : ebs) {
-			((EBClosed) eb).setTest(false);
+			((EBClosed) eb).setTerminate(true);
 			// ((EBClosed) eb).stop();
 		}
 		ebs = null;

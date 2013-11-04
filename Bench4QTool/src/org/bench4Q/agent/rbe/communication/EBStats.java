@@ -230,7 +230,7 @@ public class EBStats implements Sendable {
 	}
 
 	/**
-	 * record session information. session[0][] records the session strated at
+	 * record session information. session[0][] records the session started at
 	 * that time. session[1][] records the session ended at that time.
 	 * 
 	 * @param start

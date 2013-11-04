@@ -378,24 +378,22 @@ public class P_WIPSSection extends JPanel implements AgentInfoObserver {
 
 	@Override
 	public void saveTheChart(String prefix) {
-		if (!(VIPrate == 0.0 && m_type != Type.all)) {
-			if (m_type == Type.all)
-				prefix = prefix + "_WIPS_total.jpeg";
-			else if (m_type == Type.VIP)
-				prefix = prefix + "_WIPS_VIP.jpeg";
-			else {
-				prefix = prefix + "_WIPS_Normal.jpeg";
-			}
-			File file = new File(prefix);
-			try {
-				ChartUtilities.saveChartAsJPEG(file, chart, 730, 600);
-			} catch (IOException e) {
-				System.out.println("cannot save the WIPS pic");
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// System.out.println(m_type);
-			}
-
+		if(m_type == Type.all)
+			prefix = prefix + "_WIPS_total.jpeg";
+		else if(m_type == Type.VIP)
+			prefix = prefix + "_WIPS_VIP.jpeg";
+		else {
+			prefix = prefix + "_WIPS_Normal.jpeg";
 		}
+		File file = new File(prefix);
+		try {
+			ChartUtilities.saveChartAsJPEG(file, chart, 730, 600);
+		} catch (IOException e) {
+			System.out.println("cannot save the WIPS pic");
+			e.printStackTrace();
+		} catch (IllegalArgumentException e){
+//			System.out.println(m_type);
+		}
+		
 	}
 }

@@ -106,27 +106,27 @@ public class M_RequestPanel extends JPanel {
 				testResultPicWIRTSection, m_resources
 						.getString("testResultPicWIRTSection.tip"));
 		
-//		JPanel BrowsePicWIRTSection = new P_WIRTSection(m_resources,
-//				m_processControl, m_swingDispatcherFactory, getTotalOrNot,
-//				agentIdentity, m_agentsCollection, type, InteractionType.Browse);
-//		// testResultPicWIRTSection
-//		// .setBorder(createTitledBorder("testResultPicWIRTSection.tip"));
-//		testResultPicTablePane.addTab(m_resources
-//				.getString("BrowsePicWIRTSection.title"), m_resources
-//				.getImageIcon("testResultPicWIRTSection.image"),
-//				BrowsePicWIRTSection, m_resources
-//						.getString("BrowsePicWIRTSection.tip"));
-//		
-//		JPanel OrderPicWIRTSection = new P_WIRTSection(m_resources,
-//				m_processControl, m_swingDispatcherFactory, getTotalOrNot,
-//				agentIdentity, m_agentsCollection, type, InteractionType.Order);
-//		// testResultPicWIRTSection
-//		// .setBorder(createTitledBorder("testResultPicWIRTSection.tip"));
-//		testResultPicTablePane.addTab(m_resources
-//				.getString("OrderPicWIRTSection.title"), m_resources
-//				.getImageIcon("testResultPicWIRTSection.image"),
-//				OrderPicWIRTSection, m_resources
-//						.getString("OrderPicWIRTSection.tip"));
+		JPanel BrowsePicWIRTSection = new P_WIRTSection(m_resources,
+				m_processControl, m_swingDispatcherFactory, getTotalOrNot,
+				agentIdentity, m_agentsCollection, type, InteractionType.Browse);
+		// testResultPicWIRTSection
+		// .setBorder(createTitledBorder("testResultPicWIRTSection.tip"));
+		testResultPicTablePane.addTab(m_resources
+				.getString("BrowsePicWIRTSection.title"), m_resources
+				.getImageIcon("testResultPicWIRTSection.image"),
+				BrowsePicWIRTSection, m_resources
+						.getString("BrowsePicWIRTSection.tip"));
+		
+		JPanel OrderPicWIRTSection = new P_WIRTSection(m_resources,
+				m_processControl, m_swingDispatcherFactory, getTotalOrNot,
+				agentIdentity, m_agentsCollection, type, InteractionType.Order);
+		// testResultPicWIRTSection
+		// .setBorder(createTitledBorder("testResultPicWIRTSection.tip"));
+		testResultPicTablePane.addTab(m_resources
+				.getString("OrderPicWIRTSection.title"), m_resources
+				.getImageIcon("testResultPicWIRTSection.image"),
+				OrderPicWIRTSection, m_resources
+						.getString("OrderPicWIRTSection.tip"));
 		
 		
 		

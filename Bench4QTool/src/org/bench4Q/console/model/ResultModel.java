@@ -51,15 +51,12 @@ import org.bench4Q.console.ui.transfer.AgentInfo;
 import org.bench4Q.console.ui.transfer.AgentInfoObserver;
 import org.bench4Q.console.ui.transfer.AgentsCollection;
 
-//import com.sun.org.apache.bcel.internal.generic.NEW;
-
-
 /**
  * @author duanzhiquan
  * 
  */
 public class ResultModel implements AgentInfoObserver {
-
+	
 	private File m_selectedFile;
 	private AgentsCollection m_agentsCollection;
 	private ArrayList<AgentInfo> m_result;
@@ -118,10 +115,15 @@ public class ResultModel implements AgentInfoObserver {
 	private ErrorSet[] errors_norm = new ErrorSet[15];
 	private Map<String, ServerInfo> m_MultiServers = new HashMap<String, ServerInfo>();
 	private ArrayList<serverMon> m_serverMon = new ArrayList<serverMon>();
-	int VIPrate;
-	int time = -1;
+	private int VIPrate;
+	private int time = -1;
+	private DecimalFormat df = new DecimalFormat("0.0");
 	
 	enum type {all, normal, vip};
+	
+	private double[] trans_avg_res = new double[15];
+	private double[] trans_avg_thp = new double[15];
+	private double[] trans_avg_ratio = new double[15];
 
 	/**
 	 * @param resources
@@ -156,8 +158,22 @@ public class ResultModel implements AgentInfoObserver {
 	public void SaveToFile() {
 		CalTotalResult();
 		FileWriter outstream;
+		FileWriter outstreamCSV;
 		try {
 			outstream = new FileWriter(m_selectedFile);
+			String nameS = m_selectedFile.getAbsolutePath();
+			String lastname;
+			if(nameS.endsWith(".bq")){
+				nameS = nameS.substring(0, nameS.length()-3);
+			}
+			lastname = nameS.concat(".csv");
+			File file = new File(lastname);
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			outstreamCSV = new FileWriter(file);
 
 			outstream.write("bench4Q test result\n\n");
 			
@@ -298,6 +314,17 @@ public class ResultModel implements AgentInfoObserver {
 //
 			outstream
 					.write("****************************************************\n");
+			outstream
+			.write("Transaction name    Response Time\t\tThroughput\t\tRatio\n");
+			outstreamCSV.write("Transaction name,Response Time,Throughput,Ratio\n");
+			for (int i = 1; i < 15; i++) {
+				String out = String.format("trans " + name[i] + "          " + "%-10.1f ms\t\t" + "%-10.1f\t\t" +"%-3.1f %%\n", trans_avg_res[i], trans_avg_thp[i], trans_avg_ratio[i]);
+				outstreamCSV.write("trans " + name[i] + "," + trans_avg_res[i] + "," + trans_avg_thp[i] + "," + trans_avg_ratio[i] + "\n");
+				outstream.write(out);
+			}
+			outstreamCSV.close();
+			outstream
+			.write("****************************************************\n");
 			outstream.write("ERROR: \n");
 			int totalerror=0;
 			for (int i = 0; i < 15; i++) {
@@ -454,6 +481,9 @@ public class ResultModel implements AgentInfoObserver {
 
 		}
 		
+		TransAveResponseCal();
+		TransAvgThroughputCal();
+		
 		WIRTCal(wirt, type.all);
 		WIRTCal(wirt_vip, type.vip);
 		WIRTCal(wirt_norm, type.normal);
@@ -469,6 +499,23 @@ public class ResultModel implements AgentInfoObserver {
 			ServerCal();
 		
 
+	}
+
+	private void TransAvgThroughputCal() {
+		int length = webInteractionThroughput[0].length;
+		int sum;
+		int total = 0;
+		for (int j = 0; j < 15; j++) {
+			sum = 0;
+			for (int i = 0; i < length; i++) 
+				sum += webInteractionThroughput[j][i];
+			trans_avg_thp[j] = sum;
+			total += sum;
+		}
+		for(int i = 0; i < 15; i++){
+			trans_avg_ratio[i] = Double.parseDouble(df.format(trans_avg_thp[i] / total * 100));
+		}
+		
 	}
 
 	public void addAgent(AgentInfo agentInfo) throws ConsoleException {
@@ -675,6 +722,21 @@ public class ResultModel implements AgentInfoObserver {
 			serMon.memory_avg = Double.parseDouble(df.format(Mem_avg));
 			
 			m_serverMon.add(serMon);
+		}
+	}
+	
+	private void TransAveResponseCal(){
+		double sum;
+		int size;
+		for(int i = 1; i < 15; i++){
+			sum = 0;
+			size = 0;
+			for (Iterator<Double> iterator = wirt[i].getResult().iterator(); iterator.hasNext();) {
+				sum += iterator.next();
+				size++;
+			}
+			trans_avg_res[i] = Double.parseDouble(df.format(sum / size));
+			
 		}
 	}
 }

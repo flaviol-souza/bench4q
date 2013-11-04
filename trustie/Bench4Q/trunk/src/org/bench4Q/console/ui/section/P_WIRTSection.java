@@ -456,26 +456,23 @@ public class P_WIRTSection extends JPanel implements AgentInfoObserver {
 	}
 	@Override
 	public void saveTheChart(String prefix) {
-		if (!(VIPrate == 0.0 && m_type != Type.all)) {
-			if (m_w_type == InteractionType.all) {
-				if (m_type == Type.all)
-					prefix = prefix + "_WIRT_total.jpeg";
-				else if (m_type == Type.VIP)
-					prefix = prefix + "_WIRT_VIP.jpeg";
-				else {
-					prefix = prefix + "_WIRT_Normal.jpeg";
-				}
-				File file = new File(prefix);
-				try {
-					ChartUtilities.saveChartAsJPEG(file, m_chart, 730, 600);
-				} catch (IOException e) {
-					System.out.println("cannot save the WIRT pic");
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// System.out.println(m_type);
-				}
+		if (m_w_type == InteractionType.all) {
+			if (m_type == Type.all)
+				prefix = prefix + "_WIRT_total.jpeg";
+			else if (m_type == Type.VIP)
+				prefix = prefix + "_WIRT_VIP.jpeg";
+			else {
+				prefix = prefix + "_WIRT_Normal.jpeg";
 			}
-
+			File file = new File(prefix);
+			try {
+				ChartUtilities.saveChartAsJPEG(file, m_chart, 730, 600);
+			} catch (IOException e) {
+				System.out.println("cannot save the WIRT pic");
+				e.printStackTrace();
+			} catch (IllegalArgumentException e){
+//				System.out.println(m_type);
+			}
 		}
 	}
 
