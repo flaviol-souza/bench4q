@@ -391,9 +391,6 @@ final class ResourcePoolImplementation implements ResourcePool {
 						throw e;
 					} catch (RuntimeException runtimeException) {
 						throw runtimeException;
-					} catch (InterruptedException interruptedException) {
-						throw new UncheckedInterruptedException(
-								interruptedException);
 					} catch (Exception exception) {
 						throw new AssertionError(exception);
 					}

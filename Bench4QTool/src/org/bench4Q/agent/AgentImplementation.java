@@ -114,6 +114,8 @@ public final class AgentImplementation implements AgentInterface {
 	public void run() throws Bench4QException {
 
 		StartJASptEMessage startMessage = null;
+		
+	
 
 		try {
 			while (true) {

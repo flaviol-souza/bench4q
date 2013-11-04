@@ -36,6 +36,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -47,6 +48,14 @@ import javax.swing.event.DocumentListener;
 
 import org.bench4Q.console.common.Resources;
 import org.bench4Q.console.model.ConfigModel;
+
+import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.UnknownHostException;
 
 /**
  * @author duanzhiquan
@@ -98,6 +107,10 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JTextField cooldown;
 	private ConfigModel m_configModel;
 	private JTextField interval;
+	
+	private JLabel resetEnviroment;
+	private JButton bt_reset;
+	
 
 	/**
 	 * @param resources
@@ -112,6 +125,11 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		typeLabel = new JLabel(m_resources.getString("GenelPanel.typeLabel"),
 				SwingConstants.RIGHT);
+		resetEnviroment = new JLabel(m_resources.getString("GenelPanel.resetEnvLabel"),
+				 SwingConstants.RIGHT);
+		bt_reset = new JButton(m_resources
+				.getString("GenelPanel.resetEnvLabelBt"));
+		
 		intervalLabel = new JLabel(m_resources
 				.getString("GenelPanel.intervalLabel"), SwingConstants.RIGHT);
 		URLLabel = new JLabel(m_resources.getString("GenelPanel.URLLabel"),
@@ -344,6 +362,18 @@ public class M_LoadSimulatorPanel extends JPanel {
 				resetConfig();
 			}
 		});
+		
+		this.add(resetEnviroment, new GridBagConstraints(0, 21, 1, 1, 0.0, 0.0,
+				 GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
+				 5, 5, 5), 1, 1));
+	    this.add(bt_reset, new GridBagConstraints(1, 21, 4, 1, 100.0, 0.0,
+				 GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+				 5, 5, 5), 1, 1));
+	    bt_reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	resetVMlistener(evt);
+            }
+        });
 
 	}
 
@@ -676,5 +706,29 @@ public class M_LoadSimulatorPanel extends JPanel {
 		}
 		
 	}
+	
+	private void resetVMlistener(java.awt.event.ActionEvent evt) {
+		
+		String hostNB = "bench4qbalancer";
+		int portNB = 8889;
+		String message = "{\"expmanager\":\"reset\"}";
+
+		Socket client = null;
+		PrintStream out = null;
+		System.out.println(message);
+		try {
+			client = new Socket(hostNB, portNB);
+			out = new PrintStream(client.getOutputStream());
+			
+			out.print(message);
+			out.close();
+			client.close();
+		} catch (UnknownHostException ex) {
+			System.out.println("Couldn't connect to the server");
+		} catch (IOException ex) {
+			System.err.println(ex.toString());
+		}
+	}
+	
 
 }

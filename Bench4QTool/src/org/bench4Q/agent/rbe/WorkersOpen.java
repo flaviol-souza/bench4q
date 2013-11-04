@@ -45,8 +45,6 @@ import org.bench4Q.agent.rbe.communication.EBStats;
 import org.bench4Q.common.util.thread.ThreadPool;
 import java.util.*;
 
-//import com.sun.corba.se.spi.orbutil.threadpool.ThreadPoolManager;
-
 /**
  * @author duanzhiquan
  * 

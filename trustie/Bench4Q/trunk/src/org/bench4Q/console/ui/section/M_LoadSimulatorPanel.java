@@ -252,7 +252,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		this.add(type, new GridBagConstraints(1, 0, 1, 1, 100.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
 						5, 5, 5), 1, 1));
-		
+
 		this.add(intervalLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
 						5, 5, 5), 1, 1));
@@ -269,7 +269,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		this.add(typeExplain2, new GridBagConstraints(0, 2, 5, 1, 0.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
 						5, 5, 5), 1, 1));
-		
+
 		this.add(mixLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
 						5, 5, 5), 1, 1));

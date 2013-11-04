@@ -55,8 +55,6 @@ import org.bench4Q.agent.rbe.util.StrStrPattern;
 import org.bench4Q.agent.rbe.util.StringPattern;
 import org.bench4Q.agent.rbe.util.URLUtil;
 
-//import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory.Default;
-
 /**
  * @author duanzhiquan
  * 
@@ -376,6 +374,7 @@ public abstract class EB extends Thread {
 			html = new String(result);
 		} catch (Exception e) {
 			EBStats.getEBStats().error(state, "get methed ERROR.", url, isVIP);
+			e.printStackTrace();
 			return false;
 		} 
 		finally {
