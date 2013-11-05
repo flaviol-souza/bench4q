@@ -37,6 +37,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -77,13 +78,15 @@ public class M_UserSettingPanel extends JPanel {
 	private JLabel ttExplain;
 	private JLabel toleranceLabel;
 	private JLabel ttLabel;
+	private JLabel ttType;
 	private JTextField tolerance;
 	private JTextField tt;
-	
+
 	private JLabel VIPratelabel;
 	private JLabel VIPrateExplain;
 	private JTextField VIPrate;
 	private JLabel percent;
+	private JCheckBox ttMMPP;
 
 	/**
 	 * @param resources
@@ -106,14 +109,15 @@ public class M_UserSettingPanel extends JPanel {
 		imageLabel = new JLabel(
 				m_resources.getString("MessSection.imageLabel"),
 				SwingConstants.RIGHT);
-		trueChoise = addRadioButton(m_resources
-				.getString("MessSection.trueChoise"), fileLoader.getArgs()
-				.isGetImage());
-		falseChoise = addRadioButton(m_resources
-				.getString("MessSection.falseChoise"), !fileLoader.getArgs()
-				.isGetImage());
-		imageExplain = new JLabel(m_resources
-				.getString("MessSection.imageExplain"), SwingConstants.LEFT);
+		trueChoise = addRadioButton(
+				m_resources.getString("MessSection.trueChoise"), fileLoader
+						.getArgs().isGetImage());
+		falseChoise = addRadioButton(
+				m_resources.getString("MessSection.falseChoise"), !fileLoader
+						.getArgs().isGetImage());
+		imageExplain = new JLabel(
+				m_resources.getString("MessSection.imageExplain"),
+				SwingConstants.LEFT);
 
 		retryLabel = new JLabel(
 				m_resources.getString("MessSection.retryLabel"),
@@ -121,31 +125,40 @@ public class M_UserSettingPanel extends JPanel {
 		RetryField = new JTextField(String.valueOf(fileLoader.getArgs()
 				.getRetry()));
 		RetryField.getDocument().addDocumentListener(new RetryListener());
-		retryExplain = new JLabel(m_resources
-				.getString("MessSection.retryExplain"), SwingConstants.LEFT);
-		
-		VIPratelabel = new JLabel(m_resources.getString("MessSection.VIPrateLabel"),
+		retryExplain = new JLabel(
+				m_resources.getString("MessSection.retryExplain"),
+				SwingConstants.LEFT);
+
+		VIPratelabel = new JLabel(
+				m_resources.getString("MessSection.VIPrateLabel"),
 				SwingConstants.RIGHT);
-		VIPrateExplain = new JLabel(m_resources
-				.getString("MessSection.VIPrateExplain"), SwingConstants.LEFT);
+		VIPrateExplain = new JLabel(
+				m_resources.getString("MessSection.VIPrateExplain"),
+				SwingConstants.LEFT);
 		VIPrate = new JTextField(String.valueOf(fileLoader.getArgs().getRate()));
 		VIPrate.getDocument().addDocumentListener(new VIPrateListener());
 		percent = new JLabel("%", SwingConstants.RIGHT);
 
-		toleranceLabel = new JLabel(m_resources
-				.getString("GenelPanel.toleranceLabel"), SwingConstants.RIGHT);
+		toleranceLabel = new JLabel(
+				m_resources.getString("GenelPanel.toleranceLabel"),
+				SwingConstants.RIGHT);
 		ttLabel = new JLabel(m_resources.getString("GenelPanel.ttLabel"),
 				SwingConstants.RIGHT);
-		toleranceExplain = new JLabel(m_resources
-				.getString("GenelPanel.toleranceExplain"), SwingConstants.LEFT);
+		toleranceExplain = new JLabel(
+				m_resources.getString("GenelPanel.toleranceExplain"),
+				SwingConstants.LEFT);
 		ttExplain = new JLabel(m_resources.getString("GenelPanel.ttExplain"),
 				SwingConstants.LEFT);
+
+		ttMMPP = new JCheckBox(m_resources.getString("GenelPanel.ttMMPP"));
+
 		tolerance = new JTextField(String.valueOf(fileLoader.getArgs()
 				.getTolerance()));
 		tolerance.getDocument().addDocumentListener(new ToleranceListener());
 
 		tt = new JTextField(String.valueOf(fileLoader.getArgs().getThinktime()));
 		tt.getDocument().addDocumentListener(new TTListener());
+		ttMMPP.addActionListener(new TT_MMPP());
 
 		this.add(imageLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
@@ -176,6 +189,9 @@ public class M_UserSettingPanel extends JPanel {
 		this.add(tt, new GridBagConstraints(1, 4, 2, 1, 100.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(ttMMPP, new GridBagConstraints(3, 4, 2, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 		this.add(ttExplain, new GridBagConstraints(0, 5, 3, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
 						5, 5, 5), 1, 1));
@@ -189,7 +205,7 @@ public class M_UserSettingPanel extends JPanel {
 		this.add(toleranceExplain, new GridBagConstraints(0, 7, 3, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
 						5, 5, 5), 1, 1));
-		
+
 		this.add(VIPratelabel, new GridBagConstraints(0, 8, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
 						5, 5, 5), 1, 1));
@@ -203,9 +219,9 @@ public class M_UserSettingPanel extends JPanel {
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
 						5, 5, 5), 1, 1));
 
-		this.add(new JLabel(), new GridBagConstraints(0, 11, 3, 1, 100.0, 100.0,
-				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
-						5, 5, 5), 1, 1));
+		this.add(new JLabel(), new GridBagConstraints(0, 11, 3, 1, 100.0,
+				100.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+				new Insets(5, 5, 5, 5), 1, 1));
 
 		m_configModel.addListener(new ConfigModel.AbstractListener() {
 			public void isArgsChanged() {
@@ -333,6 +349,7 @@ public class M_UserSettingPanel extends JPanel {
 			m_configModel.getArgs().setRate(VIPrateValue);
 		}
 	}
+
 	private class ToleranceListener implements DocumentListener {
 		public void insertUpdate(DocumentEvent event) {
 			double toleranceValue = 0;
@@ -389,6 +406,21 @@ public class M_UserSettingPanel extends JPanel {
 			}
 			m_configModel.getArgs().setThinktime(ttValue);
 		}
+	}
+
+	private class TT_MMPP implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			// with stagger? => mmpp
+			if (ttMMPP.isSelected()) {
+				m_configModel.getArgs().setTtMMPP(false);
+			} else {
+				m_configModel.getArgs().setTtMMPP(true);
+			}
+		}
+
 	}
 
 }

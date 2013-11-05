@@ -69,6 +69,7 @@ public class EBOpen extends EB {
 		lambda_long = args.getLambda_long();
 
 		tt_scale = this.m_args.getThinktime();
+		tt_stagger = this.m_args.isTtMMPP();
 		tolerance_scale = this.m_args.getTolerance();
 		retry = this.m_args.getRetry();
 

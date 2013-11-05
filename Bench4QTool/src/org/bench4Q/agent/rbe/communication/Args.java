@@ -67,6 +67,7 @@ public class Args implements Sendable {
 	private double tolerance;
 	private int retry;
 	private double thinktime;
+	private boolean ttMMPP;
 	private boolean replay;
 	private boolean record;
 	private String time;
@@ -90,6 +91,7 @@ public class Args implements Sendable {
 		getImage = true;
 		tolerance = 1.0;
 		thinktime = 1.0;
+		ttMMPP = true; // with stagger
 		baseURL = "http://localhost:8080/jaspte";
 
 	}
@@ -218,6 +220,15 @@ public class Args implements Sendable {
 	 */
 	public void setThinktime(double thinktime) {
 		this.thinktime = thinktime;
+	}
+	
+
+	public boolean isTtMMPP() {
+		return ttMMPP;
+	}
+
+	public void setTtMMPP(boolean ttMMPP) {
+		this.ttMMPP = ttMMPP;
 	}
 
 	/**

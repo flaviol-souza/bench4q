@@ -65,10 +65,8 @@ public abstract class EB extends Thread {
 	protected long sessionEnd = 0;
 	protected int sessionLen = 1;
 	protected boolean Ordered = false;
-	
-	public boolean isVIP;
 
-	
+	public boolean isVIP;
 
 	protected Args m_args;
 
@@ -77,7 +75,7 @@ public abstract class EB extends Thread {
 	 */
 	public int cid;
 	/**
-	 *ESSION_ID. See TPC-W Spec.
+	 * ESSION_ID. See TPC-W Spec.
 	 */
 	public String sessionID;
 	/**
@@ -110,7 +108,7 @@ public abstract class EB extends Thread {
 	 */
 	public int curState;
 	/**
-	 *Next HTTP request.
+	 * Next HTTP request.
 	 */
 	public String nextReq;
 	/**
@@ -141,9 +139,16 @@ public abstract class EB extends Thread {
 	public Random rand = new Random();
 
 	/**
+	 * MMPP used to generate think times
+	 * */
+	public static MMPP mmpp_tt = new MMPP();
+
+	/**
 	 * Think time-scaling.
 	 */
 	public double tt_scale;
+
+	public boolean tt_stagger;
 
 	/**
 	 * Tolerance_scale.
@@ -236,14 +241,14 @@ public abstract class EB extends Thread {
 	 * 
 	 */
 	public ArrayList<Integer> m_trace;
-	
+
 	public int state = 1;
-	
+
 	public double p_s_to_l;
 	public double p_l_to_s;
 	public double lambda_short;
 	public double lambda_long;
-	
+
 	public boolean first;
 	public double rate;
 	Cookie[] cookies;
@@ -284,42 +289,41 @@ public abstract class EB extends Thread {
 		double tolerance = tolerance(curState);
 		html = "";
 		int statusCode;
-//		String happyString;
-//		if(joke)
-//			happyString =  orderInqURL;
-//		else {
-//			happyString = url;
-//		}
-		
-		
+		// String happyString;
+		// if(joke)
+		// happyString = orderInqURL;
+		// else {
+		// happyString = url;
+		// }
+
 		GetMethod httpget = new GetMethod(url);
-//		System.out.println(url);
-//		httpget.getParams().setVersion(HttpVersion.HTTP_1_0);
-		
-//		httpget.getParams().setCookiePolicy(CookiePolicy.DEFAULT);
-		
+		// System.out.println(url);
+		// httpget.getParams().setVersion(HttpVersion.HTTP_1_0);
+
+		// httpget.getParams().setCookiePolicy(CookiePolicy.DEFAULT);
 
 		try {
-			
+
 			if (tolerance != 0) {
 				httpget.getParams().setSoTimeout((int) (tolerance * 1000));
 			}
-//			HttpClient m_Client = HttpClientFactory.getInstance();
-			
-//			if(!first){
-//				httpget.getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
-//				m_Client.getState().addCookies(cookies);
-//				for(int i=0; i<cookies.length; i++){
-//					httpget.setRequestHeader("Cookie", cookies[i].getName() + "=" + cookies[i].getValue());
-//				}
-//			}
-				
-//			else {
-////				System.out.println("\n"+"first");
-//				httpget.getParams().setCookiePolicy(CookiePolicy.DEFAULT);
-//				m_Client.getState().clearCookies();
-//			}
-			
+			// HttpClient m_Client = HttpClientFactory.getInstance();
+
+			// if(!first){
+			// httpget.getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+			// m_Client.getState().addCookies(cookies);
+			// for(int i=0; i<cookies.length; i++){
+			// httpget.setRequestHeader("Cookie", cookies[i].getName() + "=" +
+			// cookies[i].getValue());
+			// }
+			// }
+
+			// else {
+			// // System.out.println("\n"+"first");
+			// httpget.getParams().setCookiePolicy(CookiePolicy.DEFAULT);
+			// m_Client.getState().clearCookies();
+			// }
+
 			start = System.currentTimeMillis();
 			statusCode = m_Client.executeMethod(httpget);
 			end = System.currentTimeMillis();
@@ -329,41 +333,40 @@ public abstract class EB extends Thread {
 				if (cc[i].getName().equalsIgnoreCase("jsessionid"))
 					sessionID = cc[i].getValue();
 			}
-			
+
 			Header[] header;
-			if(sessionID == null){
+			if (sessionID == null) {
 				String cString = null;
 				header = httpget.getRequestHeaders();
-				for(int i = 0; i < header.length; i++){
-					if(header[i].getName().equalsIgnoreCase("cookie"))
+				for (int i = 0; i < header.length; i++) {
+					if (header[i].getName().equalsIgnoreCase("cookie"))
 						cString = header[i].getValue();
 				}
 				int indexs = 0;
-				if(cString != null)
-				   indexs = cString.indexOf("JSESSIONID=");
+				if (cString != null)
+					indexs = cString.indexOf("JSESSIONID=");
 				indexs = indexs + "JSESSIONID=".length();
 				String nextString = cString.substring(indexs);
 				int indexe = 0;
 				indexe = nextString.indexOf(";");
-				sessionID = nextString.substring(0,indexe);
+				sessionID = nextString.substring(0, indexe);
 			}
-			
-			
-			
+
 			if (statusCode != HttpStatus.SC_OK) {
 				EBStats.getEBStats().error(state,
 						"HTTP response ERROR: " + statusCode, url, isVIP);
 				return false;
 			}
-//			System.out.println("start");
-//			if(first)
-//				cookies = m_Client.getState().getCookies();
-			
-//			for(int i=0; i<cookies.length; i++){
-//				System.out.println(cookies[i].getName() + "=" + cookies[i].getValue());
-//			}
-//			System.out.println("end");
-			
+			// System.out.println("start");
+			// if(first)
+			// cookies = m_Client.getState().getCookies();
+
+			// for(int i=0; i<cookies.length; i++){
+			// System.out.println(cookies[i].getName() + "=" +
+			// cookies[i].getValue());
+			// }
+			// System.out.println("end");
+
 			BufferedReader bin = new BufferedReader(new InputStreamReader(
 					httpget.getResponseBodyAsStream()));
 			StringBuilder result = new StringBuilder();
@@ -376,8 +379,7 @@ public abstract class EB extends Thread {
 			EBStats.getEBStats().error(state, "get methed ERROR.", url, isVIP);
 			e.printStackTrace();
 			return false;
-		} 
-		finally {
+		} finally {
 			// always release the connection after we're done
 			httpget.releaseConnection();
 		}
@@ -409,7 +411,8 @@ public abstract class EB extends Thread {
 					}
 				}
 			} catch (InterruptedException inte) {
-				EBStats.getEBStats().error(state, "get image ERROR.", url, isVIP);
+				EBStats.getEBStats().error(state, "get image ERROR.", url,
+						isVIP);
 				return true;
 			}
 		}
@@ -418,7 +421,7 @@ public abstract class EB extends Thread {
 	}
 
 	/**
-	 * @return 
+	 * @return
 	 * 
 	 */
 	public boolean nextState() {
@@ -440,7 +443,8 @@ public abstract class EB extends Thread {
 			if (transProb[curState][j] >= i) {
 				// record the trans.
 				EBStats.getEBStats().transition(curState, j);
-//				System.out.println("randnumber = " + i + " nextstate = " + j);
+				// System.out.println("randnumber = " + i + " nextstate = " +
+				// j);
 				curTrans = trans[curState][j];
 				nextReq = curTrans.request(this, html);
 				toHome = trans[curState][j].toHome();
@@ -449,8 +453,7 @@ public abstract class EB extends Thread {
 			}
 		}
 		return false;
-		
-		
+
 	}
 
 	/**
@@ -461,33 +464,53 @@ public abstract class EB extends Thread {
 	 */
 
 	public long thinkTime(double time) {
-		double r = rand.nextDouble();
-		long result;
-		if (r < (4.54e-5)) {
-			
-			result = 70000L;
+
+		if (tt_stagger) {
+			double r = rand.nextDouble();
+			long result;
+			if (r < (4.54e-5)) {
+
+				result = 70000L;
+			} else {
+				result = ((long) (-7000 * Math.log(r)));
+			}
+			// System.out.println("ExpNeg:\t"+(long) (result *
+			// tt_scale)+"\tscale:\t"+tt_scale);
+			return ((long) (result * tt_scale));
 		} else {
-			result = ((long) (-7000 * Math.log(r)));
+
+			/****************************************************
+			 * generate the user think times from a 2-state MAP e.g., the MAP
+			 * has mean = 7second, so r=1000*mean(ms)
+			 ***************************************************/
+			// long r = rbe.negExp(rand, 7000L, 0.36788, 70000L, 4.54e-5,
+			// 7000.0);
+			double r = 1000 * mmpp_tt.gen_interval();
+
+			r = (long) (tt_scale * r); // tt_scale = 1 if think=7second
+
+			// System.out.println("MMPP: "+(long) r+"\tscale:\t"+tt_scale);
+
+			return ((long) r);
 		}
-		return ((long) (result * tt_scale));
 
 	}
-	
-	public long MAP(){
+
+	public long MAP() {
 		double r = rand.nextDouble();
-		
-		if(state == 0 && r <= p_l_to_s)
+
+		if (state == 0 && r <= p_l_to_s)
 			state = 1;
-		else if(state == 1 && r <= p_s_to_l)
-		    state = 0;
-		
-		if(state == 0)
+		else if (state == 1 && r <= p_s_to_l)
+			state = 0;
+
+		if (state == 0)
 			return thinkTime(lambda_long);
-		else if(state == 1)
+		else if (state == 1)
 			return thinkTime(lambda_short);
 		else
 			return -1;
-		
+
 	}
 
 	/**
@@ -520,8 +543,8 @@ public abstract class EB extends Thread {
 		while ((cur = imgPat.find(html, cur)) > -1) {
 			cur = srcPat.find(html, imgPat.end() + 1);
 			quotePat.find(html, srcPat.end() + 1);
-			String imageURLString = html.substring(srcPat.end() + 1, quotePat
-					.start());
+			String imageURLString = html.substring(srcPat.end() + 1,
+					quotePat.start());
 			imageRd.addElement(new ImageReader(url, imageURLString, buffer));
 			cur = quotePat.start() + 1;
 		}

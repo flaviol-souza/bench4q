@@ -41,12 +41,11 @@ import org.bench4Q.agent.rbe.communication.TestPhase;
  * @author duanzhiquan
  * 
  */
-public class RBE implements Runnable{
+public class RBE implements Runnable {
 
 	private Args m_args;
 	private ArrayList<Workers> m_workers;
 	private long TestInterval;
-
 
 	/**
 	 * 
@@ -68,88 +67,88 @@ public class RBE implements Runnable{
 	 * 
 	 */
 	public void startWorkers() {
-//		long startTime = System.currentTimeMillis();
-//
-//		long prepairTime = m_args.getPrepair();
-//		long cooldown = m_args.getCooldown();
-//		long testInterval = 0;
-//		int testPhaseEndTime;
-//		for (TestPhase testPhase : m_args.getEbs()) {
-//			testPhaseEndTime = testPhase.getTriggerTime()
-//					+ testPhase.getStdyTime();
-//			if (testPhaseEndTime > testInterval) {
-//				testInterval = testPhaseEndTime;
-//			}
-//		}
-//
-//		EBStats.getEBStats().init(startTime, prepairTime, testInterval,
-//				cooldown);
-//		HttpClientFactory.setRetryCount(m_args.getRetry());
-//		Date date = new Date();
-//		EBStats.getEBStats().setTitle(format(date));
-//	    EBStats.getEBStats().setVIPrate(m_args.getRate());
-//		int identity=0;
-//
-//		if (m_args.getRbetype().equalsIgnoreCase("closed")) {
-//			for (TestPhase testPhase : m_args.getEbs()) {
-//				identity++;
-//				m_workers.add(new WorkersClosed(startTime, testPhase
-//						.getTriggerTime(), testPhase.getStdyTime(), testPhase
-//						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-//						.getRate(), m_args, identity));
-//			}
-//		} else if (m_args.getRbetype().equalsIgnoreCase("open")) {
-//			for (TestPhase testPhase : m_args.getEbs()) {
-//				identity++;
-//				m_workers.add(new WorkersOpen(startTime, testPhase
-//						.getTriggerTime(), testPhase.getStdyTime(), testPhase
-//						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-//						.getRate(), m_args, identity));
-//			}
-//		} else {
-//			System.out.println("Error parameter.");
-//			System.out.println("Start closed as default.");
-//			for (TestPhase testPhase : m_args.getEbs()) {
-//				identity++;
-//				m_workers.add(new WorkersClosed(startTime, testPhase
-//						.getTriggerTime(), testPhase.getStdyTime(), testPhase
-//						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-//						.getRate(), m_args, identity));
-//			}
-//		}
-//
-//		for (Workers worker : m_workers) {
-//			worker.setDaemon(true);
-//			worker.start();
-//		}
-//
-//		TestInterval = calculateTestInterval();
-//		long endTime = startTime + TestInterval * 1000L;
-//
-//		try {
-//			Thread.sleep(TestInterval * 1000L);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//
-//		boolean flag = true;
-//
-//		while (((System.currentTimeMillis() - endTime) < 0) && flag) {
-//			flag = false;
-//			for (Workers worker : m_workers) {
-//				if (worker.isAlive()) {
-//					flag = true;
-//					worker.stop();
-//				}
-//			}
-//			try {
-//				Thread.sleep(1000L);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//
-//		clear();
+		// long startTime = System.currentTimeMillis();
+		//
+		// long prepairTime = m_args.getPrepair();
+		// long cooldown = m_args.getCooldown();
+		// long testInterval = 0;
+		// int testPhaseEndTime;
+		// for (TestPhase testPhase : m_args.getEbs()) {
+		// testPhaseEndTime = testPhase.getTriggerTime()
+		// + testPhase.getStdyTime();
+		// if (testPhaseEndTime > testInterval) {
+		// testInterval = testPhaseEndTime;
+		// }
+		// }
+		//
+		// EBStats.getEBStats().init(startTime, prepairTime, testInterval,
+		// cooldown);
+		// HttpClientFactory.setRetryCount(m_args.getRetry());
+		// Date date = new Date();
+		// EBStats.getEBStats().setTitle(format(date));
+		// EBStats.getEBStats().setVIPrate(m_args.getRate());
+		// int identity=0;
+		//
+		// if (m_args.getRbetype().equalsIgnoreCase("closed")) {
+		// for (TestPhase testPhase : m_args.getEbs()) {
+		// identity++;
+		// m_workers.add(new WorkersClosed(startTime, testPhase
+		// .getTriggerTime(), testPhase.getStdyTime(), testPhase
+		// .getBaseLoad(), testPhase.getRandomLoad(), testPhase
+		// .getRate(), m_args, identity));
+		// }
+		// } else if (m_args.getRbetype().equalsIgnoreCase("open")) {
+		// for (TestPhase testPhase : m_args.getEbs()) {
+		// identity++;
+		// m_workers.add(new WorkersOpen(startTime, testPhase
+		// .getTriggerTime(), testPhase.getStdyTime(), testPhase
+		// .getBaseLoad(), testPhase.getRandomLoad(), testPhase
+		// .getRate(), m_args, identity));
+		// }
+		// } else {
+		// System.out.println("Error parameter.");
+		// System.out.println("Start closed as default.");
+		// for (TestPhase testPhase : m_args.getEbs()) {
+		// identity++;
+		// m_workers.add(new WorkersClosed(startTime, testPhase
+		// .getTriggerTime(), testPhase.getStdyTime(), testPhase
+		// .getBaseLoad(), testPhase.getRandomLoad(), testPhase
+		// .getRate(), m_args, identity));
+		// }
+		// }
+		//
+		// for (Workers worker : m_workers) {
+		// worker.setDaemon(true);
+		// worker.start();
+		// }
+		//
+		// TestInterval = calculateTestInterval();
+		// long endTime = startTime + TestInterval * 1000L;
+		//
+		// try {
+		// Thread.sleep(TestInterval * 1000L);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+		//
+		// boolean flag = true;
+		//
+		// while (((System.currentTimeMillis() - endTime) < 0) && flag) {
+		// flag = false;
+		// for (Workers worker : m_workers) {
+		// if (worker.isAlive()) {
+		// flag = true;
+		// worker.stop();
+		// }
+		// }
+		// try {
+		// Thread.sleep(1000L);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+		// }
+		//
+		// clear();
 	}
 
 	private void clear() {
@@ -176,7 +175,8 @@ public class RBE implements Runnable{
 	public Args getArgs() {
 		return m_args;
 	}
-	private String format(Date date){
+
+	private String format(Date date) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String dataString = formatter.format(date);
 		return dataString;
@@ -244,10 +244,10 @@ public class RBE implements Runnable{
 		try {
 			Thread.sleep(TestInterval * 1000L);
 		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();						
+			Thread.currentThread().interrupt();
 		} finally {
-			
-			for (Workers worker : m_workers){
+
+			for (Workers worker : m_workers) {
 				worker.setStop(true);
 			}
 			System.out.println("test finished");
@@ -256,6 +256,5 @@ public class RBE implements Runnable{
 		}
 
 	}
-
 
 }

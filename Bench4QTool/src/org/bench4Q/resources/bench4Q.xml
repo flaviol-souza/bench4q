@@ -22,7 +22,7 @@
       <randomLoad>0</randomLoad>
       <rate>0</rate>
       <triggerTime>0</triggerTime>
-      <stdyTime>140</stdyTime>
+      <stdyTime>60</stdyTime>
     </ebs>
   </rbe>
 </bench4Q>

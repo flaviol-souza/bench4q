@@ -82,6 +82,7 @@ public class EBClosed extends EB {
 		it = m_trace.iterator();
 
 		tt_scale = this.m_args.getThinktime();
+		tt_stagger = this.m_args.isTtMMPP();
 		tolerance_scale = this.m_args.getTolerance();
 		retry = this.m_args.getRetry();
 
