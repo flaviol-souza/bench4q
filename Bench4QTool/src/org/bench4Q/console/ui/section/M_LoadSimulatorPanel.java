@@ -110,6 +110,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 	
 	private JLabel resetEnviroment;
 	private JButton bt_reset;
+	private JButton bt_shutdown;
 	
 
 	/**
@@ -129,6 +130,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 				 SwingConstants.RIGHT);
 		bt_reset = new JButton(m_resources
 				.getString("GenelPanel.resetEnvLabelBt"));
+		bt_shutdown = new JButton(m_resources
+				.getString("GenelPanel.shutdownEnvLabelBt"));
 		
 		intervalLabel = new JLabel(m_resources
 				.getString("GenelPanel.intervalLabel"), SwingConstants.RIGHT);
@@ -372,6 +375,15 @@ public class M_LoadSimulatorPanel extends JPanel {
 	    bt_reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	resetVMlistener(evt);
+            }
+        });
+	    
+	    this.add(bt_shutdown, new GridBagConstraints(1, 22, 4, 1, 100.0, 0.0,
+				 GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+				 5, 5, 5), 1, 1));
+	    bt_shutdown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	shutdownVMlistener(evt);
             }
         });
 
@@ -712,6 +724,29 @@ public class M_LoadSimulatorPanel extends JPanel {
 		String hostNB = "bench4qbalancer";
 		int portNB = 8889;
 		String message = "{\"expmanager\":\"reset\"}";
+
+		Socket client = null;
+		PrintStream out = null;
+		System.out.println(message);
+		try {
+			client = new Socket(hostNB, portNB);
+			out = new PrintStream(client.getOutputStream());
+			
+			out.print(message);
+			out.close();
+			client.close();
+		} catch (UnknownHostException ex) {
+			System.out.println("Couldn't connect to the server");
+		} catch (IOException ex) {
+			System.err.println(ex.toString());
+		}
+	}
+	
+private void shutdownVMlistener(java.awt.event.ActionEvent evt) {
+		
+		String hostNB = "bench4qbalancer";
+		int portNB = 8889;
+		String message = "{\"expmanager\":\"shutdown\"}";
 
 		Socket client = null;
 		PrintStream out = null;
