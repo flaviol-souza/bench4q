@@ -29,11 +29,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Implementation of resource monitoring RMI server
- * Calls native method to retrieve data
+ * Implementation of resource monitoring RMI server Calls native method to
+ * retrieve data
  * 
  * @author xiaowei zhou
- *
+ * 
  */
 public class ServerDataManager extends UnicastRemoteObject implements
 		IServerDataManager {

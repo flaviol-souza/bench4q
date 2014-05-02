@@ -166,7 +166,8 @@ public final class ConfigModel {
 		Element retry = new Element("retry").setText(String.valueOf(m_args
 				.getRetry()));
 		rbe.addContent(retry);
-		Element vIPrate = new Element("VIPrate").setText(String.valueOf(m_args.getRate()));
+		Element vIPrate = new Element("VIPrate").setText(String.valueOf(m_args
+				.getRate()));
 		rbe.addContent(vIPrate);
 		Element thinktime = new Element("thinktime").setText(String
 				.valueOf(m_args.getThinktime()));
@@ -181,11 +182,13 @@ public final class ConfigModel {
 		rbe.addContent(getImage);
 		Element baseURL = new Element("baseURL").setText(m_args.getBaseURL());
 		rbe.addContent(baseURL);
-		Element webport = new Element("webport").setText(String.valueOf(m_args.getWebPort()));
+		Element webport = new Element("webport").setText(String.valueOf(m_args
+				.getWebPort()));
 		rbe.addContent(webport);
 		Element DBURL = new Element("databaseURL").setText(m_args.getDBURL());
 		rbe.addContent(DBURL);
-		Element DBPort = new Element("dbport").setText(String.valueOf(m_args.getDBPort()));
+		Element DBPort = new Element("dbport").setText(String.valueOf(m_args
+				.getDBPort()));
 		rbe.addContent(DBPort);
 		if (m_args.getEbs().isEmpty()) {
 			Element ebs = new Element("ebs");
@@ -280,7 +283,8 @@ public final class ConfigModel {
 		Element retry = new Element("retry").setText(String.valueOf(m_args
 				.getRetry()));
 		rbe.addContent(retry);
-		Element vIPrate = new Element("VIPrate").setText(String.valueOf(m_args.getRate()));
+		Element vIPrate = new Element("VIPrate").setText(String.valueOf(m_args
+				.getRate()));
 		rbe.addContent(vIPrate);
 		Element thinktime = new Element("thinktime").setText(String
 				.valueOf(m_args.getThinktime()));
@@ -295,13 +299,16 @@ public final class ConfigModel {
 		rbe.addContent(getImage);
 		Element baseURL = new Element("baseURL").setText(m_args.getBaseURL());
 		rbe.addContent(baseURL);
-		Element webport = new Element("webport").setText(String.valueOf(m_args.getWebPort()));
+		Element webport = new Element("webport").setText(String.valueOf(m_args
+				.getWebPort()));
 		rbe.addContent(webport);
-		
-		Element DatabaseURL = new Element("databaseURL").setText(m_args.getDBURL());
+
+		Element DatabaseURL = new Element("databaseURL").setText(m_args
+				.getDBURL());
 		rbe.addContent(DatabaseURL);
-		
-		Element DBPort = new Element("dbport").setText(String.valueOf(m_args.getDBPort()));
+
+		Element DBPort = new Element("dbport").setText(String.valueOf(m_args
+				.getDBPort()));
 		rbe.addContent(DBPort);
 
 		for (TestPhase testPhase : m_args.getEbs()) {

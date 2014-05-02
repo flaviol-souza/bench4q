@@ -139,8 +139,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 	private final Resources m_resources;
 	private final ConsoleProperties m_properties;
 	private final ProcessControl m_processControl;
-//	private ServerCollection m_serverCollection;
-//	private ServerCollection m_databaseCollection;
+	// private ServerCollection m_serverCollection;
+	// private ServerCollection m_databaseCollection;
 	private AppMonitorProcessImplementation m_serverProcess;
 	private DBMonitorProcessImplementation m_databaseProcess;
 
@@ -179,15 +179,14 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		m_resources = resources;
 		m_properties = consoleProperties;
 		m_processControl = processControl;
-		
-		
 
 		m_configModel = new ConfigModel();
 		m_resultModel = new ResultModel(m_resources);
-		
-		m_serverProcess = new AppMonitorProcessImplementation(m_configModel.getArgs());
-		m_databaseProcess = new DBMonitorProcessImplementation(m_configModel.getArgs());
-		
+
+		m_serverProcess = new AppMonitorProcessImplementation(
+				m_configModel.getArgs());
+		m_databaseProcess = new DBMonitorProcessImplementation(
+				m_configModel.getArgs());
 
 		// Create the frame to contain the a menu and the top level pane.
 		// Do before actions are constructed as we use the frame to create
@@ -207,12 +206,12 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				m_resources, m_properties);
 
 		m_collectingResultAction = new CollectingResultAction();
-		
-		
-//		m_serverCollection = new ServerCollection();
-//		
-//		m_databaseCollection = new ServerCollection(m_processControl, m_swingDispatcherFactory,
-//				m_databaseProcess);
+
+		// m_serverCollection = new ServerCollection();
+		//
+		// m_databaseCollection = new ServerCollection(m_processControl,
+		// m_swingDispatcherFactory,
+		// m_databaseProcess);
 
 		m_exitAction = new ExitAction();
 		m_startAction = new StartAction();
@@ -220,7 +219,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		m_savePlanAction = new SavePlanAction();
 		m_savePlanAsAction = new SavePlanAsAction();
 
-//		m_actionTable.add(m_collectingResultAction);
+		// m_actionTable.add(m_collectingResultAction);
 
 		m_actionTable.add(m_exitAction);
 		m_actionTable.add(m_startAction);
@@ -242,7 +241,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		m_actionTable.add(new OptionsAction());
 		m_actionTable.add(new ResetProcessesAction());
 
-//		m_actionTable.add(new StopProcessesAction());
+		// m_actionTable.add(new StopProcessesAction());
 
 		// Create the tabbed test display.
 		final JTabbedPane tabbedPane = new JTabbedPane();
@@ -263,16 +262,15 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		m_treeView = new JScrollPane(m_tree);
 
-		m_tree
-				.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-					public void valueChanged(TreeSelectionEvent e) {
-						try {
-							controlTreeValueChanged(e);
-						} catch (ConsoleException e1) {
-							e1.printStackTrace();
-						}
-					}
-				});
+		m_tree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
+				try {
+					controlTreeValueChanged(e);
+				} catch (ConsoleException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		expandAll(m_tree, new TreePath(m_treeModel.getRoot()), true);
 
 		m_mainPanel = new MainPanel(m_resources);
@@ -340,7 +338,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		m_frame.setVisible(true);
 	}
 
-	private String format(Date date){
+	private String format(Date date) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
 		String dataString = formatter.format(date);
 		return dataString;
@@ -480,14 +478,11 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 								new PropertyChangeListener() {
 									public void propertyChange(
 											PropertyChangeEvent evt) {
-										if (evt
-												.getPropertyName()
-												.equals(
-														CustomAction.RELEVANT_TO_SELECTION)) {
-											menuItem
-													.setVisible(((CustomAction) menuItem
-															.getAction())
-															.isRelevantToSelection());
+										if (evt.getPropertyName()
+												.equals(CustomAction.RELEVANT_TO_SELECTION)) {
+											menuItem.setVisible(((CustomAction) menuItem
+													.getAction())
+													.isRelevantToSelection());
 										}
 									}
 								});
@@ -613,7 +608,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 			File file = m_fileChooser.getSelectedFile();
 			String fname = m_fileChooser.getName(file);
-			
+
 			String picName = fname;
 
 			if (fname != null && fname.trim().length() > 0) {
@@ -628,10 +623,10 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			file = m_fileChooser.getCurrentDirectory();
 			picName = file.getPath().concat(File.separator).concat(picName);
 			file = new File(file.getPath().concat(File.separator).concat(fname));
-//			picName = file.getPath().concat(File.separator).concat(picName);
+			// picName = file.getPath().concat(File.separator).concat(picName);
 			if (file.exists()) {
-				if (JOptionPane.showConfirmDialog(m_frame, m_resources
-						.getString("saveResultCoverConfirm.text"),
+				if (JOptionPane.showConfirmDialog(m_frame,
+						m_resources.getString("saveResultCoverConfirm.text"),
 						(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 					return;
 
@@ -643,9 +638,9 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if(m_treeModel.isMoniApp())
+			if (m_treeModel.isMoniApp())
 				m_resultModel.insertData(m_serverProcess.getData());
-			if(m_treeModel.isMoniDB())
+			if (m_treeModel.isMoniDB())
 				m_resultModel.insertData(m_databaseProcess.getData());
 
 			m_resultModel.setSelectedFile(file);
@@ -810,8 +805,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				return;
 			}
 			final File file = m_fileChooser.getSelectedFile();
-			if (JOptionPane.showConfirmDialog(m_frame, m_resources
-					.getString("NewConfirmation.text"),
+			if (JOptionPane.showConfirmDialog(m_frame,
+					m_resources.getString("NewConfirmation.text"),
 					(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 				return;
 			}
@@ -854,8 +849,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				return;
 			}
 			final File file = m_fileChooser.getSelectedFile();
-			if (JOptionPane.showConfirmDialog(m_frame, m_resources
-					.getString("openConfirmation.text"),
+			if (JOptionPane.showConfirmDialog(m_frame,
+					m_resources.getString("openConfirmation.text"),
 					(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 				return;
 			}
@@ -941,8 +936,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			}
 
 			final File file = m_fileChooser.getSelectedFile();
-			if (JOptionPane.showConfirmDialog(m_frame, m_resources
-					.getString("saveConfirmation.text"),
+			if (JOptionPane.showConfirmDialog(m_frame,
+					m_resources.getString("saveConfirmation.text"),
 					(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 				return;
 			}
@@ -996,29 +991,29 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 	}
 
 	private class EnableIfDataRecorded implements ProcessControl.Listener {
-		
+
 		private final Action m_action;
-		
+
 		EnableIfDataRecorded(Action action) {
 			m_action = action;
 			enableOrDisable();
-			
+
 		}
-		
+
 		public final void update(ProcessControl.ProcessReports[] processStatuses) {
 			enableOrDisable();
 		}
-		
+
 		protected final void enableOrDisable() {
 			m_action.setEnabled(shouldEnable());
 		}
-		protected boolean shouldEnable() {
-			return m_processControl.getNumberOfLiveAgents() > 0 && m_configModel.getArgs().isRecord();
-		}
-		
-	}
-	
 
+		protected boolean shouldEnable() {
+			return m_processControl.getNumberOfLiveAgents() > 0
+					&& m_configModel.getArgs().isRecord();
+		}
+
+	}
 
 	private class StartProcessesAction extends CustomAction {
 
@@ -1030,198 +1025,66 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		public void actionPerformed(final ActionEvent event) {
 
-//			if(m_configModel.getArgs().isUseEJB())
-//			{
-//				String url = m_configModel.getArgs().getBaseURL() + "/dbapproach?approach=EJB3";
-//				try {
-//					URL u = new URL(url);
-//					
-//					HttpURLConnection conn =  (HttpURLConnection)u.openConnection();
-//					conn.connect();
-//					//Object O = u.getContent();
-//					InputStream is = conn.getInputStream();
-//					BufferedReader buf = new BufferedReader(new InputStreamReader(is)); 
-//					String currentS = "";
-//					String totalS = "";
-//					while((currentS = buf.readLine()) != null){
-//						totalS += currentS; 
-//					}
-//										
-//					boolean flag = totalS.contains("Set database access approach to: EJB3");
-//					if(!flag){
-//						JOptionPane.showMessageDialog(m_frame, "can't connect with servlet!", "error", JOptionPane.ERROR_MESSAGE);
-//						return;
-//					}
-//						
-//				} catch (MalformedURLException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//			else {
-//				String url = m_configModel.getArgs().getBaseURL() + "/dbapproach?approach=JDBC";
-//				try {
-//					URL u = new URL(url);
-//					HttpURLConnection conn =  (HttpURLConnection)u.openConnection();
-//					conn.connect();
-//					BufferedReader buf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//			        String currentS = "";
-//			        String totalS = "";
-//			        while((currentS = buf.readLine()) != null){
-//			        	totalS += currentS;
-//			        }
-// 					boolean flag = totalS.contains("Set database access approach to: JDBC");
-//					if(!flag){
-//						JOptionPane.showMessageDialog(m_frame, "can't connect with servlet!", "error", JOptionPane.ERROR_MESSAGE);
-//						return;
-//					}
-//						
-//				} catch (MalformedURLException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-
-//			if(m_configModel.getArgs().isUseEJB())
-//			{
-//				String url = m_configModel.getArgs().getBaseURL() + "/dbapproach?approach=EJB3";
-//				try {
-//					URL u = new URL(url);
-//					
-//					HttpURLConnection conn =  (HttpURLConnection)u.openConnection();
-//					conn.connect();
-//					//Object O = u.getContent();
-//					InputStream is = conn.getInputStream();
-//					BufferedReader buf = new BufferedReader(new InputStreamReader(is)); 
-//					String currentS = "";
-//					String totalS = "";
-//					while((currentS = buf.readLine()) != null){
-//						totalS += currentS; 
-//					}
-//										
-//					boolean flag = totalS.contains("Set database access approach to: EJB3");
-//					if(!flag){
-//						JOptionPane.showMessageDialog(m_frame, "can't connect with servlet!", "error", JOptionPane.ERROR_MESSAGE);
-//						return;
-//					}
-//						
-//				} catch (MalformedURLException e) {
-//					// TODO Auto-generated catch block
-//					System.out.println("Warning: not the EJB/servlet version");
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} 
-//			}
-//			else {
-//				String url = m_configModel.getArgs().getBaseURL() + "/dbapproach?approach=JDBC";
-//				try {
-//					URL u = new URL(url);
-//					HttpURLConnection conn =  (HttpURLConnection)u.openConnection();
-//					conn.connect();
-//					BufferedReader buf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//			        String currentS = "";
-//			        String totalS = "";
-//			        while((currentS = buf.readLine()) != null){
-//			        	totalS += currentS;
-//			        }
-// 					boolean flag = totalS.contains("Set database access approach to: JDBC");
-//					if(!flag){
-//						JOptionPane.showMessageDialog(m_frame, "can't connect with servlet!", "error", JOptionPane.ERROR_MESSAGE);
-//						return;
-//					}
-//						
-//				} catch (MalformedURLException e) {
-//					// TODO Auto-generated catch block
-//					System.out.println("Warning: not the EJB/servlet version");
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-
-			
-			int isRecord = JOptionPane.showConfirmDialog(m_frame, m_resources
-					.getString("RecordConfirmation.text"), "",
+			int isRecord = JOptionPane.showConfirmDialog(m_frame,
+					m_resources.getString("RecordConfirmation.text"), "",
 					JOptionPane.YES_NO_CANCEL_OPTION);
-			if(isRecord == JOptionPane.YES_OPTION){
+			if (isRecord == JOptionPane.YES_OPTION) {
 				m_configModel.getArgs().setRecord(true);
 				m_configModel.getArgs().setReplay(false);
 				Date date = new Date();
 				time = format(date);
-				
+
 				File file = new File("workload/" + time + ".xml");
 				m_configModel.SaveToFile(file);
 				m_configModel.getArgs().setTime(time);
 			}
-				
-			else if (isRecord == JOptionPane.NO_OPTION){
+
+			else if (isRecord == JOptionPane.NO_OPTION) {
 				m_configModel.getArgs().setRecord(false);
 				m_configModel.getArgs().setReplay(false);
-			}
-			else {
+			} else {
 				return;
 			}
-//			double lambda_short = 300;
-//			int num = 0;
-//			for(int i=0; i<m_configModel.getArgs().getEbs().size(); i++){
-//				num += m_configModel.getArgs().getEbs().get(i).getBaseLoad();
-//			}
-//			double lambda_long = (double) num * lambda_short > 7000.0 ? num * lambda_short : 7000.0;
-//			IndexOfDispersion IOD = new IndexOfDispersion(lambda_short, lambda_long, 4000);
-//			IOD.init();
-//		
-//			m_configModel.getArgs().setP_l_to_s(IOD.getP_l_to_s());
-//			m_configModel.getArgs().setP_s_to_l(IOD.getP_s_to_l());
-//			m_configModel.getArgs().setLambda_long(lambda_long);
-//			m_configModel.getArgs().setLambda_short(lambda_short);
-//			
 			m_processControl
 					.startWorkerProcesses(null, m_configModel.getArgs());
 			m_resultModel.restartTest();
-			ProgressBarFrame pbBarFrame = new ProgressBarFrame(m_frame, m_configModel.getArgs(),m_processControl,m_resources);
-			
+			ProgressBarFrame pbBarFrame = new ProgressBarFrame(m_frame,
+					m_configModel.getArgs(), m_processControl, m_resources);
+
 			pbBarFrame.setVisible(true);
-			if(m_configModel.getArgs().isMoniWeb()){
+			if (m_configModel.getArgs().isMoniWeb()) {
 				m_treeModel.setMoniApp(true);
 				m_serverProcess.StartMonitor();
-				
-//				m_serverCollection.reset();
-			}
-			else {
+
+				// m_serverCollection.reset();
+			} else {
 				m_treeModel.setMoniApp(false);
 			}
-			if(m_configModel.getArgs().isMoniDB()){
+			if (m_configModel.getArgs().isMoniDB()) {
 				m_treeModel.setMoniDB(true);
 				m_databaseProcess.StartMonitor();
 
-//				m_databaseCollection.reset();
-			}
-			else {
+				// m_databaseCollection.reset();
+			} else {
 				m_treeModel.setMoniDB(false);
 			}
-			
+
 		}
 	}
-        private class ReplayProcessAction extends CustomAction {
-		
+
+	private class ReplayProcessAction extends CustomAction {
+
 		ReplayProcessAction() {
 			super(m_resources, "replay-processes");
-			
-			m_processControl
-			        .addProcessStatusListener(new EnableIfDataRecorded(this));
+
+			m_processControl.addProcessStatusListener(new EnableIfDataRecorded(
+					this));
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			File file = new File(time + ".xml");
-			if(!file.isFile()){
+			if (!file.isFile()) {
 				System.out.println("û�и��ļ�");
 				return;
 			}
@@ -1243,14 +1106,15 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 			m_configModel.getArgs().setTime(time);
 			m_processControl
-			.startWorkerProcesses(null, m_configModel.getArgs());
-			
+					.startWorkerProcesses(null, m_configModel.getArgs());
+
 		}
-		
+
 	}
-	
+
 	private class ReplayAsProcessAction extends CustomAction {
 		private final JFileChooser m_fileChooser = new JFileChooser(".");
+
 		public ReplayAsProcessAction() {
 			super(m_resources, "replay-as-processes");
 
@@ -1271,8 +1135,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				}
 			});
 			m_processControl
-			.addProcessStatusListener(new EnableIfAgentsConnected(this));
-			
+					.addProcessStatusListener(new EnableIfAgentsConnected(this));
+
 		}
 
 		@Override
@@ -1283,13 +1147,13 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			} else {
 
 			}
-			
+
 			if (m_fileChooser.showOpenDialog(m_frame) != JFileChooser.APPROVE_OPTION) {
 				return;
 			}
 			final File file = m_fileChooser.getSelectedFile();
-			if (JOptionPane.showConfirmDialog(m_frame, m_resources
-					.getString("openConfirmation.text"),
+			if (JOptionPane.showConfirmDialog(m_frame,
+					m_resources.getString("openConfirmation.text"),
 					(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 				return;
 			}
@@ -1308,21 +1172,20 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			}
 			m_configModel.getArgs().setReplay(true);
 			m_configModel.getArgs().setRecord(true);
-			
+
 			String name = file.getName();
-			if(name.endsWith(".xml")){
+			if (name.endsWith(".xml")) {
 				int spl = name.indexOf('.');
 				name = name.substring(0, spl);
 			}
-			
+
 			m_configModel.getArgs().setTime(name);
-			
+
 			time = name;
 			m_processControl
-			.startWorkerProcesses(null, m_configModel.getArgs());
+					.startWorkerProcesses(null, m_configModel.getArgs());
 		}
-		
-		
+
 	}
 
 	private final class ResetProcessesAction extends CustomAction {
@@ -1347,10 +1210,12 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		public void actionPerformed(ActionEvent event) {
 
 			try {
-				final int chosen = m_optionalConfirmDialog.show(m_resources
-						.getString("stopProcessesConfirmation.text"),
-						(String) getValue(NAME), JOptionPane.OK_CANCEL_OPTION,
-						"stopProcessesAsk");
+				final int chosen = m_optionalConfirmDialog
+						.show(m_resources
+								.getString("stopProcessesConfirmation.text"),
+								(String) getValue(NAME),
+								JOptionPane.OK_CANCEL_OPTION,
+								"stopProcessesAsk");
 
 				if (chosen != JOptionPane.OK_OPTION
 						&& chosen != OptionalConfirmDialog.DONT_ASK_OPTION) {

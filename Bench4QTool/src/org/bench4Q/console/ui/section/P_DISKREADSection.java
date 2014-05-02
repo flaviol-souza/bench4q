@@ -258,10 +258,10 @@ public class P_DISKREADSection extends JPanel implements ServerInfoObserver{
 		
 		DecimalFormat df = new DecimalFormat("0.0");
 		
-		Max = Double.parseDouble(df.format(Max));
-		Min = Double.parseDouble(df.format(Min));
-		Mean = Double.parseDouble(df.format(Mean));
-		Var = Double.parseDouble(df.format(Var));
+//		Max = Double.parseDouble(df.format(Max));
+//		Min = Double.parseDouble(df.format(Min));
+//		Mean = Double.parseDouble(df.format(Mean));
+//		Var = Double.parseDouble(df.format(Var));
 		
 		picPanel.setShowForm(printDISKREADPic());
 		this.updateUI();

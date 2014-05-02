@@ -39,45 +39,45 @@ import org.bench4Q.servermonitor.ServerData;
 
 /**
  * @author wang sa
- *
- * this class will control the process of monitoring the application server
+ * 
+ *         this class will control the process of monitoring the application
+ *         server
  * 
  */
 public class AppMonitorProcessImplementation implements MonitorProcess {
-	
+
 	private ServerInfo m_serverInfo;
-	
 
 	private ResourceMonitorThread m_resourceMonitor;
-	
+
 	private Args m_arg;
-	
+
 	private String m_hostaddr;
-	
+
 	private int port;
-	
+
 	private Map MultiServer;
+
 	/**
-	 * @param arg 
-	 *    arg is the configuration information
+	 * @param arg
+	 *            arg is the configuration information
 	 * 
 	 */
-	public AppMonitorProcessImplementation(Args arg){
-		
+	public AppMonitorProcessImplementation(Args arg) {
+
 		m_arg = arg;
 		MultiServer = new HashMap<String, ServerInfo>();
 	}
-	
-	
+
 	/**
 	 * 
 	 */
-	public void StartMonitor(){
-		
+	public void StartMonitor() {
+
 		m_serverInfo = new ServerInfo();
 		int max = 0;
 		int workerEndTime;
-		
+
 		// count the time of the whole test
 		for (TestPhase testPhase : m_arg.getEbs()) {
 			workerEndTime = testPhase.getStdyTime()
@@ -87,42 +87,46 @@ public class AppMonitorProcessImplementation implements MonitorProcess {
 			}
 		}
 		String hostaddr = m_arg.getBaseURL();
-		
-		//extract the address of application server
-		if(hostaddr.startsWith("http://"))
+
+		// extract the address of application server
+		if (hostaddr.startsWith("http://"))
 			m_hostaddr = hostaddr.substring(7);
-		m_hostaddr = m_hostaddr.subSequence(0, 15).toString();
-//		int index = m_hostaddr.indexOf('/');
-//		m_hostaddr = m_hostaddr.substring(0, index);
-		
+
+		if (m_hostaddr.contains(":")) {
+			m_hostaddr = m_hostaddr.split(":")[0];
+		} else if (m_hostaddr.contains("/")) {
+			m_hostaddr = m_hostaddr.split("/")[0];
+		}
+
+		// m_hostaddr = m_hostaddr.subSequence(0, 15).toString();
+		// int index = m_hostaddr.indexOf('/');
+		// m_hostaddr = m_hostaddr.substring(0, index);
+
 		// get the port of the resource monitor
 		port = m_arg.getWebPort();
-		
 
-//		m_resourceMonitor = new ResourceMonitorThread(m_hostaddr, MultiServer, max * 1000L, port);
+		// m_resourceMonitor = new ResourceMonitorThread(m_hostaddr,
+		// MultiServer, max * 1000L, port);
 
-		m_resourceMonitor = new ResourceMonitorThread(m_hostaddr, MultiServer, max * 1000L, port);
+		m_resourceMonitor = new ResourceMonitorThread(m_hostaddr, MultiServer,
+				max * 1000L, port);
 
-		
 		// start the monitor thread
 		m_resourceMonitor.setDaemon(true);
 		m_resourceMonitor.start();
 	}
-	
-	
+
 	/**
 	 * 
 	 */
-	public void StopMonitor(){
-		
+	public void StopMonitor() {
+
 		m_resourceMonitor.tostop();
 	}
-	
 
 	@Override
 	public Map<String, ServerInfo> getData() {
 		return MultiServer;
 	}
-
 
 }
