@@ -255,11 +255,11 @@ private static final long serialVersionUID = -4664913085497482123L;
 		Var = Math.sqrt(Var / (size-1));
 		
 		DecimalFormat df = new DecimalFormat("0.0");
-		
-		Max = Double.parseDouble(df.format(Max));
-		Min = Double.parseDouble(df.format(Min));
-		Mean = Double.parseDouble(df.format(Mean));
-		Var = Double.parseDouble(df.format(Var));
+//		
+//		Max = Double.parseDouble(df.format(Max));
+//		Min = Double.parseDouble(df.format(Min));
+//		Mean = Double.parseDouble(df.format(Mean));
+//		Var = Double.parseDouble(df.format(Var));
 		
 		picPanel.setShowForm(printNETWORKSENTPic());
 		this.updateUI();

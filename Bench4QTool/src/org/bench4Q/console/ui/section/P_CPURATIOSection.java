@@ -73,9 +73,9 @@ import org.jfree.data.xy.DefaultXYDataset;
 
 /**
  * @author wang sa
- *
+ * 
  */
-public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
+public class P_CPURATIOSection extends JPanel implements ServerInfoObserver {
 
 	/**
 	 * 
@@ -86,12 +86,11 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 	private ProcessControl m_processControl;
 	private SwingDispatcherFactory m_swingDispatcherFactory;
 
-
 	private ServerCollection m_serverCollection;
 
 	private PicPanel picPanel;
-	
-	private double Max = Double.MIN_VALUE; 
+
+	private double Max = Double.MIN_VALUE;
 	private double Min = Double.MAX_VALUE;
 	private double Mean = 0;
 	private double Var = 0;
@@ -99,7 +98,7 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 	double[][] result;
 	int num;
 	int deleteNum = 5;
-	
+
 	/**
 	 * @param resources
 	 * @param processControl
@@ -129,6 +128,7 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 						0, 0, 0, 0), 1, 1));
 
 	}
+
 	/**
 	 * @return
 	 */
@@ -139,7 +139,7 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 
 		}
 		DefaultCategoryDataset defaultcategorydataset = new DefaultCategoryDataset();
-		
+
 		String series1 = "Basic";
 		String series2 = "test (" + "Max = " + Max + " Min = " + Min
 				+ " Average = " + Mean + " StDev = " + Var + " )";
@@ -147,7 +147,7 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 		for (int i = 0; i < value[0].length; ++i) {
 			defaultcategorydataset.addValue(value[1][i], series1, new Integer(
 					(int) value[0][i]));
-			
+
 			defaultcategorydataset.addValue(result[1][i + num], series2,
 					new Integer((int) value[0][i]));
 		}
@@ -177,24 +177,24 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 		// "time (s)", "%", ds, PlotOrientation.VERTICAL, true,
 		// false, false);
 		// final XYPlot plot = chart.getXYPlot();
-		//		
+		//
 		// plot.setDomainCrosshairVisible(true);
 		// plot.setRangeCrosshairVisible(true);
 		// plot.setRangeCrosshairLockedOnData(true);
 		// plot.setBackgroundPaint(Color.WHITE);
 		//
 		// plot.setRangeCrosshairVisible(true);
-		//		
+		//
 		// XYItemRenderer render = chart.getXYPlot().getRenderer();
 		// render.setSeriesPaint(0, Color.BLUE);
-		//		
+		//
 		// XYAnnotation annotation = new XYTextAnnotation("average", 90, -10);
 		// render.addAnnotation(annotation);
 
 		final ChartPanel chartPanel = new ChartPanel(chart);
 		return chartPanel;
 	}
-	
+
 	private class PicPanel extends JPanel {
 		// BorderLayout borderLayout = new BorderLayout();
 		JPanel panel;
@@ -203,8 +203,8 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 			this.setLayout(new GridBagLayout());
 
 			panel = new JPanel();
-			JLabel noResultLabel = new JLabel(m_resources
-					.getString("Picture.noResultReceived"));
+			JLabel noResultLabel = new JLabel(
+					m_resources.getString("Picture.noResultReceived"));
 			panel.add(noResultLabel);
 			// this.add(panel, java.awt.BorderLayout.CENTER);
 			this.add(panel, new GridBagConstraints(0, 0, 1, 1, 100.0, 100.0,
@@ -224,34 +224,34 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 		}
 
 	}
+
 	@Override
 	public void getResult(ServerInfo serverInfo) {
-		
+
 		ArrayList<Double> filter = new ArrayList<Double>();
 		ArrayList<Integer> position = new ArrayList<Integer>();
 		double mid, sum;
 		sum = 0.0;
-		for(int i = 0; i < serverInfo.getCpu_ratio().size(); i++){
-					
+		for (int i = 0; i < serverInfo.getCpu_ratio().size(); i++) {
+
 			mid = (double) serverInfo.getCpu_ratio().get(i);
-			if(mid == -1.0){
+			if (mid == -1.0) {
 				filter.add(1.0);
 				position.add(i + 1);
-			}
-			else if(mid == -2.0)
+			} else if (mid == -2.0)
 				continue;
-			else{
+			else {
 				filter.add(mid);
 				position.add(i + 1);
 			}
-					
+
 		}
 		result = new double[2][filter.size()];
 		int size = filter.size();
-		for(int j = 0; j < size; j++){
+		for (int j = 0; j < size; j++) {
 			mid = filter.get(j);
 			result[1][j] = mid;
-			if(mid > Max)
+			if (mid > Max)
 				Max = mid;
 			else if (mid < Min)
 				Min = mid;
@@ -259,36 +259,37 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 			result[0][j] = position.get(j);
 		}
 		Mean = sum / size;
-		for(int i = 0; i < size; i++)
-			Var = Var + (result[1][i]-Mean) * (result[1][i]-Mean);
-		Var = Math.sqrt(Var / (size-1));
-		
+		for (int i = 0; i < size; i++)
+			Var = Var + (result[1][i] - Mean) * (result[1][i] - Mean);
+		Var = Math.sqrt(Var / (size - 1));
+
 		DecimalFormat df = new DecimalFormat("0.0");
 		// Round off
-		Max = Double.parseDouble(df.format(Max));
-		Min = Double.parseDouble(df.format(Min));
-		Mean = Double.parseDouble(df.format(Mean));
-		Var = Double.parseDouble(df.format(Var));
-		
+//		Max = Double.parseDouble(df.format(Max));
+//		Min = Double.parseDouble(df.format(Min));
+//		Mean = Double.parseDouble(df.format(Mean));
+//		Var = Double.parseDouble(df.format(Var));
+
 		picPanel.setShowForm(printCPURatioPic());
 		this.updateUI();
 		restartTest();
-  
-		
+
 	}
+
 	@Override
 	public void restartTest() {
 		result = null;
-		
+
 	}
+
 	private double[][] wipsSmooth() {
-		
+
 		int i = result[1].length - 1;
 		double[][] smooth;
 		if (i > deleteNum * 2) {
 
 			smooth = new double[2][i - deleteNum + 2];
-			num = deleteNum / 2 ;
+			num = deleteNum / 2;
 			if (i != -1) {
 				smooth[1][0] = 0;
 				for (int j = 0; j < deleteNum; j++) {
@@ -296,8 +297,7 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 				}
 				for (int j = deleteNum; j <= i; j++) {
 					smooth[1][j - deleteNum + 1] = smooth[1][j - deleteNum]
-							+ result[1][j]
-							- result[1][j - deleteNum];
+							+ result[1][j] - result[1][j - deleteNum];
 				}
 				for (int j = 0; j <= i - deleteNum + 1; j++) {
 					smooth[1][j] = smooth[1][j] / deleteNum;
@@ -319,6 +319,5 @@ public class P_CPURATIOSection extends JPanel implements ServerInfoObserver{
 
 		return smooth;
 	}
-	
 
 }
