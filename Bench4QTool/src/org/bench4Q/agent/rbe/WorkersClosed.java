@@ -47,7 +47,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
+
+
 import org.bench4Q.agent.rbe.communication.Args;
+import org.bench4Q.agent.rbe.communication.TestPhase;
 
 /**
  * @author duanzhiquan
@@ -70,9 +73,9 @@ public class WorkersClosed extends Workers {
 	 * @param args
 	 */
 	public WorkersClosed(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, Args args, int identity){
+			int baseLoad, int randomLoad, int rate, TestPhase testPhase, Args args, int identity){
 		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
-				args, identity);
+				testPhase, args, identity);
 		trace = new ArrayList<ArrayList<Integer>>();
 		if (m_args.isReplay()){
 			FileInputStream fi;
@@ -123,6 +126,7 @@ public class WorkersClosed extends Workers {
 	void StartEB() {
 		int n = 0;
 		long beginTime = System.currentTimeMillis();
+		long startTime = beginTime + m_testPhase.getStartTime() * 1000L;
 		long endTime = beginTime + m_stdyTime * 1000L;
 
 		int baseLoad = m_baseLoad;
@@ -134,7 +138,8 @@ public class WorkersClosed extends Workers {
 			eb.setTest(true);
 		}
 
-		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
+//		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
+		while ((!isStop()) && (System.currentTimeMillis() >= startTime) && (System.currentTimeMillis() - endTime) < 0) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {

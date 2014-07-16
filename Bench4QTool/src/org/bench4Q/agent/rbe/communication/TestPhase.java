@@ -45,6 +45,33 @@ public class TestPhase implements Sendable {
 	private int rate;
 	private int stdyTime;
 	private int triggerTime;
+	private int startTime;
+	private int durationTime;
+	private boolean polarity;
+
+	public int getDurationTime() {
+		return durationTime;
+	}
+
+	public void setDurationTime(int durationTime) {
+		this.durationTime = durationTime;
+	}
+
+	public boolean isPolarity() {
+		return polarity;
+	}
+
+	public void setPolarity(boolean polarity) {
+		this.polarity = polarity;
+	}
+
+	public int getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
+	}
 
 	/**
 	 * @return

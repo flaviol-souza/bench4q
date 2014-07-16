@@ -42,7 +42,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
+import org.bench4Q.agent.rbe.communication.TestPhase;
 import org.bench4Q.common.util.thread.ThreadPool;
+
 import java.util.*;
 
 /**
@@ -61,9 +63,9 @@ public class WorkersOpen extends Workers {
 	 * @param args
 	 */
 	public WorkersOpen(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, Args args, int identity) {
+			int baseLoad, int randomLoad, int rate, TestPhase testPhase, Args args, int identity) {
 		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
-				args, identity);
+				testPhase, args, identity);
 		trace = new ArrayList<ArrayList<Integer>>();
 		if (m_args.isReplay()){
 			FileInputStream fi;
@@ -106,9 +108,11 @@ public class WorkersOpen extends Workers {
 				new ArrayBlockingQueue<Runnable>(workQueueLength),
 				new ThreadPoolExecutor.AbortPolicy());
 		long beginTime = System.currentTimeMillis();
+		long startTime = beginTime + m_testPhase.getStartTime() * 1000L;
 		long endTime = beginTime + m_stdyTime * 1000L;
 		int baseLoad = m_baseLoad;
-		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
+		//while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
+		while ((!isStop()) && (System.currentTimeMillis() >= startTime) && (System.currentTimeMillis() - endTime) < 0) {
 			long stime = System.currentTimeMillis();
 			int realLoad = baseLoad + m_randomLoad;
 

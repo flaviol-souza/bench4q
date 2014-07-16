@@ -46,6 +46,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import org.bench4Q.agent.rbe.communication.Args;
+import org.bench4Q.agent.rbe.communication.TestPhase;
 
 /**
  * @author duanzhiquan
@@ -80,6 +81,10 @@ public abstract class Workers extends Thread {
 	/**
 	 * 
 	 */
+	public TestPhase m_testPhase;
+	/**
+	 * 
+	 */
 	public Args m_args;
 
 	/**
@@ -106,10 +111,11 @@ public abstract class Workers extends Thread {
 	 * @param baseLoad
 	 * @param randomLoad
 	 * @param rate
+	 * @param testPhase 
 	 * @param args
 	 */
 	public Workers(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, Args args, int identity) {
+			int baseLoad, int randomLoad, int rate, TestPhase testPhase, Args args, int identity) {
 		super();
 		m_startTime = startTime;
 		m_triggerTime = triggerTime;
@@ -119,6 +125,7 @@ public abstract class Workers extends Thread {
 		m_rate = rate;
 		m_args = args;
 		m_identity = identity;
+		m_testPhase = testPhase;
 		
 	}
 

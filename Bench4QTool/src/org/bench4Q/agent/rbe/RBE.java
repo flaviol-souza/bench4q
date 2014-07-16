@@ -212,7 +212,7 @@ public class RBE implements Runnable {
 				m_workers.add(new WorkersClosed(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), m_args, identity));
+						.getRate(), testPhase, m_args, identity));
 			}
 		} else if (m_args.getRbetype().equalsIgnoreCase("open")) {
 			for (TestPhase testPhase : m_args.getEbs()) {
@@ -220,7 +220,7 @@ public class RBE implements Runnable {
 				m_workers.add(new WorkersOpen(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), m_args, identity));
+						.getRate(), testPhase, m_args, identity));
 			}
 		} else {
 			System.out.println("Error parameter.");
@@ -230,7 +230,7 @@ public class RBE implements Runnable {
 				m_workers.add(new WorkersClosed(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), m_args, identity));
+						.getRate(), testPhase, m_args, identity));
 			}
 		}
 
