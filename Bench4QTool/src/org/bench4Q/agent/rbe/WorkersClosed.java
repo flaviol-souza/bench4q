@@ -46,9 +46,6 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
-
-
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.TestPhase;
 
@@ -59,9 +56,6 @@ import org.bench4Q.agent.rbe.communication.TestPhase;
 public class WorkersClosed extends Workers {
 
 	private ArrayList<EB> ebs;
-	
-
-	
 
 	/**
 	 * @param startTime
@@ -73,16 +67,17 @@ public class WorkersClosed extends Workers {
 	 * @param args
 	 */
 	public WorkersClosed(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, TestPhase testPhase, Args args, int identity){
+			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
+			Args args, int identity) {
 		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
 				testPhase, args, identity);
 		trace = new ArrayList<ArrayList<Integer>>();
-		if (m_args.isReplay()){
+		if (m_args.isReplay()) {
 			FileInputStream fi;
 			try {
 				fi = new FileInputStream(m_args.getTime() + "-" + identity);
 				ObjectInputStream ois = new ObjectInputStream(fi);
-				trace = (ArrayList<ArrayList<Integer>>)ois.readObject();
+				trace = (ArrayList<ArrayList<Integer>>) ois.readObject();
 				ois.close();
 				fi.close();
 			} catch (FileNotFoundException e) {
@@ -102,31 +97,30 @@ public class WorkersClosed extends Workers {
 		// initialize the pool
 		for (int j = 0; j < baseLoad; j++) {
 			ArrayList<Integer> tra = new ArrayList<Integer>();
-			if(m_args.isReplay()){
+			if (m_args.isReplay()) {
 				tra = trace.get(j);
 				EB eb = new EBClosed(m_args, tra);
 				eb.setDaemon(true);
-//				if(j > baseLoad / 2)
-//					eb.joke = true;
+				// if(j > baseLoad / 2)
+				// eb.joke = true;
 				eb.start();
 				ebs.add(eb);
-			}
-			else {
+			} else {
 				EB eb = new EBClosed(m_args, tra);
-			eb.setDaemon(true);
-			eb.start();
-			ebs.add(eb);
+				eb.setDaemon(true);
+				eb.start();
+				ebs.add(eb);
 				trace.add(tra);
 			}
-						
-			
+
 		}
 	}
 
 	void StartEB() {
 		int n = 0;
 		long beginTime = System.currentTimeMillis();
-		long startTime = beginTime + m_testPhase.getStartTime() * 1000L;
+		long startTime = beginTime + m_testPhase.getFrequency().getStartTime()
+				* 1000L;
 		long endTime = beginTime + m_stdyTime * 1000L;
 
 		int baseLoad = m_baseLoad;
@@ -138,12 +132,13 @@ public class WorkersClosed extends Workers {
 			eb.setTest(true);
 		}
 
-//		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
-		while ((!isStop()) && (System.currentTimeMillis() >= startTime) && (System.currentTimeMillis() - endTime) < 0) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
+		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
+			if ((System.currentTimeMillis() >= startTime)) {
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
 			}
 		}
 
@@ -154,5 +149,5 @@ public class WorkersClosed extends Workers {
 		ebs = null;
 
 	}
-	
+
 }

@@ -41,9 +41,8 @@ import java.util.Vector;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.HttpVersion;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
@@ -324,57 +323,59 @@ public abstract class EB extends Thread {
 			// m_Client.getState().clearCookies();
 			// }
 
-			start = System.currentTimeMillis();
-			statusCode = m_Client.executeMethod(httpget);
-			end = System.currentTimeMillis();
-			Cookie[] cc;
-			cc = m_Client.getState().getCookies();
-			for (int i = 0; i < cc.length; i++) {
-				if (cc[i].getName().equalsIgnoreCase("jsessionid"))
-					sessionID = cc[i].getValue();
-			}
-
-			Header[] header;
-			if (sessionID == null) {
-				String cString = null;
-				header = httpget.getRequestHeaders();
-				for (int i = 0; i < header.length; i++) {
-					if (header[i].getName().equalsIgnoreCase("cookie"))
-						cString = header[i].getValue();
+			if(httpget instanceof HttpMethod){
+				start = System.currentTimeMillis();
+				statusCode = m_Client.executeMethod(httpget);
+				end = System.currentTimeMillis();
+				Cookie[] cc;
+				cc = m_Client.getState().getCookies();
+				for (int i = 0; i < cc.length; i++) {
+					if (cc[i].getName().equalsIgnoreCase("jsessionid"))
+						sessionID = cc[i].getValue();
 				}
-				int indexs = 0;
-				if (cString != null)
-					indexs = cString.indexOf("JSESSIONID=");
-				indexs = indexs + "JSESSIONID=".length();
-				String nextString = cString.substring(indexs);
-				int indexe = 0;
-				indexe = nextString.indexOf(";");
-				sessionID = nextString.substring(0, indexe);
+				
+				Header[] header;
+				if (sessionID == null) {
+					String cString = null;
+					header = httpget.getRequestHeaders();
+					for (int i = 0; i < header.length; i++) {
+						if (header[i].getName().equalsIgnoreCase("cookie"))
+							cString = header[i].getValue();
+					}
+					int indexs = 0;
+					if (cString != null)
+						indexs = cString.indexOf("JSESSIONID=");
+					indexs = indexs + "JSESSIONID=".length();
+					String nextString = cString.substring(indexs);
+					int indexe = 0;
+					indexe = nextString.indexOf(";");
+					sessionID = nextString.substring(0, indexe);
+				}
+				
+				if (statusCode != HttpStatus.SC_OK) {
+					EBStats.getEBStats().error(state,
+							"HTTP response ERROR: " + statusCode, url, isVIP);
+					return false;
+				}
+				// System.out.println("start");
+				// if(first)
+				// cookies = m_Client.getState().getCookies();
+				
+				// for(int i=0; i<cookies.length; i++){
+				// System.out.println(cookies[i].getName() + "=" +
+				// cookies[i].getValue());
+				// }
+				// System.out.println("end");
+				
+				BufferedReader bin = new BufferedReader(new InputStreamReader(
+						httpget.getResponseBodyAsStream()));
+				StringBuilder result = new StringBuilder();
+				String s;
+				while ((s = bin.readLine()) != null) {
+					result.append(s);
+				}
+				html = new String(result);
 			}
-
-			if (statusCode != HttpStatus.SC_OK) {
-				EBStats.getEBStats().error(state,
-						"HTTP response ERROR: " + statusCode, url, isVIP);
-				return false;
-			}
-			// System.out.println("start");
-			// if(first)
-			// cookies = m_Client.getState().getCookies();
-
-			// for(int i=0; i<cookies.length; i++){
-			// System.out.println(cookies[i].getName() + "=" +
-			// cookies[i].getValue());
-			// }
-			// System.out.println("end");
-
-			BufferedReader bin = new BufferedReader(new InputStreamReader(
-					httpget.getResponseBodyAsStream()));
-			StringBuilder result = new StringBuilder();
-			String s;
-			while ((s = bin.readLine()) != null) {
-				result.append(s);
-			}
-			html = new String(result);
 		} catch (Exception e) {
 			EBStats.getEBStats().error(state, "get methed ERROR.", url, isVIP);
 			e.printStackTrace();

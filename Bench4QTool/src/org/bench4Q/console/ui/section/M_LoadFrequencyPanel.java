@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -16,13 +17,11 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import org.bench4Q.agent.rbe.communication.TestPhase;
+import org.bench4Q.agent.rbe.communication.TypeFrequency;
 import org.bench4Q.console.common.Resources;
 import org.bench4Q.console.model.ConfigModel;
 
 public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
-
-	private final String[] colNames = { "Start Time", "Duration Stile",
-			"Polarity" };
 
 	private JTable table;
 	private JPanel mainPanel;
@@ -49,22 +48,33 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 	}
 
 	private void createButtons() {
-		final String[] functionComboBox = { "Selected", "Stile" };
+		final List<String> listFunctions = new ArrayList<String>();
+
+		listFunctions.add("Select");
+		for (TypeFrequency type : TypeFrequency.values()) {
+			listFunctions.add(type.getName());
+		}
+
 		final JPanel painelButtons = new JPanel(new GridLayout());
 		mainPanel.add(painelButtons, BorderLayout.NORTH);
 
-		final JComboBox<String> functionCombo = new JComboBox<String>(
-				functionComboBox);
+		String[] array = new String[listFunctions.size()];
+		array = listFunctions.toArray(array);
+
+		final JComboBox<String> functionCombo = new JComboBox<String>(array);
 		functionCombo.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				createPanelFunction();
+				TypeFrequency type = TypeFrequency.getType((String) e.getItem());
+				if (type != null) {
+					createPanelFunction(type);
+				}
 			}
 		});
 		painelButtons.add(functionCombo);
 	}
 
-	private void createPanelFunction() {
+	private void createPanelFunction(final TypeFrequency type) {
 		functionPanel = new JPanel(new GridLayout());
 		functionPanel.setPreferredSize(new Dimension(690, 480));
 		functionPanel.setMinimumSize(new Dimension(300, 200));
@@ -73,7 +83,7 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 		this.dataSet = m_configModel.getArgs().getEbs();
 
 		table = new JTable();
-		table.setModel(new MyTableModel(colNames, this.dataSet));
+		table.setModel(new MyTableModel(type, this.dataSet));
 		// table.setRowHeight(1, 10);
 		// table.setSize(100, 30);
 
@@ -88,15 +98,15 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 
 		m_configModel.addListener(new ConfigModel.AbstractListener() {
 			public void isArgsChanged() {
-				resetConfig();
+				resetConfig(type);
 			}
 		});
 
 	}
 
-	protected void resetConfig() {
+	protected void resetConfig(TypeFrequency type) {
 		dataSet = m_configModel.getArgs().getEbs();
-		MyTableModel myTableModel = new MyTableModel(colNames, dataSet);
+		MyTableModel myTableModel = new MyTableModel( type, dataSet);
 		this.table.setModel(myTableModel);
 		this.table.revalidate();
 	}
@@ -112,10 +122,12 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 
 		private String[] columnNames = new String[0];
 		private ArrayList data = new ArrayList();
+		private TypeFrequency type;
 
-		public MyTableModel(String[] colNames, ArrayList dataSet) {
-			this.columnNames = colNames;
+		public MyTableModel(TypeFrequency type, ArrayList dataSet) {
+			this.columnNames = type.getAttributes();
 			this.data = dataSet;
+			this.type = type;
 		}
 
 		public int getColumnCount() {
@@ -131,37 +143,12 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			if (columnIndex == 0) {
-				return ((TestPhase) data.get(rowIndex)).getStartTime();
-			} else if (columnIndex == 1) {
-				return ((TestPhase) data.get(rowIndex)).getDurationTime();
-			} else if (columnIndex == 2) {
-				if(((TestPhase) data.get(rowIndex)).isPolarity())
-					return "+";
-				else
-					return "-";
-			} else {
-				return null;
-			}
+			return this.type.getValueAt(data, rowIndex, columnIndex);
 		}
 
 		public void setValueAt(Object value, int row, int col) {
-			if (col == 0) {
-				((TestPhase) data.get(row)).setStartTime(Integer
-						.valueOf((String) value));
-			} else if (col == 1) {
-				((TestPhase) data.get(row)).setDurationTime(Integer
-						.valueOf((String) value));
-			} else if (col == 2) {
-				
-				if(((String)value).equals("-"))
-					((TestPhase) data.get(row)).setPolarity(false);
-				else
-					((TestPhase) data.get(row)).setPolarity(true);
-			} else {
-			}
-
-//			resetShowPanel();
+			this.type.setValueAt(data, value, row, col);
+			// resetShowPanel();
 
 		}
 

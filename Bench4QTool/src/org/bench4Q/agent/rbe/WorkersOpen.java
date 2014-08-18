@@ -63,16 +63,17 @@ public class WorkersOpen extends Workers {
 	 * @param args
 	 */
 	public WorkersOpen(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, TestPhase testPhase, Args args, int identity) {
+			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
+			Args args, int identity) {
 		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
 				testPhase, args, identity);
 		trace = new ArrayList<ArrayList<Integer>>();
-		if (m_args.isReplay()){
+		if (m_args.isReplay()) {
 			FileInputStream fi;
 			try {
 				fi = new FileInputStream(m_args.getTime() + "-" + identity);
 				ObjectInputStream ois = new ObjectInputStream(fi);
-				trace = (ArrayList<ArrayList<Integer>>)ois.readObject();
+				trace = (ArrayList<ArrayList<Integer>>) ois.readObject();
 				fi.close();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -85,7 +86,7 @@ public class WorkersOpen extends Workers {
 				e.printStackTrace();
 			}
 
-	}
+		}
 	}
 
 	/*
@@ -108,51 +109,55 @@ public class WorkersOpen extends Workers {
 				new ArrayBlockingQueue<Runnable>(workQueueLength),
 				new ThreadPoolExecutor.AbortPolicy());
 		long beginTime = System.currentTimeMillis();
-		long startTime = beginTime + m_testPhase.getStartTime() * 1000L;
+		long startTime = beginTime + m_testPhase.getFrequency().getStartTime() * 1000L;
 		long endTime = beginTime + m_stdyTime * 1000L;
 		int baseLoad = m_baseLoad;
-		//while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
-		while ((!isStop()) && (System.currentTimeMillis() >= startTime) && (System.currentTimeMillis() - endTime) < 0) {
-			long stime = System.currentTimeMillis();
-			int realLoad = baseLoad + m_randomLoad;
+		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
+			if ((System.currentTimeMillis() >= startTime)) {
 
-			for (int j2 = 0; j2 < realLoad; j2++) {
-				ArrayList<Integer> tra = new ArrayList<Integer>();
-				if(m_args.isReplay())
-					tra = trace.get(j2);
-				else 
-					trace.add(tra);
-				boolean isVIP = Math.random() < (m_args.getRate() / 100.0) ? true : false;
-				EB eb = new EBOpen(m_args, tra, isVIP);
-				eb.setDaemon(true);
-				try{
-					threadPool.execute(eb);
-					}catch (RejectedExecutionException e) {
+				long stime = System.currentTimeMillis();
+				int realLoad = baseLoad + m_randomLoad;
+
+				for (int j2 = 0; j2 < realLoad; j2++) {
+					ArrayList<Integer> tra = new ArrayList<Integer>();
+					if (m_args.isReplay())
+						tra = trace.get(j2);
+					else
+						trace.add(tra);
+					boolean isVIP = Math.random() < (m_args.getRate() / 100.0) ? true
+							: false;
+					EB eb = new EBOpen(m_args, tra, isVIP);
+					eb.setDaemon(true);
+					try {
+						threadPool.execute(eb);
+					} catch (RejectedExecutionException e) {
 						EBStats.getEBStats().addErrorSession(0, eb.isVIP);
-						EBStats.getEBStats().error(0, "Request is rejected!", m_args.getBaseURL(), eb.isVIP);
+						EBStats.getEBStats().error(0, "Request is rejected!",
+								m_args.getBaseURL(), eb.isVIP);
 					}
-			}
-			baseLoad += m_rate;
-			long etime = System.currentTimeMillis();
-			long interval = (long) ((long) 1000 * m_args.getInterval());
-			if ((etime - stime) < interval) {
-				try {
-					Thread.sleep((interval - (etime - stime)));
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-
 				}
-			} else {
+				baseLoad += m_rate;
+				long etime = System.currentTimeMillis();
+				long interval = (long) ((long) 1000 * m_args.getInterval());
+				if ((etime - stime) < interval) {
+					try {
+						Thread.sleep((interval - (etime - stime)));
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
 
-				// interval is not long enough to finish the work. This kind
-				// of situation is not handled.Harry up to do next work.
+					}
+				} else {
+
+					// interval is not long enough to finish the work. This kind
+					// of situation is not handled.Harry up to do next work.
+				}
 			}
 
 		}
-//		}catch(Throwable t){
-//			System.err.println("exit : " + Thread.currentThread().getName());
-//			t.printStackTrace();
-//		}
+		// }catch(Throwable t){
+		// System.err.println("exit : " + Thread.currentThread().getName());
+		// t.printStackTrace();
+		// }
 
 	}
 }

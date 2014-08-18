@@ -45,32 +45,28 @@ public class TestPhase implements Sendable {
 	private int rate;
 	private int stdyTime;
 	private int triggerTime;
-	private int startTime;
-	private int durationTime;
-	private boolean polarity;
 
-	public int getDurationTime() {
-		return durationTime;
+	// Modification by ICMC-USP Brazil - Flavio Souza
+	private TestFrequency frequency;
+
+	public TestPhase() {
+		this.frequency = new TestFrequency();
+	}
+	 
+	
+	/**
+	 * @return the frequency
+	 */
+	public TestFrequency getFrequency() {
+		return frequency;
 	}
 
-	public void setDurationTime(int durationTime) {
-		this.durationTime = durationTime;
-	}
-
-	public boolean isPolarity() {
-		return polarity;
-	}
-
-	public void setPolarity(boolean polarity) {
-		this.polarity = polarity;
-	}
-
-	public int getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(int startTime) {
-		this.startTime = startTime;
+	/**
+	 * @param frequency
+	 *            the frequency to set
+	 */
+	public void setFrequency(TestFrequency frequency) {
+		this.frequency = frequency;
 	}
 
 	/**

@@ -206,6 +206,8 @@ public class RBE implements Runnable {
 		EBStats.getEBStats().setVIPrate(m_args.getRate());
 		int identity = 0;
 
+		FrequencySettings.setQntWorkers(m_args.getEbs().size());
+		
 		if (m_args.getRbetype().equalsIgnoreCase("closed")) {
 			for (TestPhase testPhase : m_args.getEbs()) {
 				identity++;

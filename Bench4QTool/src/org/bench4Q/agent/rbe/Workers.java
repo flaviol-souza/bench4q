@@ -127,6 +127,8 @@ public abstract class Workers extends Thread {
 		m_identity = identity;
 		m_testPhase = testPhase;
 		
+		FrequencySettings.settings(identity, this, testPhase);
+		
 	}
 
 	/* (non-Javadoc)
