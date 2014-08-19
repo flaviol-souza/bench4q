@@ -217,7 +217,7 @@ public final class AgentImplementation implements AgentInterface {
 					// clean EBStats for a new test.
 					EBStats.cleaner();
 
-					//  ²âÊÔ´úÂë
+					//  ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
 					RBE rbe = new RBE(m_args);
 //					rbe.startWorkers();
 
@@ -234,7 +234,7 @@ public final class AgentImplementation implements AgentInterface {
 						m_consoleListener.waitForMessage();
 					}
 					
-					//  ²âÊÔ´úÂë
+					//  ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
 					
 					if (m_consoleListener.received(ConsoleListener.COLLECT)) {
 						System.out.println("Received collection message.");

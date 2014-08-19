@@ -323,7 +323,7 @@ public abstract class EB extends Thread {
 			// m_Client.getState().clearCookies();
 			// }
 
-			if(httpget instanceof HttpMethod){
+//			if(httpget instanceof HttpMethod){
 				start = System.currentTimeMillis();
 				statusCode = m_Client.executeMethod(httpget);
 				end = System.currentTimeMillis();
@@ -375,7 +375,7 @@ public abstract class EB extends Thread {
 					result.append(s);
 				}
 				html = new String(result);
-			}
+//			}
 		} catch (Exception e) {
 			EBStats.getEBStats().error(state, "get methed ERROR.", url, isVIP);
 			e.printStackTrace();

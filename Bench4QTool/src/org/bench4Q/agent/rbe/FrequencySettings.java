@@ -1,9 +1,11 @@
 package org.bench4Q.agent.rbe;
 
+import java.io.Serializable;
+
 import org.bench4Q.agent.rbe.communication.TestPhase;
 import org.bench4Q.agent.rbe.communication.TypeFrequency;
 
-public class FrequencySettings {
+public class FrequencySettings implements Serializable{
 
 	private static int qntWorkers;
 	

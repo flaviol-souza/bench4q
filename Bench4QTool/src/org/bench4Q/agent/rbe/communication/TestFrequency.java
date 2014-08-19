@@ -1,7 +1,9 @@
 package org.bench4Q.agent.rbe.communication;
 
+import java.io.Serializable;
+
 //Create by ICMC-USP Brazil - Flavio Souza
-public class TestFrequency {
+public class TestFrequency implements Serializable{
 
 	private TypeFrequency type;
 
