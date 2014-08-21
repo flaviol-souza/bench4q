@@ -23,8 +23,8 @@ public class FrequencySettings implements Serializable{
 		if(TypeFrequency.RAMP.equals(type)){
 			workers.m_startTime = (workers.m_stdyTime/qntWorkers)*index;
 		}else if(TypeFrequency.STILE.equals(type)){
-			if(qntWorkers/2 >= index){
-				workers.m_startTime = workers.m_stdyTime/2;
+			if(index >= testPhase.getFrequency().getQuantity()){
+				workers.m_startTime = testPhase.getFrequency().getStartTime();
 			}else{
 				workers.m_startTime = 0;
 			}

@@ -3,13 +3,15 @@ package org.bench4Q.agent.rbe.communication;
 import java.io.Serializable;
 
 //Create by ICMC-USP Brazil - Flavio Souza
-public class TestFrequency implements Serializable{
+public class TestFrequency implements Serializable {
 
 	private TypeFrequency type;
 
 	private int startTime;
+	private int endTime;
 	private int durationTime;
 	private boolean polarity;
+	private int quantity;
 
 	/**
 	 * @return the type
@@ -69,6 +71,22 @@ public class TestFrequency implements Serializable{
 	 */
 	public void setPolarity(boolean polarity) {
 		this.polarity = polarity;
+	}
+
+	public int getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(int endTime) {
+		this.endTime = endTime;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 }
