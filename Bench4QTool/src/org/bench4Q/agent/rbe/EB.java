@@ -60,6 +60,10 @@ import org.bench4Q.agent.rbe.util.URLUtil;
  */
 public abstract class EB extends Thread {
 
+	protected long timeStart = 0;
+	protected long timeEnd = 0;
+	protected boolean isFrenquency = false;
+	
 	protected long sessionStart = 0;
 	protected long sessionEnd = 0;
 	protected int sessionLen = 1;

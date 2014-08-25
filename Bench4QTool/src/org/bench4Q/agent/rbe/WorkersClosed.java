@@ -56,6 +56,9 @@ import org.bench4Q.agent.rbe.communication.TestPhase;
 public class WorkersClosed extends Workers {
 
 	private ArrayList<EB> ebs;
+	
+
+	
 
 	/**
 	 * @param startTime
@@ -119,26 +122,24 @@ public class WorkersClosed extends Workers {
 	void StartEB() {
 		int n = 0;
 		long beginTime = System.currentTimeMillis();
-		long startTime = beginTime + m_testPhase.getFrequency().getStartTime()
-				* 1000L;
 		long endTime = beginTime + m_stdyTime * 1000L;
 
 		int baseLoad = m_baseLoad;
 
 		Iterator iterator = ebs.iterator();
 
+		int index = 0;
 		while (iterator.hasNext()) {
 			EBClosed eb = (EBClosed) iterator.next();
-			eb.setTest(true);
+			FrequencySettings.settings(index++, eb, m_testPhase);
+			eb.setTest(true);	
 		}
 
 		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
-			if ((System.currentTimeMillis() >= startTime)) {
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 			}
 		}
 
@@ -149,5 +150,5 @@ public class WorkersClosed extends Workers {
 		ebs = null;
 
 	}
-
+	
 }

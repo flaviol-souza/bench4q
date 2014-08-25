@@ -33,7 +33,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
@@ -43,9 +42,6 @@ import java.util.concurrent.TimeUnit;
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
 import org.bench4Q.agent.rbe.communication.TestPhase;
-import org.bench4Q.common.util.thread.ThreadPool;
-
-import java.util.*;
 
 /**
  * @author duanzhiquan
@@ -109,55 +105,50 @@ public class WorkersOpen extends Workers {
 				new ArrayBlockingQueue<Runnable>(workQueueLength),
 				new ThreadPoolExecutor.AbortPolicy());
 		long beginTime = System.currentTimeMillis();
-		long startTime = beginTime + m_testPhase.getFrequency().getStartTime() * 1000L;
 		long endTime = beginTime + m_stdyTime * 1000L;
 		int baseLoad = m_baseLoad;
 		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
-			if ((System.currentTimeMillis() >= startTime)) {
+			long stime = System.currentTimeMillis();
+			int realLoad = baseLoad + m_randomLoad;
 
-				long stime = System.currentTimeMillis();
-				int realLoad = baseLoad + m_randomLoad;
-
-				for (int j2 = 0; j2 < realLoad; j2++) {
-					ArrayList<Integer> tra = new ArrayList<Integer>();
-					if (m_args.isReplay())
-						tra = trace.get(j2);
-					else
-						trace.add(tra);
-					boolean isVIP = Math.random() < (m_args.getRate() / 100.0) ? true
-							: false;
-					EB eb = new EBOpen(m_args, tra, isVIP);
-					eb.setDaemon(true);
-					try {
-						threadPool.execute(eb);
-					} catch (RejectedExecutionException e) {
+			for (int j2 = 0; j2 < realLoad; j2++) {
+				ArrayList<Integer> tra = new ArrayList<Integer>();
+				if(m_args.isReplay())
+					tra = trace.get(j2);
+				else 
+					trace.add(tra);
+				boolean isVIP = Math.random() < (m_args.getRate() / 100.0) ? true : false;
+				EB eb = new EBOpen(m_args, tra, isVIP);
+				FrequencySettings.settings(j2, eb, m_testPhase);
+				eb.setDaemon(true);
+				try{
+					threadPool.execute(eb);
+					}catch (RejectedExecutionException e) {
 						EBStats.getEBStats().addErrorSession(0, eb.isVIP);
-						EBStats.getEBStats().error(0, "Request is rejected!",
-								m_args.getBaseURL(), eb.isVIP);
+						EBStats.getEBStats().error(0, "Request is rejected!", m_args.getBaseURL(), eb.isVIP);
 					}
-				}
-				baseLoad += m_rate;
-				long etime = System.currentTimeMillis();
-				long interval = (long) ((long) 1000 * m_args.getInterval());
-				if ((etime - stime) < interval) {
-					try {
-						Thread.sleep((interval - (etime - stime)));
-					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
+			}
+			baseLoad += m_rate;
+			long etime = System.currentTimeMillis();
+			long interval = (long) ((long) 1000 * m_args.getInterval());
+			if ((etime - stime) < interval) {
+				try {
+					Thread.sleep((interval - (etime - stime)));
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
 
-					}
-				} else {
-
-					// interval is not long enough to finish the work. This kind
-					// of situation is not handled.Harry up to do next work.
 				}
+			} else {
+
+				// interval is not long enough to finish the work. This kind
+				// of situation is not handled.Harry up to do next work.
 			}
 
 		}
-		// }catch(Throwable t){
-		// System.err.println("exit : " + Thread.currentThread().getName());
-		// t.printStackTrace();
-		// }
+//		}catch(Throwable t){
+//			System.err.println("exit : " + Thread.currentThread().getName());
+//			t.printStackTrace();
+//		}
 
 	}
 }

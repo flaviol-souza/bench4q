@@ -62,7 +62,7 @@ public class EBOpen extends EB {
 		m_trace = trace;
 		it = m_trace.iterator();
 		isVIP = _isVIP;
-		
+
 		p_s_to_l = args.getP_s_to_l();
 		p_l_to_s = args.getP_l_to_s();
 		lambda_short = args.getLambda_short();
@@ -129,92 +129,108 @@ public class EBOpen extends EB {
 		long tt = 0L; // Think Time.
 		boolean sign = true;
 		wirt_t1 = System.currentTimeMillis();
+		
+		if(timeStart == 0){
+			timeStart = System.currentTimeMillis();
+		}else{
+			timeStart = (timeStart*1000) + System.currentTimeMillis();
+		}
+		
+		if(timeEnd > 0){
+			timeEnd = (timeEnd*1000) + System.currentTimeMillis();
+		}
+		
 		// session start.
 		sessionStart = wirt_t1;
 		first = true;
 		while ((maxTrans == -1) || (maxTrans > 0)) {
-			if (nextReq != null) {
-				// Check if user session is finished.
-				if (toHome) {
-					// User session is complete.
-					sessionEnd = System.currentTimeMillis();
-					EBStats.getEBStats().sessionRecorder(sessionStart,
-							sessionEnd, sessionLen, Ordered, isVIP);
-					return;
-				}
-				if (nextReq.equals("")) {
-					EBStats.getEBStats().addErrorSession(curState, isVIP);
-//					sessionEnd = System.currentTimeMillis();
-//					EBStats.getEBStats().sessionRecorder(sessionStart,
-//							sessionEnd, sessionLen, Ordered);
-					return;
-				}
-				// Send HTTP request.
-				URL httpReq;
-				try {
-					httpReq = new URL(nextReq);
-				} catch (MalformedURLException e) {
-					EBStats.getEBStats().addErrorSession(curState, isVIP);
-//					sessionEnd = System.currentTimeMillis();
-//					EBStats.getEBStats().sessionRecorder(sessionStart,
-//							sessionEnd, sessionLen, Ordered);
-					return;
-				}
-				
-				if(first){
-					m_Client = HttpClientFactory.getInstance();
-					m_Client.getParams().setCookiePolicy(CookiePolicy.RFC_2965);
-				}
+			long currentTimeMillis = System.currentTimeMillis();
+			if (timeStart >= currentTimeMillis && timeEnd <= currentTimeMillis) {
+				if (nextReq != null) {
+					// Check if user session is finished.
+					if (toHome) {
+						// User session is complete.
+						sessionEnd = System.currentTimeMillis();
+						EBStats.getEBStats().sessionRecorder(sessionStart,
+								sessionEnd, sessionLen, Ordered, isVIP);
+						return;
+					}
+					if (nextReq.equals("")) {
+						EBStats.getEBStats().addErrorSession(curState, isVIP);
+						// sessionEnd = System.currentTimeMillis();
+						// EBStats.getEBStats().sessionRecorder(sessionStart,
+						// sessionEnd, sessionLen, Ordered);
+						return;
+					}
+					// Send HTTP request.
+					URL httpReq;
+					try {
+						httpReq = new URL(nextReq);
+					} catch (MalformedURLException e) {
+						EBStats.getEBStats().addErrorSession(curState, isVIP);
+						// sessionEnd = System.currentTimeMillis();
+						// EBStats.getEBStats().sessionRecorder(sessionStart,
+						// sessionEnd, sessionLen, Ordered);
+						return;
+					}
 
-				// Receive HTML response page.
-				wirt_t1 = System.currentTimeMillis();
-				sign = getHTML(curState, nextReq);
-				if (sign == false) {
-					EBStats.getEBStats().addErrorSession(curState, isVIP);
-//					sessionEnd = System.currentTimeMillis();
-//					EBStats.getEBStats().sessionRecorder(sessionStart,
-//							sessionEnd, sessionLen, Ordered);
+					if (first) {
+						m_Client = HttpClientFactory.getInstance();
+						m_Client.getParams().setCookiePolicy(
+								CookiePolicy.RFC_2965);
+					}
+
+					// Receive HTML response page.
+					wirt_t1 = System.currentTimeMillis();
+					sign = getHTML(curState, nextReq);
+					if (sign == false) {
+						EBStats.getEBStats().addErrorSession(curState, isVIP);
+						// sessionEnd = System.currentTimeMillis();
+						// EBStats.getEBStats().sessionRecorder(sessionStart,
+						// sessionEnd, sessionLen, Ordered);
+						return;
+					}
+					wirt_t2 = System.currentTimeMillis();
+
+					// Compute and store Web Interaction Response Time (WIRT)
+					EBStats.getEBStats().interaction(curState, wirt_t1,
+							wirt_t2, tt, isVIP);
+					sessionLen++;
+
+					if (curState == 4) {
+						Ordered = true;
+					}
+
+					curTrans.postProcess(this, html);
+				} else {
+					html = null;
+					wirt_t2 = wirt_t1;
+				}
+				if (!nextState())
 					return;
-				}
-				wirt_t2 = System.currentTimeMillis();
-
-				// Compute and store Web Interaction Response Time (WIRT)
-				EBStats.getEBStats()
-						.interaction(curState, wirt_t1, wirt_t2, tt, isVIP);
-				sessionLen++;
-
-				if (curState == 4) {
-					Ordered = true;
-				}
-
-				curTrans.postProcess(this, html);
-			} else {
-				html = null;
-				wirt_t2 = wirt_t1;
-			}
-			if(!nextState())
-				return;
-			if (nextReq != null) {
-				// Pick think time (TT), and compute absolute request time
-				tt = MAP();
-				wirt_t1 = wirt_t2 + tt;
-				try {
-					sleep(tt);
-				} catch (InterruptedException inte) {
+				if (nextReq != null) {
+					// Pick think time (TT), and compute absolute request time
+					tt = MAP();
+					wirt_t1 = wirt_t2 + tt;
+					try {
+						sleep(tt);
+					} catch (InterruptedException inte) {
+						EBStats.getEBStats().addErrorSession(curState, isVIP);
+						System.out.println(" Caught an interrupted exception!");
+						// sessionEnd = System.currentTimeMillis();
+						// EBStats.getEBStats().sessionRecorder(sessionStart,
+						// sessionEnd, sessionLen, Ordered);
+						return;
+					}
+					if (maxTrans > 0)
+						maxTrans--;
+				} else {
+					// sessionEnd = System.currentTimeMillis();
+					// EBStats.getEBStats().sessionRecorder(sessionStart,
+					// sessionEnd,
+					// sessionLen, Ordered);
 					EBStats.getEBStats().addErrorSession(curState, isVIP);
-					System.out.println(" Caught an interrupted exception!");
-//					sessionEnd = System.currentTimeMillis();
-//					EBStats.getEBStats().sessionRecorder(sessionStart,
-//							sessionEnd, sessionLen, Ordered);
-					return;
 				}
-				if (maxTrans > 0)
-					maxTrans--;
-			} else {
-//				sessionEnd = System.currentTimeMillis();
-//				EBStats.getEBStats().sessionRecorder(sessionStart, sessionEnd,
-//						sessionLen, Ordered);
-				EBStats.getEBStats().addErrorSession(curState, isVIP);
 			}
 		}
 	}

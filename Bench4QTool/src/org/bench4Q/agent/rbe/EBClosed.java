@@ -31,8 +31,8 @@ package org.bench4Q.agent.rbe;
 
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpClient;
+import javax.rmi.CORBA.Tie;
+
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
@@ -56,7 +56,7 @@ public class EBClosed extends EB {
 	/**
 	 * @param args
 	 */
-	public EBClosed(Args args, ArrayList<Integer> trace){
+	public EBClosed(Args args, ArrayList<Integer> trace) {
 		m_args = args;
 		terminate = false;
 		test = false;
@@ -72,7 +72,7 @@ public class EBClosed extends EB {
 		lname = null;
 		toHome = false;
 		rate = args.getRate() / 100.0;
-		
+
 		p_s_to_l = args.getP_s_to_l();
 		p_l_to_s = args.getP_l_to_s();
 		lambda_short = args.getLambda_short();
@@ -138,14 +138,30 @@ public class EBClosed extends EB {
 
 	public void run() {
 		while (!this.terminate) {
-			if (test) {
+			if (isFrenquency) {
 				isVIP = rand.nextDouble() < rate ? true : false;
-//				System.out.println(isVIP);
+				first = true;
+				
+				if(timeStart == 0){
+					timeStart = System.currentTimeMillis();
+				}else{
+					timeStart = (timeStart*1000) + System.currentTimeMillis();
+				}
+				
+				if(timeEnd > 0){
+					timeEnd = (timeEnd*1000) + System.currentTimeMillis();
+				}
+				
+				test2();
+				m_Client.getState().clearCookies();
+			} else if (test) {
+				isVIP = rand.nextDouble() < rate ? true : false;
+				// System.out.println(isVIP);
 				first = true;
 				test();
 				m_Client.getState().clearCookies();
 			} else {
-				try {					
+				try {
 					Thread.sleep(1000L);
 				} catch (InterruptedException ie) {
 					Thread.currentThread().interrupt();
@@ -158,6 +174,130 @@ public class EBClosed extends EB {
 	/**
 	 * 
 	 */
+	public void test2() {
+
+		long startGet;
+		long endGet;
+		long tt = 0L; // Think Time.
+		boolean sign = true;
+		startGet = System.currentTimeMillis();
+		// session start.
+		sessionStart = startGet;
+
+		while ((maxTrans == -1) || (maxTrans > 0)) {
+
+			long currentTimeMillis = System.currentTimeMillis();
+			if (timeStart >= currentTimeMillis && timeEnd <= currentTimeMillis) {
+				if (this.terminate || !this.test) {
+					sessionEnd = System.currentTimeMillis();
+					EBStats.getEBStats().sessionRecorder(sessionStart,
+							sessionEnd, sessionLen, Ordered, isVIP);
+					return;
+				}
+				if (nextReq != null) {
+					// Check if user session is finished.
+					if (toHome) {
+						// User session is complete. Start new user session.
+						sessionEnd = System.currentTimeMillis();
+						EBStats.getEBStats().sessionRecorder(sessionStart,
+								sessionEnd, sessionLen, Ordered, isVIP);
+						initialize();
+						return;
+					}
+					if (nextReq.equals("")) {
+						EBStats.getEBStats().addErrorSession(curState, isVIP);
+						// sessionEnd = System.currentTimeMillis();
+						// EBStats.getEBStats().sessionRecorder(sessionStart,
+						// sessionEnd, sessionLen, Ordered);
+						initialize();
+						continue;
+					}
+					// Receive HTML response page.
+
+					if (rate > 0) {
+						if (isVIP) {
+							if (nextReq.contains("?"))
+								nextReq = nextReq
+										+ "&bench4q_session_priority=10";
+							else {
+								nextReq = nextReq
+										+ "?bench4q_session_priority=10";
+							}
+						} else {
+							if (nextReq.contains("?"))
+								nextReq = nextReq
+										+ "&bench4q_session_priority=1";
+							else {
+								nextReq = nextReq
+										+ "?bench4q_session_priority=1";
+							}
+						}
+
+					}
+					if (first) {
+						m_Client = HttpClientFactory.getInstance();
+						m_Client.getParams().setCookiePolicy(
+								CookiePolicy.RFC_2965);
+
+					}
+
+					startGet = System.currentTimeMillis();
+					sign = getHTML(curState, nextReq);
+					// System.out.println("send");
+					endGet = System.currentTimeMillis();
+
+					if (sign == false) {
+						EBStats.getEBStats().addErrorSession(curState, isVIP);
+						// sessionEnd = System.currentTimeMillis();
+						// EBStats.getEBStats().sessionRecorder(sessionStart,
+						// sessionEnd, sessionLen, Ordered);
+						initialize();
+						continue;
+					}
+
+					first = false;
+					// Compute and store Web Interaction Response Time (WIRT)
+					EBStats.getEBStats().interaction(curState, startGet,
+							endGet, tt, isVIP);
+					sessionLen++;
+					if (curState == 4) {
+						Ordered = true;
+					}
+					curTrans.postProcess(this, html);
+				} else {
+					html = null;
+					endGet = startGet;
+				}
+				if (!nextState())
+					return;
+				if (nextReq != null) {
+					// Pick think time (TT), and compute absolute request time
+					tt = MAP();
+					startGet = endGet + tt;
+					if (terminate || !this.test)
+						return;
+					try {
+						sleep(tt);
+					} catch (InterruptedException inte) {
+						Thread.currentThread().interrupt();
+						return;
+					}
+					if (maxTrans > 0)
+						maxTrans--;
+				} else {
+					EBStats.getEBStats().addErrorSession(curState, isVIP);
+					// sessionEnd = System.currentTimeMillis();
+					// EBStats.getEBStats().sessionRecorder(sessionStart,
+					// sessionEnd,
+					// sessionLen, Ordered);
+					initialize();
+					continue;
+				}
+			}
+
+		}
+	}
+
 	public void test() {
 
 		long startGet;
@@ -169,7 +309,7 @@ public class EBClosed extends EB {
 		sessionStart = startGet;
 
 		while ((maxTrans == -1) || (maxTrans > 0)) {
-			
+
 			if (this.terminate || !this.test) {
 				sessionEnd = System.currentTimeMillis();
 				EBStats.getEBStats().sessionRecorder(sessionStart, sessionEnd,
@@ -188,57 +328,54 @@ public class EBClosed extends EB {
 				}
 				if (nextReq.equals("")) {
 					EBStats.getEBStats().addErrorSession(curState, isVIP);
-//					sessionEnd = System.currentTimeMillis();
-//					EBStats.getEBStats().sessionRecorder(sessionStart,
-//							sessionEnd, sessionLen, Ordered);
+					// sessionEnd = System.currentTimeMillis();
+					// EBStats.getEBStats().sessionRecorder(sessionStart,
+					// sessionEnd, sessionLen, Ordered);
 					initialize();
 					continue;
 				}
 				// Receive HTML response page.
-				
+
 				if (rate > 0) {
-					if (isVIP){
-						if(nextReq.contains("?"))
+					if (isVIP) {
+						if (nextReq.contains("?"))
 							nextReq = nextReq + "&bench4q_session_priority=10";
 						else {
 							nextReq = nextReq + "?bench4q_session_priority=10";
 						}
-					}
-					else {
-						if(nextReq.contains("?"))
+					} else {
+						if (nextReq.contains("?"))
 							nextReq = nextReq + "&bench4q_session_priority=1";
 						else {
 							nextReq = nextReq + "?bench4q_session_priority=1";
 						}
 					}
-					
+
 				}
-				if(first){
+				if (first) {
 					m_Client = HttpClientFactory.getInstance();
 					m_Client.getParams().setCookiePolicy(CookiePolicy.RFC_2965);
-					
+
 				}
-				
+
 				startGet = System.currentTimeMillis();
 				sign = getHTML(curState, nextReq);
-//				System.out.println("send");
+				// System.out.println("send");
 				endGet = System.currentTimeMillis();
-				
-				
+
 				if (sign == false) {
 					EBStats.getEBStats().addErrorSession(curState, isVIP);
-//					sessionEnd = System.currentTimeMillis();
-//					EBStats.getEBStats().sessionRecorder(sessionStart,
-//							sessionEnd, sessionLen, Ordered);
+					// sessionEnd = System.currentTimeMillis();
+					// EBStats.getEBStats().sessionRecorder(sessionStart,
+					// sessionEnd, sessionLen, Ordered);
 					initialize();
 					continue;
 				}
-				
-			
+
 				first = false;
 				// Compute and store Web Interaction Response Time (WIRT)
-				EBStats.getEBStats()
-						.interaction(curState, startGet, endGet, tt, isVIP);
+				EBStats.getEBStats().interaction(curState, startGet, endGet,
+						tt, isVIP);
 				sessionLen++;
 				if (curState == 4) {
 					Ordered = true;
@@ -248,7 +385,7 @@ public class EBClosed extends EB {
 				html = null;
 				endGet = startGet;
 			}
-			if(!nextState())
+			if (!nextState())
 				return;
 			if (nextReq != null) {
 				// Pick think time (TT), and compute absolute request time
@@ -266,9 +403,10 @@ public class EBClosed extends EB {
 					maxTrans--;
 			} else {
 				EBStats.getEBStats().addErrorSession(curState, isVIP);
-//				sessionEnd = System.currentTimeMillis();
-//				EBStats.getEBStats().sessionRecorder(sessionStart, sessionEnd,
-//						sessionLen, Ordered);
+				// sessionEnd = System.currentTimeMillis();
+				// EBStats.getEBStats().sessionRecorder(sessionStart,
+				// sessionEnd,
+				// sessionLen, Ordered);
 				initialize();
 				continue;
 			}

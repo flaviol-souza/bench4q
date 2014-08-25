@@ -111,11 +111,11 @@ public abstract class Workers extends Thread {
 	 * @param baseLoad
 	 * @param randomLoad
 	 * @param rate
-	 * @param testPhase 
 	 * @param args
 	 */
 	public Workers(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, TestPhase testPhase, Args args, int identity) {
+			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
+			Args args, int identity) {
 		super();
 		m_startTime = startTime;
 		m_triggerTime = triggerTime;
@@ -126,9 +126,6 @@ public abstract class Workers extends Thread {
 		m_args = args;
 		m_identity = identity;
 		m_testPhase = testPhase;
-		
-		FrequencySettings.settings(identity, this, testPhase);
-		
 	}
 
 	/* (non-Javadoc)
