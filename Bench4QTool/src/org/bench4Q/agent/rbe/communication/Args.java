@@ -61,8 +61,6 @@ public class Args implements Sendable {
 
 	private boolean MoniWeb;
 	private boolean MoniDB;
-	
-
 
 	private double tolerance;
 	private int retry;
@@ -71,9 +69,10 @@ public class Args implements Sendable {
 	private boolean replay;
 	private boolean record;
 	private String time;
-	
 
 	private ArrayList<TestPhase> testPhase;
+
+	private String typeFrenquency;
 
 	/**
 	 * constructor
@@ -221,7 +220,6 @@ public class Args implements Sendable {
 	public void setThinktime(double thinktime) {
 		this.thinktime = thinktime;
 	}
-	
 
 	public boolean isTtMMPP() {
 		return ttMMPP;
@@ -328,13 +326,14 @@ public class Args implements Sendable {
 	public void setTestDescription(String testDescription) {
 		this.testDescription = testDescription;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public boolean isReplay() {
 		return replay;
-        }
+	}
+
 	public String getDBURL() {
 		return DBURL;
 	}
@@ -344,10 +343,12 @@ public class Args implements Sendable {
 	 */
 	public void setReplay(boolean replay) {
 		this.replay = replay;
-        }
+	}
+
 	public void setDBURL(String dBURL) {
 		DBURL = dBURL;
 	}
+
 	/**
 	 * @return
 	 */
@@ -375,7 +376,7 @@ public class Args implements Sendable {
 	public void setDBPort(int dBPort) {
 		DBPort = dBPort;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -389,7 +390,7 @@ public class Args implements Sendable {
 	public void setUseEJB(boolean useEJB) {
 		UseEJB = useEJB;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -431,8 +432,7 @@ public class Args implements Sendable {
 	public void setRecord(boolean record) {
 		this.record = record;
 	}
-	
-	
+
 	/**
 	 * @return
 	 */
@@ -446,7 +446,7 @@ public class Args implements Sendable {
 	public void setTime(String time) {
 		this.time = time;
 	}
-	
+
 	public double getP_s_to_l() {
 		return p_s_to_l;
 	}
@@ -462,7 +462,7 @@ public class Args implements Sendable {
 	public void setP_l_to_s(double pLToS) {
 		p_l_to_s = pLToS;
 	}
-	
+
 	public double getLambda_short() {
 		return lambda_short;
 	}
@@ -478,6 +478,7 @@ public class Args implements Sendable {
 	public void setLambda_long(double lambdaLong) {
 		lambda_long = lambdaLong;
 	}
+
 	public double getRate() {
 		return rate;
 	}
@@ -486,6 +487,12 @@ public class Args implements Sendable {
 		this.rate = rate;
 	}
 
-	
+	public String getTypeFrenquency() {
+		return typeFrenquency;
+	}
+
+	public void setTypeFrenquency(String typeFrenquency) {
+		this.typeFrenquency = typeFrenquency;
+	}
 
 }

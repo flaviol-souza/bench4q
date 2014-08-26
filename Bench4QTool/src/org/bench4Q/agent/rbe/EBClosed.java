@@ -138,20 +138,9 @@ public class EBClosed extends EB {
 
 	public void run() {
 		while (!this.terminate) {
-			if (isFrenquency) {
+			if (this.propertiesEB.isFrenquency()) {
 				isVIP = rand.nextDouble() < rate ? true : false;
 				first = true;
-				
-				if(timeStart == 0){
-					timeStart = System.currentTimeMillis();
-				}else{
-					timeStart = (timeStart*1000) + System.currentTimeMillis();
-				}
-				
-				if(timeEnd > 0){
-					timeEnd = (timeEnd*1000) + System.currentTimeMillis();
-				}
-				
 				test2();
 				m_Client.getState().clearCookies();
 			} else if (test) {
@@ -187,7 +176,8 @@ public class EBClosed extends EB {
 		while ((maxTrans == -1) || (maxTrans > 0)) {
 
 			long currentTimeMillis = System.currentTimeMillis();
-			if (timeStart >= currentTimeMillis && timeEnd <= currentTimeMillis) {
+			if (currentTimeMillis >= this.propertiesEB.getTimeStart() && currentTimeMillis <= this.propertiesEB.getTimeEnd() ) {
+				System.out.println("entrou close");
 				if (this.terminate || !this.test) {
 					sessionEnd = System.currentTimeMillis();
 					EBStats.getEBStats().sessionRecorder(sessionStart,

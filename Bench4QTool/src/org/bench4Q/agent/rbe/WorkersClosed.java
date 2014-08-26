@@ -48,6 +48,7 @@ import java.util.Iterator;
 
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.TestPhase;
+import org.bench4Q.agent.rbe.communication.TypeFrequency;
 
 /**
  * @author duanzhiquan
@@ -110,6 +111,7 @@ public class WorkersClosed extends Workers {
 				ebs.add(eb);
 			} else {
 				EB eb = new EBClosed(m_args, tra);
+				eb.setPropertiesEB(new PropertiesEB());
 				eb.setDaemon(true);
 				eb.start();
 				ebs.add(eb);
@@ -126,12 +128,17 @@ public class WorkersClosed extends Workers {
 
 		int baseLoad = m_baseLoad;
 
+		TypeFrequency type = TypeFrequency.getType(m_args.getTypeFrenquency());
+
 		Iterator iterator = ebs.iterator();
+
 
 		int index = 0;
 		while (iterator.hasNext()) {
 			EBClosed eb = (EBClosed) iterator.next();
-			FrequencySettings.settings(index++, eb, m_testPhase);
+			//
+			PropertiesEB propertiesEB = FrequencySettings.createProperties(index++, m_testPhase, type, beginTime);
+			eb.setPropertiesEB(propertiesEB);
 			eb.setTest(true);	
 		}
 

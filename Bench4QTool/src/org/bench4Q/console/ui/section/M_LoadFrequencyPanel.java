@@ -79,6 +79,8 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 		functionPanel.setPreferredSize(new Dimension(690, 480));
 		functionPanel.setMinimumSize(new Dimension(300, 200));
 
+		m_configModel.getArgs().setTypeFrenquency(type.getName());
+		
 		// Object[][] dados = { { stdyTime / 2, stdyTime / 2, "+" } };
 		this.dataSet = m_configModel.getArgs().getEbs();
 

@@ -129,23 +129,13 @@ public class EBOpen extends EB {
 		long tt = 0L; // Think Time.
 		boolean sign = true;
 		wirt_t1 = System.currentTimeMillis();
-		
-		if(timeStart == 0){
-			timeStart = System.currentTimeMillis();
-		}else{
-			timeStart = (timeStart*1000) + System.currentTimeMillis();
-		}
-		
-		if(timeEnd > 0){
-			timeEnd = (timeEnd*1000) + System.currentTimeMillis();
-		}
-		
+
 		// session start.
 		sessionStart = wirt_t1;
 		first = true;
 		while ((maxTrans == -1) || (maxTrans > 0)) {
 			long currentTimeMillis = System.currentTimeMillis();
-			if (timeStart >= currentTimeMillis && timeEnd <= currentTimeMillis) {
+			if (currentTimeMillis >= this.propertiesEB.getTimeStart() && currentTimeMillis <= this.propertiesEB.getTimeEnd() ) {
 				if (nextReq != null) {
 					// Check if user session is finished.
 					if (toHome) {
