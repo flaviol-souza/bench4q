@@ -135,6 +135,11 @@ public class EBOpen extends EB {
 		first = true;
 		while ((maxTrans == -1) || (maxTrans > 0)) {
 			long currentTimeMillis = System.currentTimeMillis();
+			//permite termionar  as requisicoes
+			if (currentTimeMillis > this.propertiesEB.getTimeEnd()){
+				maxTrans = 0;
+			}
+			
 			if (currentTimeMillis >= this.propertiesEB.getTimeStart() && currentTimeMillis <= this.propertiesEB.getTimeEnd() ) {
 				if (nextReq != null) {
 					// Check if user session is finished.

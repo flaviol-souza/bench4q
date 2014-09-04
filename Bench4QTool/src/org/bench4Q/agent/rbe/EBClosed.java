@@ -176,6 +176,11 @@ public class EBClosed extends EB {
 		while ((maxTrans == -1) || (maxTrans > 0)) {
 
 			long currentTimeMillis = System.currentTimeMillis();
+			//permite terminar as requisicoes
+			if (currentTimeMillis > this.propertiesEB.getTimeEnd()){
+				maxTrans = 0;
+			}
+			
 			if (currentTimeMillis >= this.propertiesEB.getTimeStart() && currentTimeMillis <= this.propertiesEB.getTimeEnd() ) {
 				System.out.println("entrou close");
 				if (this.terminate || !this.test) {
