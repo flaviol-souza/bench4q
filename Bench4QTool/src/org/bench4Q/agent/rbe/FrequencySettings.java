@@ -30,6 +30,7 @@ public class FrequencySettings implements Serializable {
 		}
 
 		eb.getPropertiesEB().setFrenquency(true);
+		eb.getPropertiesEB().setIndexEB(index);
 
 		if (TypeFrequency.RAMP.equals(type)) {
 			eb.getPropertiesEB().setTimeStart(

@@ -347,10 +347,15 @@ public abstract class EB extends Thread {
 				if (cString != null)
 					indexs = cString.indexOf("JSESSIONID=");
 				indexs = indexs + "JSESSIONID=".length();
-				String nextString = cString.substring(indexs);
-				int indexe = 0;
-				indexe = nextString.indexOf(";");
-				sessionID = nextString.substring(0, indexe);
+				// o que faz isso?
+				if(cString == null){
+					sessionID = "";
+				}else{
+					String nextString = cString.substring(indexs);
+					int indexe = 0;
+					indexe = nextString.indexOf(";");
+					sessionID = nextString.substring(0, indexe);
+				}
 			}
 
 			if (statusCode != HttpStatus.SC_OK) {

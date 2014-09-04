@@ -2,9 +2,18 @@ package org.bench4Q.agent.rbe;
 
 public class PropertiesEB {
 
+	protected int indexEB;
 	protected long timeStart = 0;
 	protected long timeEnd = 0;
 	protected boolean isFrenquency = false;
+
+	public int getIndexEB() {
+		return indexEB;
+	}
+
+	public void setIndexEB(int indexEB) {
+		this.indexEB = indexEB;
+	}
 
 	public long getTimeStart() {
 		return timeStart;

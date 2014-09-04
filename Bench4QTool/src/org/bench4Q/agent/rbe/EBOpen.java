@@ -137,6 +137,7 @@ public class EBOpen extends EB {
 			long currentTimeMillis = System.currentTimeMillis();
 			//permite termionar  as requisicoes
 			if (currentTimeMillis > this.propertiesEB.getTimeEnd()){
+				//System.out.println("EB index "+this.propertiesEB.getIndexEB()+" terminate");
 				maxTrans = 0;
 			}
 			
