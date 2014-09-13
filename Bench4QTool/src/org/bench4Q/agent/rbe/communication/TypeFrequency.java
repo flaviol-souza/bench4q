@@ -5,8 +5,8 @@ import java.util.ArrayList;
 //Create by ICMC-USP Brazil - Flavio Souza
 public enum TypeFrequency {
 
-	STILE("Stile", new String[] { "Start Time", "Duration Stile", "Polarity",
-			"Quantity" }), RAMP("Ramp", new String[] {"Start Time", "Quantity"});
+	STILE("Stile", new String[] { "Start Time", "Duration Stile", "Polarity", "Quantity" }), //
+	RAMP("Ramp", new String[] {"Start Time", "Quantity"});
 
 	private final String name;
 	private final String[] attributes;

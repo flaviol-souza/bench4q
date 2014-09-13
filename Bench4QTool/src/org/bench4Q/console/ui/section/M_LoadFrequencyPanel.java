@@ -66,7 +66,7 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				TypeFrequency type = TypeFrequency.getType((String) e.getItem());
-				if (type != null) {
+				if (type != null && e.getStateChange() == ItemEvent.SELECTED) {
 					createPanelFunction(type);
 				}
 			}
@@ -75,6 +75,10 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 	}
 
 	private void createPanelFunction(final TypeFrequency type) {
+		JPanel functionPanelOld = null;
+		if(functionPanel != null){
+			functionPanelOld = functionPanel;
+		}
 		functionPanel = new JPanel(new GridLayout());
 		functionPanel.setPreferredSize(new Dimension(690, 480));
 		functionPanel.setMinimumSize(new Dimension(300, 200));
@@ -93,7 +97,13 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 		scrollTable.setViewportView(table);
 
 		functionPanel.add(scrollTable);
-
+		
+		if(functionPanelOld != null){
+			functionPanelOld.setVisible(false);
+			mainPanel.remove(functionPanelOld);
+		}
+		
+		functionPanel.setVisible(true);
 		mainPanel.add(functionPanel);
 		mainPanel.revalidate();
 		mainPanel.repaint();

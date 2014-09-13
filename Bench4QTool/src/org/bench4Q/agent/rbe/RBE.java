@@ -190,12 +190,15 @@ public class RBE implements Runnable {
 		long cooldown = m_args.getCooldown();
 		long testInterval = 0;
 		int testPhaseEndTime;
+		//count EBs
+		int baseLoadEbs = 0;
 		for (TestPhase testPhase : m_args.getEbs()) {
 			testPhaseEndTime = testPhase.getTriggerTime()
 					+ testPhase.getStdyTime();
 			if (testPhaseEndTime > testInterval) {
 				testInterval = testPhaseEndTime;
 			}
+			baseLoadEbs += testPhase.getBaseLoad();
 		}
 
 		EBStats.getEBStats().init(startTime, prepairTime, testInterval,
@@ -206,7 +209,7 @@ public class RBE implements Runnable {
 		EBStats.getEBStats().setVIPrate(m_args.getRate());
 		int identity = 0;
 
-		FrequencySettings.setQntWorkers(m_args.getEbs().size());
+		FrequencySettings.setQntWorkers(baseLoadEbs);
 		
 		if (m_args.getRbetype().equalsIgnoreCase("closed")) {
 			for (TestPhase testPhase : m_args.getEbs()) {

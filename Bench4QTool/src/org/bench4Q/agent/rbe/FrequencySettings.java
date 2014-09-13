@@ -33,8 +33,9 @@ public class FrequencySettings implements Serializable {
 		eb.getPropertiesEB().setIndexEB(index);
 
 		if (TypeFrequency.RAMP.equals(type)) {
-			eb.getPropertiesEB().setTimeStart(
-					(testPhase.getStdyTime() / qntEbs) * index);
+			int time = (testPhase.getStdyTime() / qntEbs) * index;
+			System.out.println("EB index:"+index+" time:"+time);
+			eb.getPropertiesEB().setTimeStart(time);
 			eb.getPropertiesEB().setTimeEnd(testPhase.getStdyTime());
 		} else if (TypeFrequency.STILE.equals(type)) {
 			if (index >= testPhase.getFrequency().getQuantity()) {
@@ -57,8 +58,10 @@ public class FrequencySettings implements Serializable {
 		propertiesEB.isFrenquency = true;
 
 		if (TypeFrequency.RAMP.equals(type)) {
-			propertiesEB.setTimeStart((testPhase.getStdyTime() / qntEbs)
-					* index);
+			float reason = testPhase.getStdyTime() / (float)qntEbs;
+			int timeStart = (int) (reason * index);
+			
+			propertiesEB.setTimeStart(timeStart);
 			propertiesEB.setTimeEnd(testPhase.getStdyTime());
 		} else if (TypeFrequency.STILE.equals(type)) {
 			if (index >= testPhase.getFrequency().getQuantity()) {
@@ -84,6 +87,8 @@ public class FrequencySettings implements Serializable {
 		}else{
 			propertiesEB.setTimeEnd(timeEnd);
 		}
+		
+		//System.out.println("EB index:"+index+" timeStart:"+propertiesEB.getTimeStart()+" timeEnd:"+propertiesEB.getTimeEnd());
 
 		return propertiesEB;
 
