@@ -164,11 +164,10 @@ public class E_ErrorSection extends JPanel implements AgentInfoObserver {
 		renderer.setSeriesPaint(1, new Color(0, 255, 0));
 		renderer.setSeriesOutlinePaint(1, Color.red);
 		renderer.setItemMargin(0.1);
-		renderer
-				.setItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-		renderer.setItemLabelFont(new Font("ºÚÌå", Font.BOLD, 12));
+		/*renderer.setItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+		renderer.setItemLabelFont(new Font("Arial", Font.BOLD, 12));
 		renderer.setItemLabelPaint(Color.black);
-		renderer.setItemLabelsVisible(true);
+		renderer.setItemLabelsVisible(true);*/
 		plot.setRenderer(renderer);
 
 		plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
