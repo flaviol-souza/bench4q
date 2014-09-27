@@ -286,70 +286,43 @@ public abstract class EB extends Thread {
 	 * @return boolean
 	 */
 	public boolean getHTML(int state, String url) {
-		double tolerance = tolerance(curState);
+
+		double tolerance = tolerance(this.curState);
 		html = "";
-		int statusCode;
-		// String happyString;
-		// if(joke)
-		// happyString = orderInqURL;
-		// else {
-		// happyString = url;
-		// }
 
 		GetMethod httpget = new GetMethod(url);
-		// System.out.println(url);
-		// httpget.getParams().setVersion(HttpVersion.HTTP_1_0);
-
-		// httpget.getParams().setCookiePolicy(CookiePolicy.DEFAULT);
-
 		try {
 
-			if (tolerance != 0) {
-				httpget.getParams().setSoTimeout((int) (tolerance * 1000));
+			if (tolerance != 0.0D) {
+				httpget.getParams().setSoTimeout((int) (tolerance * 1000.0D));
 			}
-			// HttpClient m_Client = HttpClientFactory.getInstance();
-
-			// if(!first){
-			// httpget.getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
-			// m_Client.getState().addCookies(cookies);
-			// for(int i=0; i<cookies.length; i++){
-			// httpget.setRequestHeader("Cookie", cookies[i].getName() + "=" +
-			// cookies[i].getValue());
-			// }
-			// }
-
-			// else {
-			// // System.out.println("\n"+"first");
-			// httpget.getParams().setCookiePolicy(CookiePolicy.DEFAULT);
-			// m_Client.getState().clearCookies();
-			// }
-
-			start = System.currentTimeMillis();
-			statusCode = m_Client.executeMethod(httpget);
-			end = System.currentTimeMillis();
-			Cookie[] cc;
-			cc = m_Client.getState().getCookies();
+			this.start = System.currentTimeMillis();
+			int statusCode = this.m_Client.executeMethod(httpget);
+			this.end = System.currentTimeMillis();
+			Cookie[] cc = this.m_Client.getState().getCookies();
 			for (int i = 0; i < cc.length; i++) {
-				if (cc[i].getName().equalsIgnoreCase("jsessionid"))
-					sessionID = cc[i].getValue();
+				if (cc[i].getName().equalsIgnoreCase("jsessionid")) {
+					this.sessionID = cc[i].getValue();
+				}
 			}
 
-			Header[] header;
 			if (sessionID == null) {
 				String cString = null;
-				header = httpget.getRequestHeaders();
+				Header[] header = httpget.getRequestHeaders();
 				for (int i = 0; i < header.length; i++) {
-					if (header[i].getName().equalsIgnoreCase("cookie"))
+					if (header[i].getName().equalsIgnoreCase("cookie")) {
 						cString = header[i].getValue();
+					}
 				}
 				int indexs = 0;
-				if (cString != null)
+				if (cString != null) {
 					indexs = cString.indexOf("JSESSIONID=");
-				indexs = indexs + "JSESSIONID=".length();
+				}
+				indexs += "JSESSIONID=".length();
 				String nextString = cString.substring(indexs);
 				int indexe = 0;
 				indexe = nextString.indexOf(";");
-				sessionID = nextString.substring(0, indexe);
+				this.sessionID = nextString.substring(0, indexe);
 			}
 
 			if (statusCode != HttpStatus.SC_OK) {
@@ -357,15 +330,6 @@ public abstract class EB extends Thread {
 						"HTTP response ERROR: " + statusCode, url, isVIP);
 				return false;
 			}
-			// System.out.println("start");
-			// if(first)
-			// cookies = m_Client.getState().getCookies();
-
-			// for(int i=0; i<cookies.length; i++){
-			// System.out.println(cookies[i].getName() + "=" +
-			// cookies[i].getValue());
-			// }
-			// System.out.println("end");
 
 			BufferedReader bin = new BufferedReader(new InputStreamReader(
 					httpget.getResponseBodyAsStream()));
@@ -374,17 +338,18 @@ public abstract class EB extends Thread {
 			while ((s = bin.readLine()) != null) {
 				result.append(s);
 			}
-			html = new String(result);
+			this.html = new String(result);
 		} catch (Exception e) {
 			EBStats.getEBStats().error(state, "get methed ERROR.", url, isVIP);
 			e.printStackTrace();
 			return false;
 		} finally {
-			// always release the connection after we're done
 			httpget.releaseConnection();
 		}
 
-		if (!m_args.isGetImage()) {
+		int statusCode;
+		httpget.releaseConnection();
+		if (!this.m_args.isGetImage()) {
 			return true;
 		}
 		Vector<ImageReader> imageRd = new Vector<ImageReader>(0);
@@ -392,19 +357,21 @@ public abstract class EB extends Thread {
 		try {
 			u = new URL(url);
 		} catch (MalformedURLException e) {
-			EBStats.getEBStats().error(state, "get image ERROR.", url, isVIP);
+			EBStats.getEBStats().error(state, "get image ERROR.", url,
+					this.isVIP);
 			return false;
 		}
-		findImg(html, u, imgPat, srcPat, quotePat, imageRd);
-		findImg(html, u, inputPat, srcPat, quotePat, imageRd);
+
+		findImg(this.html, u, this.imgPat, this.srcPat, this.quotePat, imageRd);
+		findImg(this.html, u, this.inputPat, this.srcPat, this.quotePat,
+				imageRd);
 		while (imageRd.size() > 0) {
 			int max = imageRd.size();
 			int min = Math.max(max - RBEUtil.maxImageRd, 0);
-			int i;
 			try {
-				for (i = min; i < max; i++) {
+				for (int i = min; i < max; i++) {
 					ImageReader rd = (ImageReader) imageRd.elementAt(i);
-					if (!rd.readImage(state, isVIP)) {
+					if (!rd.readImage(state, this.isVIP)) {
 						imageRd.removeElementAt(i);
 						i--;
 						max--;
@@ -412,7 +379,7 @@ public abstract class EB extends Thread {
 				}
 			} catch (InterruptedException inte) {
 				EBStats.getEBStats().error(state, "get image ERROR.", url,
-						isVIP);
+						this.isVIP);
 				return true;
 			}
 		}
