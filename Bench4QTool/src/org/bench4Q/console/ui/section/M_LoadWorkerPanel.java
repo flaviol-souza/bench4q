@@ -99,8 +99,6 @@ public class M_LoadWorkerPanel extends JPanel implements ActionListener {
 				.getString("LW_ConfigLoadSection.tableColNameTriggerTime");
 		colNames[4] = m_resources
 				.getString("LW_ConfigLoadSection.tableColNameStdyTime");
-//		colNames[5] = m_resources
-//				.getString("LW_ConfigLoadSection.tableColNameStartTime");
 
 		this.dataSet = m_configModel.getArgs().getEbs();
 		MyDatamodel = new MyTableModel(this.colNames, this.dataSet);
@@ -253,9 +251,8 @@ public class M_LoadWorkerPanel extends JPanel implements ActionListener {
 				return ((TestPhase) data.get(rowIndex)).getTriggerTime();
 			} else if (columnIndex == 4) {
 				return ((TestPhase) data.get(rowIndex)).getStdyTime();
-//			}  else if (columnIndex == 5) {
-//				return ((TestPhase) data.get(rowIndex)).getStartTime();
-			}else {
+			} else {
+
 				return null;
 			}
 		}
@@ -276,10 +273,7 @@ public class M_LoadWorkerPanel extends JPanel implements ActionListener {
 			} else if (col == 4) {
 				((TestPhase) data.get(row)).setStdyTime(Integer
 						.valueOf((String) value));
-//			}  else if (col == 5) {
-//				((TestPhase) data.get(row)).setStartTime(Integer
-//						.valueOf((String) value));
-			}else {
+			} else {
 			}
 
 			resetShowPanel();

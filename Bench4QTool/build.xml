@@ -59,6 +59,12 @@
     </target>
     <target name="Agent">
         <java classname="org.bench4Q.Agent" failonerror="true" fork="yes">
+            <jvmarg line="-Xms1024m -Xmx1024m"/>
+            <classpath refid="Bench4QTool.classpath"/>
+        </java>
+    </target>
+    <target name="Console">
+        <java classname="org.bench4Q.Console" failonerror="true" fork="yes">
             <classpath refid="Bench4QTool.classpath"/>
         </java>
     </target>

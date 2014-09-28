@@ -163,10 +163,11 @@ public class S_SummarizeSection extends JPanel implements AgentInfoObserver {
 		renderer.setSeriesOutlinePaint(1, Color.red);
 		renderer.setItemMargin(0.1);
 
-		renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-		/*renderer.setItemLabelFont(new Font("Arial", Font.PLAIN, 12));
+		renderer
+				.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+		renderer.setItemLabelFont(new Font("ºÚÌå", Font.PLAIN, 12));
 		renderer.setItemLabelPaint(Color.black);
-		renderer.setItemLabelsVisible(true);*/
+		renderer.setItemLabelsVisible(true);
 		plot.setRenderer(renderer);
 
 		plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_LEFT);

@@ -61,19 +61,35 @@ public class FrequencySettings implements Serializable {
 			float reason = testPhase.getStdyTime() / (float)qntEbs;
 			int timeStart = (int) (reason * index);
 			
-			propertiesEB.setTimeStart(timeStart);
-			propertiesEB.setTimeEnd(testPhase.getStdyTime());
-		} else if (TypeFrequency.STILE.equals(type)) {
-			if (index >= testPhase.getFrequency().getQuantity()) {
-				propertiesEB.setTimeStart(0);
+			if(testPhase.getFrequency().isPolarity()){
+				propertiesEB.setTimeStart(timeStart);
 				propertiesEB.setTimeEnd(testPhase.getStdyTime());
-			} else {
-				propertiesEB.setTimeStart(testPhase.getFrequency()
-						.getStartTime());
-				propertiesEB.setTimeEnd(testPhase.getFrequency()
-						.getDurationTime());
+			}else{
+				propertiesEB.setTimeStart(testPhase.getFrequency().getStartTime());
+				propertiesEB.setTimeEnd(testPhase.getFrequency().getStartTime() + timeStart);
 			}
-
+		} else if (TypeFrequency.STILE.equals(type)) {
+//			if(testPhase.getFrequency().isPolarity()){
+				if (index >= testPhase.getFrequency().getQuantity()) {
+					propertiesEB.setTimeStart(0);
+					propertiesEB.setTimeEnd(testPhase.getStdyTime());
+				} else {
+					propertiesEB.setTimeStart(testPhase.getFrequency()
+							.getStartTime());
+					propertiesEB.setTimeEnd(testPhase.getFrequency()
+							.getDurationTime());
+				}	
+//			}else{
+//				if (index >= testPhase.getFrequency().getQuantity()) {
+//					propertiesEB.setTimeStart(0);
+//					propertiesEB.setTimeEnd(testPhase.getStdyTime());
+//				} else {
+//					propertiesEB.setTimeStart(testPhase.getFrequency()
+//							.getStartTime());
+//					propertiesEB.setTimeEnd(testPhase.getFrequency()
+//							.getDurationTime());
+//				}
+//			}
 		}
 
 		long timeStart = (propertiesEB.getTimeStart() * 1000) + timeInt;

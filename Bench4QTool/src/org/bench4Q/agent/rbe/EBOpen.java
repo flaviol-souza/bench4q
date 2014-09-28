@@ -47,31 +47,31 @@ public class EBOpen extends EB {
 	 * @param args
 	 */
 	public EBOpen(Args args, ArrayList<Integer> trace, boolean _isVIP) {
-		m_args = args;
-		maxTrans = 1000;
-		curState = 0;
-		nextReq = null;
-		html = null;
-		prevHTML = null;
-		cid = ID_UNKNOWN;
-		sessionID = null;
-		shopID = ID_UNKNOWN;
-		fname = null;
-		lname = null;
-		toHome = false;
-		m_trace = trace;
-		it = m_trace.iterator();
-		isVIP = _isVIP;
+		this.m_args = args;
+		this.maxTrans = 1000;
+		this.curState = 0;
+		this.nextReq = null;
+		this.html = null;
+		this.prevHTML = null;
+		this.cid = ID_UNKNOWN;
+		this.sessionID = null;
+		this.shopID = ID_UNKNOWN;
+		this.fname = null;
+		this.lname = null;
+		this.toHome = false;
+		this.m_trace = trace;
+		this.it = this.m_trace.iterator();
+		this.isVIP = _isVIP;
 
-		p_s_to_l = args.getP_s_to_l();
-		p_l_to_s = args.getP_l_to_s();
-		lambda_short = args.getLambda_short();
-		lambda_long = args.getLambda_long();
+		this.p_s_to_l = args.getP_s_to_l();
+		this.p_l_to_s = args.getP_l_to_s();
+		this.lambda_short = args.getLambda_short();
+		this.lambda_long = args.getLambda_long();
 
-		tt_scale = this.m_args.getThinktime();
+		this.tt_scale = this.m_args.getThinktime();
 		tt_stagger = this.m_args.isTtMMPP();
-		tolerance_scale = this.m_args.getTolerance();
-		retry = this.m_args.getRetry();
+		this.tolerance_scale = this.m_args.getTolerance();
+		this.retry = this.m_args.getRetry();
 
 		www = this.m_args.getBaseURL();
 		if (www.endsWith("/")) {
@@ -106,34 +106,32 @@ public class EBOpen extends EB {
 			adminConfURL = www + "/admin_response";
 		}
 
-		String mixType = m_args.getMix();
+		String mixType = this.m_args.getMix();
 		Mix mix = new Mix();
 		Mix.initialize();
 		if (mixType.equals("browsing")) {
-			transProb = mix.getTransProb("browsing");
-			trans = mix.getTrans("browsing");
+			this.transProb = mix.getTransProb("browsing");
+			this.trans = mix.getTrans("browsing");
 		} else if (mixType.equals("shopping")) {
-			transProb = mix.getTransProb("shopping");
-			trans = mix.getTrans("shopping");
+			this.transProb = mix.getTransProb("shopping");
+			this.trans = mix.getTrans("shopping");
 		} else if (mixType.equals("ordering")) {
-			transProb = mix.getTransProb("ordering");
-			trans = mix.getTrans("ordering");
+			this.transProb = mix.getTransProb("ordering");
+			this.trans = mix.getTrans("ordering");
 		} else {
 			System.out.println("EB initiate mix ERROR");
 		}
 	}
 
 	public void run() {
-		long wirt_t1;
-		long wirt_t2;
 		long tt = 0L; // Think Time.
 		boolean sign = true;
-		wirt_t1 = System.currentTimeMillis();
-
+		long wirt_t1 = System.currentTimeMillis();
 		// session start.
-		sessionStart = wirt_t1;
-		first = true;
-		while ((maxTrans == -1) || (maxTrans > 0)) {
+		this.sessionStart = wirt_t1;
+		this.first = true;
+		while ((this.maxTrans == -1) || (this.maxTrans > 0)) {
+			long wirt_t2;
 			long currentTimeMillis = System.currentTimeMillis();
 			//permite termionar  as requisicoes
 			if (currentTimeMillis > this.propertiesEB.getTimeEnd()){
@@ -146,16 +144,13 @@ public class EBOpen extends EB {
 					// Check if user session is finished.
 					if (toHome) {
 						// User session is complete.
-						sessionEnd = System.currentTimeMillis();
-						EBStats.getEBStats().sessionRecorder(sessionStart,
-								sessionEnd, sessionLen, Ordered, isVIP);
+						this.sessionEnd = System.currentTimeMillis();
+						EBStats.getEBStats().sessionRecorder(this.sessionStart,
+								this.sessionEnd, this.sessionLen, this.Ordered, this.isVIP);
 						return;
 					}
-					if (nextReq.equals("")) {
-						EBStats.getEBStats().addErrorSession(curState, isVIP);
-						// sessionEnd = System.currentTimeMillis();
-						// EBStats.getEBStats().sessionRecorder(sessionStart,
-						// sessionEnd, sessionLen, Ordered);
+					if (this.nextReq.equals("")) {
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						return;
 					}
 					// Send HTTP request.
@@ -163,69 +158,53 @@ public class EBOpen extends EB {
 					try {
 						httpReq = new URL(nextReq);
 					} catch (MalformedURLException e) {
-						EBStats.getEBStats().addErrorSession(curState, isVIP);
-						// sessionEnd = System.currentTimeMillis();
-						// EBStats.getEBStats().sessionRecorder(sessionStart,
-						// sessionEnd, sessionLen, Ordered);
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						return;
 					}
 
-					if (first) {
-						m_Client = HttpClientFactory.getInstance();
-						m_Client.getParams().setCookiePolicy(
-								CookiePolicy.RFC_2965);
+					if (this.first) {
+						this.m_Client = HttpClientFactory.getInstance();
+						this.m_Client.getParams().setCookiePolicy(CookiePolicy.RFC_2965);							
 					}
 
-					// Receive HTML response page.
 					wirt_t1 = System.currentTimeMillis();
-					sign = getHTML(curState, nextReq);
-					if (sign == false) {
-						EBStats.getEBStats().addErrorSession(curState, isVIP);
-						// sessionEnd = System.currentTimeMillis();
-						// EBStats.getEBStats().sessionRecorder(sessionStart,
-						// sessionEnd, sessionLen, Ordered);
+					sign = getHTML(this.curState, this.nextReq);
+					if (!sign) {
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						return;
 					}
 					wirt_t2 = System.currentTimeMillis();
 
-					// Compute and store Web Interaction Response Time (WIRT)
-					EBStats.getEBStats().interaction(curState, wirt_t1,
-							wirt_t2, tt, isVIP);
-					sessionLen++;
-
-					if (curState == 4) {
-						Ordered = true;
+					EBStats.getEBStats().interaction(this.curState, wirt_t1, wirt_t2, tt, this.isVIP);
+					this.sessionLen++;
+	
+					if (this.curState == 4) {
+						this.Ordered = true;
 					}
 
-					curTrans.postProcess(this, html);
+					this.curTrans.postProcess(this, this.html);
 				} else {
-					html = null;
+					this.html = null;
 					wirt_t2 = wirt_t1;
 				}
 				if (!nextState())
 					return;
-				if (nextReq != null) {
+				if (this.nextReq != null) {
 					// Pick think time (TT), and compute absolute request time
 					tt = MAP();
 					wirt_t1 = wirt_t2 + tt;
 					try {
 						sleep(tt);
 					} catch (InterruptedException inte) {
-						EBStats.getEBStats().addErrorSession(curState, isVIP);
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						System.out.println(" Caught an interrupted exception!");
-						// sessionEnd = System.currentTimeMillis();
-						// EBStats.getEBStats().sessionRecorder(sessionStart,
-						// sessionEnd, sessionLen, Ordered);
 						return;
 					}
-					if (maxTrans > 0)
-						maxTrans--;
+					if (this.maxTrans > 0){
+						this.maxTrans--;
+					}
 				} else {
-					// sessionEnd = System.currentTimeMillis();
-					// EBStats.getEBStats().sessionRecorder(sessionStart,
-					// sessionEnd,
-					// sessionLen, Ordered);
-					EBStats.getEBStats().addErrorSession(curState, isVIP);
+					EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 				}
 			}
 		}

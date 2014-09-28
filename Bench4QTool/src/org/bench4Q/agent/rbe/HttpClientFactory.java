@@ -32,7 +32,7 @@ package org.bench4Q.agent.rbe;
 import org.apache.commons.httpclient.DefaultMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.params.HttpClientParams;
 
 /**
  * @author duanzhiquan
@@ -43,17 +43,18 @@ public class HttpClientFactory {
 	private static HttpClient m_client;
 
 	private static int DEFAULT_RETRY_COUNT = 3;
+	private static int i_maxConn = 500;
 
 	static {
 		if (m_client == null) {
 			MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
-			connectionManager.setMaxConnectionsPerHost(10000);
-			connectionManager.setMaxTotalConnections(10000);
+			connectionManager.setMaxConnectionsPerHost(i_maxConn);
+			connectionManager.setMaxTotalConnections(i_maxConn);
 			m_client = new HttpClient(connectionManager);
 
 			DefaultMethodRetryHandler retryhandler = new DefaultMethodRetryHandler();
 			retryhandler.setRetryCount(DEFAULT_RETRY_COUNT);
-			m_client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+			m_client.getParams().setParameter(HttpClientParams.RETRY_HANDLER,
 					retryhandler);
 		}
 	}
@@ -66,13 +67,14 @@ public class HttpClientFactory {
 	public static HttpClient getInstance() {
 		if (m_client == null) {
 			MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
-			connectionManager.setMaxConnectionsPerHost(10000);
-			connectionManager.setMaxTotalConnections(10000);
+			connectionManager.setMaxConnectionsPerHost(i_maxConn);
+			connectionManager.setMaxTotalConnections(i_maxConn);
+
 			m_client = new HttpClient(connectionManager);
 
 			DefaultMethodRetryHandler retryhandler = new DefaultMethodRetryHandler();
 			retryhandler.setRetryCount(DEFAULT_RETRY_COUNT);
-			m_client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+			m_client.getParams().setParameter(HttpClientParams.RETRY_HANDLER,
 					retryhandler);
 		}
 		return m_client;
@@ -88,7 +90,7 @@ public class HttpClientFactory {
 		if (m_client != null) {
 			DefaultMethodRetryHandler retryhandler = new DefaultMethodRetryHandler();
 			retryhandler.setRetryCount(count);
-			m_client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+			m_client.getParams().setParameter(HttpClientParams.RETRY_HANDLER,
 					retryhandler);
 		}
 
@@ -105,3 +107,4 @@ public class HttpClientFactory {
 	}
 
 }
+

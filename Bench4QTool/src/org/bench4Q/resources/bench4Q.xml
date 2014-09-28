@@ -13,16 +13,16 @@
     <mix>shopping</mix>
     <slow>0.0</slow>
     <getImage>false</getImage>
-    <baseURL>http://srv1:8080/bench4q</baseURL>
+    <baseURL>http://srv11:8080/bench4q</baseURL>
     <webport>10724</webport>
     <databaseURL>133.133.133.135</databaseURL>
     <dbport>10724</dbport>
     <ebs>
-      <baseLoad>100</baseLoad>
+      <baseLoad>250</baseLoad>
       <randomLoad>0</randomLoad>
       <rate>0</rate>
       <triggerTime>0</triggerTime>
-      <stdyTime>60</stdyTime>
+      <stdyTime>100</stdyTime>
     </ebs>
   </rbe>
 </bench4Q>

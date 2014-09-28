@@ -105,8 +105,8 @@ public class WorkersClosed extends Workers {
 				tra = trace.get(j);
 				EB eb = new EBClosed(m_args, tra);
 				eb.setDaemon(true);
-				// if(j > baseLoad / 2)
-				// eb.joke = true;
+//				if(j > baseLoad / 2)
+//					eb.joke = true;
 				eb.start();
 				ebs.add(eb);
 			} else {
