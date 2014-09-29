@@ -46,6 +46,27 @@ public class TestPhase implements Sendable {
 	private int stdyTime;
 	private int triggerTime;
 
+	private TestFrequency frequency;
+
+	public TestPhase() {
+		this.frequency = new TestFrequency();
+	}
+	 
+	
+	/**
+	 * @return the frequency
+	 */
+	public TestFrequency getFrequency() {
+		return frequency;
+	}
+
+	/**
+	 * @param frequency
+	 *            the frequency to set
+	 */
+	public void setFrequency(TestFrequency frequency) {
+		this.frequency = frequency;
+	}
 	/**
 	 * @return
 	 */

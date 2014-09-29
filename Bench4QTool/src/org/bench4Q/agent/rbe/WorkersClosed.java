@@ -48,6 +48,8 @@ import java.util.Iterator;
 
 
 import org.bench4Q.agent.rbe.communication.Args;
+import org.bench4Q.agent.rbe.communication.TestPhase;
+import org.bench4Q.agent.rbe.communication.TypeFrequency;
 
 /**
  * @author duanzhiquan
@@ -70,9 +72,10 @@ public class WorkersClosed extends Workers {
 	 * @param args
 	 */
 	public WorkersClosed(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, Args args, int identity){
+			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
+			Args args, int identity) {
 		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
-				args, identity);
+				testPhase, args, identity);
 		trace = new ArrayList<ArrayList<Integer>>();
 		if (m_args.isReplay()){
 			FileInputStream fi;
@@ -107,9 +110,9 @@ public class WorkersClosed extends Workers {
 //					eb.joke = true;
 				eb.start();
 				ebs.add(eb);
-			}
-			else {
+			} else {
 				EB eb = new EBClosed(m_args, tra);
+				eb.setPropertiesEB(new PropertiesEB());
 			eb.setDaemon(true);
 			eb.start();
 			ebs.add(eb);
@@ -127,10 +130,14 @@ public class WorkersClosed extends Workers {
 
 		int baseLoad = m_baseLoad;
 
+		TypeFrequency type = TypeFrequency.getType(m_args.getTypeFrenquency());
 		Iterator iterator = ebs.iterator();
 
+		int index = 0;
 		while (iterator.hasNext()) {
 			EBClosed eb = (EBClosed) iterator.next();
+			PropertiesEB propertiesEB = FrequencySettings.createProperties(index++, m_testPhase, type, beginTime);
+			eb.setPropertiesEB(propertiesEB);
 			eb.setTest(true);
 		}
 

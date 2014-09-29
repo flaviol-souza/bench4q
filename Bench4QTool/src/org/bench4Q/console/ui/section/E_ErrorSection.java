@@ -166,7 +166,7 @@ public class E_ErrorSection extends JPanel implements AgentInfoObserver {
 		renderer.setItemMargin(0.1);
 		renderer
 				.setItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-		renderer.setItemLabelFont(new Font("ºÚÌå", Font.BOLD, 12));
+		renderer.setItemLabelFont(new Font("Arial", Font.BOLD, 12));
 		renderer.setItemLabelPaint(Color.black);
 		renderer.setItemLabelsVisible(true);
 		plot.setRenderer(renderer);

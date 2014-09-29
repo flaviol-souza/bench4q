@@ -127,11 +127,18 @@ public class EBOpen extends EB {
 		long tt = 0L; // Think Time.
 		boolean sign = true;
 		long wirt_t1 = System.currentTimeMillis();
+		long wirt_t2;
+		long currentTimeMillis = System.currentTimeMillis();
 		// session start.
 		this.sessionStart = wirt_t1;
 		this.first = true;
 		while ((this.maxTrans == -1) || (this.maxTrans > 0)) {
-			long wirt_t2;
+			currentTimeMillis = System.currentTimeMillis();
+			// se o tempo do degrao foi alcancado 
+			if (currentTimeMillis > this.propertiesEB.getTimeEnd()){
+				maxTrans = 0;
+			}
+
 			if (this.nextReq != null) {
 				// Check if user session is finished.
 				if (this.toHome) {

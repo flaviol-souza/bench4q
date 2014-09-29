@@ -147,10 +147,16 @@ public class EBClosed extends EB {
 		long tt = 0L; // Think Time.
 		boolean sign = true;
 		long startGet = System.currentTimeMillis();
-
+		long currentTimeMillis = System.currentTimeMillis();
 		this.sessionStart = startGet;
 
 		while ((this.maxTrans == -1) || (this.maxTrans > 0)) {
+			currentTimeMillis = System.currentTimeMillis();
+			// permite terminar as requisicoes so se for esculhida a opcao frequency
+			if (currentTimeMillis > this.propertiesEB.getTimeEnd() && this.propertiesEB.isFrenquency()) {
+				maxTrans = 0;
+			}
+
 			if (this.terminate || !this.test) {
 				this.sessionEnd = System.currentTimeMillis();
 				EBStats.getEBStats().sessionRecorder(this.sessionStart, this.sessionEnd,

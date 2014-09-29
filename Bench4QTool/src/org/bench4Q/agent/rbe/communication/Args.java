@@ -75,6 +75,7 @@ public class Args implements Sendable {
 
 	private ArrayList<TestPhase> testPhase;
 
+	private String typeFrenquency;
 	/**
 	 * constructor
 	 */
@@ -486,6 +487,12 @@ public class Args implements Sendable {
 		this.rate = rate;
 	}
 
+	public String getTypeFrenquency() {
+		return typeFrenquency;
+	}
 	
+	public void setTypeFrenquency(String typeFrenquency) {
+		this.typeFrenquency = typeFrenquency;
+	}
 
 }

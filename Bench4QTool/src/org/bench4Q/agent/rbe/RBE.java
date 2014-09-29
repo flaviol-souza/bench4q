@@ -190,12 +190,14 @@ public class RBE implements Runnable {
 		long cooldown = m_args.getCooldown();
 		long testInterval = 0;
 		int testPhaseEndTime;
+		int baseLoadEbs = 0;
 		for (TestPhase testPhase : m_args.getEbs()) {
 			testPhaseEndTime = testPhase.getTriggerTime()
 					+ testPhase.getStdyTime();
 			if (testPhaseEndTime > testInterval) {
 				testInterval = testPhaseEndTime;
 			}
+			baseLoadEbs += testPhase.getBaseLoad();
 		}
 
 		EBStats.getEBStats().init(startTime, prepairTime, testInterval,
@@ -206,13 +208,14 @@ public class RBE implements Runnable {
 		EBStats.getEBStats().setVIPrate(m_args.getRate());
 		int identity = 0;
 
+		FrequencySettings.setQntWorkers(baseLoadEbs);
 		if (m_args.getRbetype().equalsIgnoreCase("closed")) {
 			for (TestPhase testPhase : m_args.getEbs()) {
 				identity++;
 				m_workers.add(new WorkersClosed(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), m_args, identity));
+						.getRate(), testPhase, m_args, identity));
 			}
 		} else if (m_args.getRbetype().equalsIgnoreCase("open")) {
 			for (TestPhase testPhase : m_args.getEbs()) {
@@ -220,7 +223,7 @@ public class RBE implements Runnable {
 				m_workers.add(new WorkersOpen(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), m_args, identity));
+						.getRate(), testPhase, m_args, identity));
 			}
 		} else {
 			System.out.println("Error parameter.");
@@ -230,7 +233,7 @@ public class RBE implements Runnable {
 				m_workers.add(new WorkersClosed(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), m_args, identity));
+						.getRate(), testPhase, m_args, identity));
 			}
 		}
 

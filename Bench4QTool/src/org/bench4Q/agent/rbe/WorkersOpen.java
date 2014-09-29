@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -42,8 +44,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
-import org.bench4Q.common.util.thread.ThreadPool;
-import java.util.*;
+import org.bench4Q.agent.rbe.communication.TestPhase;
+import org.bench4Q.agent.rbe.communication.TypeFrequency;
 
 /**
  * @author duanzhiquan
@@ -61,9 +63,10 @@ public class WorkersOpen extends Workers {
 	 * @param args
 	 */
 	public WorkersOpen(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, Args args, int identity) {
+			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
+			Args args, int identity) {
 		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
-				args, identity);
+				testPhase, args, identity);
 		trace = new ArrayList<ArrayList<Integer>>();
 		if (m_args.isReplay()){
 			FileInputStream fi;
@@ -108,9 +111,19 @@ public class WorkersOpen extends Workers {
 		long beginTime = System.currentTimeMillis();
 		long endTime = beginTime + m_stdyTime * 1000L;
 		int baseLoad = m_baseLoad;
+
+		int realLoad = baseLoad + m_randomLoad;
+		long timeInt = System.currentTimeMillis();
+		Map<Integer, PropertiesEB> mapProperties = new HashMap<Integer, PropertiesEB>();
+		for (int indexEB = 0; indexEB < realLoad; indexEB++) {
+			TypeFrequency type = TypeFrequency.getType(m_args.getTypeFrenquency());
+			PropertiesEB propertiesEB = FrequencySettings.createProperties(indexEB, m_testPhase, type, timeInt);
+			mapProperties.put(indexEB, propertiesEB);
+		}
+
 		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
 			long stime = System.currentTimeMillis();
-			int realLoad = baseLoad + m_randomLoad;
+			realLoad = baseLoad + m_randomLoad;
 
 			for (int j2 = 0; j2 < realLoad; j2++) {
 				ArrayList<Integer> tra = new ArrayList<Integer>();
@@ -120,6 +133,7 @@ public class WorkersOpen extends Workers {
 					trace.add(tra);
 				boolean isVIP = Math.random() < (m_args.getRate() / 100.0) ? true : false;
 				EB eb = new EBOpen(m_args, tra, isVIP);
+				eb.setPropertiesEB(mapProperties.get(j2));
 				eb.setDaemon(true);
 				try{
 					threadPool.execute(eb);

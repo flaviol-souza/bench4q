@@ -59,6 +59,7 @@ import org.bench4Q.console.ui.section.M_AgentMainPanel;
 import org.bench4Q.console.ui.section.M_AnalysisMatrixPanel;
 import org.bench4Q.console.ui.section.M_ErrorPanel;
 import org.bench4Q.console.ui.section.M_GlobalSettingPanel;
+import org.bench4Q.console.ui.section.M_LoadFrequencyPanel;
 import org.bench4Q.console.ui.section.M_LoadSimulatorPanel;
 import org.bench4Q.console.ui.section.M_LoadStartedShowPanel;
 import org.bench4Q.console.ui.section.M_LoadWorkerPanel;
@@ -193,6 +194,10 @@ public class Bench4QTreeModel extends DefaultTreeModel implements
 				new LoadWorkerNode(m_resources), this, true, null,
 				loadWorkerPanel);
 
+		JPanel loadFrequencyPanel = new M_LoadFrequencyPanel(m_resources, m_configModel);
+		Bench4QTreeNode LoadFrenquencyNode = new Bench4QTreeNode(
+				new LoadFrequencyNode(m_resources), this, true, null,
+				loadFrequencyPanel);
 		JPanel userSettingPanel = new M_UserSettingPanel(m_resources,
 				m_configModel);
 		Bench4QTreeNode UserNode = new Bench4QTreeNode(
@@ -246,7 +251,8 @@ public class Bench4QTreeModel extends DefaultTreeModel implements
 		insertNodeInto(AnalysisMatrixNode, (Bench4QTreeNode) RootNode, 2);
 
 		insertNodeInto(LoadWorkerNode, (Bench4QTreeNode) LoadSimulatorNode, 0);
-		insertNodeInto(UserNode, (Bench4QTreeNode) LoadSimulatorNode, 1);
+		insertNodeInto(LoadFrenquencyNode, (Bench4QTreeNode) LoadSimulatorNode, 1);
+		insertNodeInto(UserNode, (Bench4QTreeNode) LoadSimulatorNode, 2);
 
 		insertNodeInto(PerformanceNode, (Bench4QTreeNode) AnalysisMatrixNode, 0);
 		insertNodeInto(QoSNode, (Bench4QTreeNode) AnalysisMatrixNode, 1);

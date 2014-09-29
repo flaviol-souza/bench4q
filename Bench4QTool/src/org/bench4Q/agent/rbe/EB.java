@@ -61,6 +61,7 @@ import org.bench4Q.agent.rbe.util.URLUtil;
  */
 public abstract class EB extends Thread {
 
+	protected PropertiesEB propertiesEB;
 	protected long sessionStart = 0;
 	protected long sessionEnd = 0;
 	protected int sessionLen = 1;
@@ -569,6 +570,14 @@ public abstract class EB extends Thread {
 		id = Integer.parseInt(html.substring(j, k));
 
 		return id;
+	}
+
+	public PropertiesEB getPropertiesEB() {
+		return propertiesEB;
+	}
+
+	public void setPropertiesEB(PropertiesEB propertiesEB) {
+		this.propertiesEB = propertiesEB;
 	}
 
 }
