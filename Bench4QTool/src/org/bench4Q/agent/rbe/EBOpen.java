@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
+import org.bench4Q.common.util.Logger;
 
 /**
  * @author duanzhiquan
@@ -136,6 +137,7 @@ public class EBOpen extends EB {
 			currentTimeMillis = System.currentTimeMillis();
 			// se o tempo do degrao foi alcancado 
 			if (currentTimeMillis > this.propertiesEB.getTimeEnd()){
+				Logger.getLogger().info(this.cid + " is ending ...");
 				maxTrans = 0;
 			}
 

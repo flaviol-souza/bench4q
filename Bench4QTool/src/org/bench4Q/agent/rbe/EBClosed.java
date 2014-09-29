@@ -32,8 +32,10 @@ package org.bench4Q.agent.rbe;
 import java.util.ArrayList;
 
 import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.logging.Log;
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
+import org.bench4Q.common.util.Logger;
 
 /**
  * @author duanzhiquan
@@ -154,98 +156,111 @@ public class EBClosed extends EB {
 			currentTimeMillis = System.currentTimeMillis();
 			// permite terminar as requisicoes so se for esculhida a opcao frequency
 			if (currentTimeMillis > this.propertiesEB.getTimeEnd() && this.propertiesEB.isFrenquency()) {
-				maxTrans = 0;
+				Logger.getLogger().debug(this.cid + " is ENDING ... "
+								+ (this.propertiesEB.getTimeEnd() - currentTimeMillis));
+				this.test = false;
 			}
 
-			if (this.terminate || !this.test) {
-				this.sessionEnd = System.currentTimeMillis();
-				EBStats.getEBStats().sessionRecorder(this.sessionStart, this.sessionEnd,
-						this.sessionLen, this.Ordered, this.isVIP);
-				return;
-			}
-			long endGet;
-			if (this.nextReq != null) {
-				// Check if user session is finished.
-				if (this.toHome) {
-					// User session is complete. Start new user session.
+			if (currentTimeMillis >= this.propertiesEB.getTimeStart()) {
+				if (this.terminate || !this.test) {
 					this.sessionEnd = System.currentTimeMillis();
 					EBStats.getEBStats().sessionRecorder(this.sessionStart,
-							this.sessionEnd, this.sessionLen, this.Ordered, this.isVIP);
-					initialize();
+							this.sessionEnd, this.sessionLen, this.Ordered,
+							this.isVIP);
 					return;
 				}
-				if (this.nextReq.equals("")) {
-					EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
-					// sessionEnd = System.currentTimeMillis();
-					// EBStats.getEBStats().sessionRecorder(sessionStart,
-					// sessionEnd, sessionLen, Ordered);
-					initialize();
-					continue;
-				}
-				// Receive HTML response page.
 
-				if (this.rate > 0) {
-					if (isVIP) {
-						if (this.nextReq.contains("?")) {
-							this.nextReq += "&bench4q_session_priority=10";
-						} else {
-							this.nextReq += "?bench4q_session_priority=10";
-						}
-					} else if (this.nextReq.contains("?")) {
-							this.nextReq += "&bench4q_session_priority=1";
-					}else {
-							this.nextReq += "?bench4q_session_priority=1";
+				long endGet;
+				if (this.nextReq != null) {
+					// Check if user session is finished.
+					if (this.toHome) {
+						// User session is complete. Start new user session.
+						this.sessionEnd = System.currentTimeMillis();
+						EBStats.getEBStats().sessionRecorder(this.sessionStart,
+								this.sessionEnd, this.sessionLen, this.Ordered,
+								this.isVIP);
+						initialize();
+						return;
 					}
-				}
-				if (this.first) {
-					this.m_Client = HttpClientFactory.getInstance();
-					this.m_Client.getParams().setCookiePolicy(CookiePolicy.RFC_2965);
+					if (this.nextReq.equals("")) {
+						EBStats.getEBStats().addErrorSession(this.curState,
+								this.isVIP);
+						// sessionEnd = System.currentTimeMillis();
+						// EBStats.getEBStats().sessionRecorder(sessionStart,
+						// sessionEnd, sessionLen, Ordered);
+						initialize();
+						continue;
+					}
+					// Receive HTML response page.
+
+					if (this.rate > 0) {
+						if (isVIP) {
+							if (this.nextReq.contains("?")) {
+								this.nextReq += "&bench4q_session_priority=10";
+							} else {
+								this.nextReq += "?bench4q_session_priority=10";
+							}
+						} else if (this.nextReq.contains("?")) {
+							this.nextReq += "&bench4q_session_priority=1";
+						} else {
+							this.nextReq += "?bench4q_session_priority=1";
+						}
+					}
+					if (this.first) {
+						this.m_Client = HttpClientFactory.getInstance();
+						this.m_Client.getParams().setCookiePolicy(
+								CookiePolicy.RFC_2965);
+					}
+
+					startGet = System.currentTimeMillis();
+					sign = getHTML(this.curState, this.nextReq);
+					endGet = System.currentTimeMillis();
+
+					if (!sign) {
+						EBStats.getEBStats().addErrorSession(this.curState,
+								this.isVIP);
+						initialize();
+						continue;
+					}
+					this.first = false;
+
+					// Compute and store Web Interaction Response Time (WIRT)
+					EBStats.getEBStats().interaction(this.curState, startGet,
+							endGet, tt, this.isVIP);
+					this.sessionLen++;
+					if (this.curState == 4) {
+						this.Ordered = true;
+					}
+					this.curTrans.postProcess(this, this.html);
+				} else {
+					this.html = null;
+					endGet = startGet;
 				}
 
-				startGet = System.currentTimeMillis();
-				sign = getHTML(this.curState, this.nextReq);
-				endGet = System.currentTimeMillis();
-
-				if (!sign) {
-					EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
+				if (!nextState()) {
+					return;
+				}
+				if (this.nextReq != null) {
+					// Pick think time (TT), and compute absolute request time
+					tt = MAP();
+					startGet = endGet + tt;
+					if ((this.terminate) || (!this.test)) {
+						return;
+					}
+					try {
+						sleep(tt);
+					} catch (InterruptedException inte) {
+						Thread.currentThread().interrupt();
+						return;
+					}
+					if (this.maxTrans > 0) {
+						this.maxTrans--;
+					}
+				} else {
+					EBStats.getEBStats().addErrorSession(this.curState,
+							this.isVIP);
 					initialize();
-					continue;
 				}
-				this.first = false;
-
-				// Compute and store Web Interaction Response Time (WIRT)
-				EBStats.getEBStats().interaction(this.curState, startGet, endGet, tt, this.isVIP);
-				this.sessionLen++;
-				if (this.curState == 4) {
-					this.Ordered = true;
-				}
-				this.curTrans.postProcess(this, this.html);
-			} else {
-				this.html = null;
-				endGet = startGet;
-			}
-			if (!nextState()) {
-				return;
-			}
-			if (this.nextReq != null) {
-				// Pick think time (TT), and compute absolute request time
-				tt = MAP();
-				startGet = endGet + tt;
-				if ((this.terminate) || (!this.test)){
-					return;
-				}
-				try {
-					sleep(tt);
-				} catch (InterruptedException inte) {
-					Thread.currentThread().interrupt();
-					return;
-				}
-				if (this.maxTrans > 0){
-					this.maxTrans--;
-				}
-			} else {
-				EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
-				initialize();
 			}
 		}
 	}
@@ -283,4 +298,3 @@ public class EBClosed extends EB {
 		this.terminate = terminate;
 	}
 }
-

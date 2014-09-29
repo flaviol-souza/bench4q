@@ -56,9 +56,11 @@ import org.bench4Q.common.communication.MessageDispatchSender;
 import org.bench4Q.common.communication.MessagePump;
 import org.bench4Q.common.communication.TeeSender;
 import org.bench4Q.common.util.Directory;
+import org.bench4Q.common.util.Logger;
 import org.bench4Q.common.util.thread.Condition;
 import org.bench4Q.console.messages.AgentAddress;
 import org.bench4Q.console.messages.AgentProcessReportMessage;
+import org.jfree.util.Log;
 
 /**
  * the actual work agent in a command line mode.
@@ -114,8 +116,6 @@ public final class AgentImplementation implements AgentInterface {
 	public void run() throws Bench4QException {
 
 		StartJASptEMessage startMessage = null;
-		
-	
 
 		try {
 			while (true) {
@@ -158,7 +158,7 @@ public final class AgentImplementation implements AgentInterface {
 									consoleCommunication);
 							m_agentStateReport
 									.sendStateMessage(AgentProcessReportMessage.STATE_STARTED);
-							System.out.println("connected to console at "
+							Logger.getLogger().info("Connected to console at "
 									+ connector.getEndpointAsString());
 						} catch (CommunicationException e) {
 							System.out
@@ -169,7 +169,7 @@ public final class AgentImplementation implements AgentInterface {
 					}
 
 					if (consoleCommunication != null && startMessage == null) {
-						System.out.println("waiting for console signal");
+						Logger.getLogger().info("Waiting for console signal");
 						m_consoleListener.waitForMessage();
 
 						if (m_consoleListener.received(ConsoleListener.START)) {
@@ -189,7 +189,7 @@ public final class AgentImplementation implements AgentInterface {
 						final Directory fileStoreDirectory = m_fileStore
 								.getDirectory();
 
-						System.out.println("got start message");
+						Logger.getLogger().info("Got start message");
 
 						// Convert relative path to absolute path.
 						messageProperties
@@ -197,8 +197,7 @@ public final class AgentImplementation implements AgentInterface {
 										.getFile(messageProperties
 												.getAssociatedFile()));
 
-						m_agentIdentity
-								.setNumber(startMessage.getAgentNumber());
+						m_agentIdentity.setNumber(startMessage.getAgentNumber());
 
 						flag = false;
 					} else {
@@ -210,21 +209,20 @@ public final class AgentImplementation implements AgentInterface {
 				if (startMessage != null) {
 
 					m_consoleListener.setTestFinished(false);
-					System.out.println("test started");
+					Logger.getLogger().info("Test started!");
 					m_agentStateReport
 							.sendStateMessage(AgentProcessReportMessage.STATE_RUNNING);
 
 					// clean EBStats for a new test.
 					EBStats.cleaner();
 
-					//  ≤‚ ‘¥˙¬Î
 					RBE rbe = new RBE(m_args);
-//					rbe.startWorkers();
+					// rbe.startWorkers();
 
 					Thread starttest = new Thread(rbe);
 					starttest.setDaemon(true);
 					starttest.start();
-					
+
 					m_consoleListener.waitForMessage();
 					m_agentStateReport
 							.sendStateMessage(AgentProcessReportMessage.STATE_FINISHED);
@@ -233,19 +231,16 @@ public final class AgentImplementation implements AgentInterface {
 						starttest.interrupt();
 						m_consoleListener.waitForMessage();
 					}
-					
-					//  ≤‚ ‘¥˙¬Î
-					
+
 					if (m_consoleListener.received(ConsoleListener.COLLECT)) {
-						System.out.println("Received collection message.");
-						System.out
-								.println("sending TestResultMessage message....");
+						Logger.getLogger().info("Received collection message.");
+						Logger.getLogger().info("Sending TestResultMessage message....");
 						Message result = new TestResultMessage(m_agentIdentity,
-								EBStats.getEBStats(), m_fileStore
-										.getCacheHighWaterMark());
+								EBStats.getEBStats(),
+								m_fileStore.getCacheHighWaterMark());
 						consoleCommunication.getSender().send(result);
 					}
-					
+
 				}
 
 				if (consoleCommunication == null) {
@@ -256,8 +251,7 @@ public final class AgentImplementation implements AgentInterface {
 
 					if (!m_consoleListener.received(ConsoleListener.ANY)) {
 						// We've got here naturally, without a console signal.
-						System.out
-								.println("finished, waiting for console signal");
+						Logger.getLogger().info("Finished, waiting for console signal");
 						m_consoleListener.waitForMessage();
 					}
 
@@ -396,12 +390,9 @@ public final class AgentImplementation implements AgentInterface {
 						if (m_consoleCommunication != null) {
 							m_consoleCommunication
 									.getSender()
-									.send(
-											new AgentProcessReportMessage(
-													m_agentIdentity,
-													m_state,
-													m_fileStore
-															.getCacheHighWaterMark()));
+									.send(new AgentProcessReportMessage(
+											m_agentIdentity, m_state,
+											m_fileStore.getCacheHighWaterMark()));
 						}
 
 					} catch (CommunicationException e) {
