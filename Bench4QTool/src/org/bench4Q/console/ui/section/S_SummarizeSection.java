@@ -165,7 +165,7 @@ public class S_SummarizeSection extends JPanel implements AgentInfoObserver {
 
 		renderer
 				.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-		renderer.setItemLabelFont(new Font("ºÚÌå", Font.PLAIN, 12));
+		renderer.setItemLabelFont(new Font("Arial", Font.PLAIN, 12));
 		renderer.setItemLabelPaint(Color.black);
 		renderer.setItemLabelsVisible(true);
 		plot.setRenderer(renderer);
