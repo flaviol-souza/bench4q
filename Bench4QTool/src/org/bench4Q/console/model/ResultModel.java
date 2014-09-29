@@ -513,7 +513,8 @@ public class ResultModel implements AgentInfoObserver {
 			total += sum;
 		}
 		for(int i = 0; i < 15; i++){
-			trans_avg_ratio[i] = Double.parseDouble(df.format(trans_avg_thp[i] / total * 100));
+//			trans_avg_ratio[i] = Double.parseDouble(df.format(trans_avg_thp[i] / total * 100));
+			trans_avg_ratio[i] = trans_avg_thp[i] / total * 100;
 		}
 		
 	}
@@ -670,7 +671,8 @@ public class ResultModel implements AgentInfoObserver {
 		if ((i - 1) > 0) {
 			DecimalFormat df = new DecimalFormat("0.0");
 			m_wips /= (i - 1);
-			m_wips = Double.parseDouble(df.format(m_wips));
+			//m_wips = Double.parseDouble(df.format(m_wips));
+			m_wips = m_wips;
 		} else {
 			m_wips = 0;
 		}
@@ -735,7 +737,10 @@ public class ResultModel implements AgentInfoObserver {
 				sum += iterator.next();
 				size++;
 			}
-			trans_avg_res[i] = Double.parseDouble(df.format(sum / size));
+			if(size == 0)
+				size = 1;
+			//trans_avg_res[i] = Double.parseDouble(df.format(sum / size));
+			trans_avg_res[i] = sum / size;
 			
 		}
 	}

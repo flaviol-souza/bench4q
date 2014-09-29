@@ -130,7 +130,8 @@ public class EBClosed extends EB {
 				isVIP = rand.nextDouble() < rate ? true : false;
 				first = true;
 				test2();
-				m_Client.getState().clearCookies();
+				if(m_Client != null)
+					m_Client.getState().clearCookies();
 			} else if (this.test) {
 				this.isVIP = this.rand.nextDouble() < this.rate ? true : false;
 				// System.out.println(isVIP);
