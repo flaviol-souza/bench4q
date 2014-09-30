@@ -140,8 +140,7 @@ public class EBOpen extends EB {
 				Logger.getLogger().debug(this.cid + " is ending ...");
 				maxTrans = 0;
 			}
-			if (currentTimeMillis >= this.propertiesEB.getTimeStart()
-					&& currentTimeMillis <= this.propertiesEB.getTimeEnd()) {
+			if (currentTimeMillis >= this.propertiesEB.getTimeStart()) {
 				if (this.nextReq != null) {
 					// Check if user session is finished.
 					if (this.toHome) {
@@ -216,6 +215,13 @@ public class EBOpen extends EB {
 				} else {
 					EBStats.getEBStats().addErrorSession(this.curState,
 							this.isVIP);
+				}
+			} else {
+				try {
+					Thread.sleep(500L);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import java.util.Iterator;
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
 import org.bench4Q.agent.rbe.communication.TestPhase;
@@ -48,108 +49,17 @@ public class RBE implements Runnable {
 	private ArrayList<Workers> m_workers;
 	private long TestInterval;
 
-	/**
-	 * 
-	 */
 	public RBE() {
-		m_workers = new ArrayList<Workers>();
-		TestInterval = 0;
+		this.m_workers = new ArrayList<Workers>();
+		this.TestInterval = 0L;
 	}
 
-	/**
-	 * @param arg
-	 */
 	public RBE(Args arg) {
 		this();
-		m_args = arg;
+		this.m_args = arg;
 	}
 
-	/**
-	 * 
-	 */
 	public void startWorkers() {
-		// long startTime = System.currentTimeMillis();
-		//
-		// long prepairTime = m_args.getPrepair();
-		// long cooldown = m_args.getCooldown();
-		// long testInterval = 0;
-		// int testPhaseEndTime;
-		// for (TestPhase testPhase : m_args.getEbs()) {
-		// testPhaseEndTime = testPhase.getTriggerTime()
-		// + testPhase.getStdyTime();
-		// if (testPhaseEndTime > testInterval) {
-		// testInterval = testPhaseEndTime;
-		// }
-		// }
-		//
-		// EBStats.getEBStats().init(startTime, prepairTime, testInterval,
-		// cooldown);
-		// HttpClientFactory.setRetryCount(m_args.getRetry());
-		// Date date = new Date();
-		// EBStats.getEBStats().setTitle(format(date));
-		// EBStats.getEBStats().setVIPrate(m_args.getRate());
-		// int identity=0;
-		//
-		// if (m_args.getRbetype().equalsIgnoreCase("closed")) {
-		// for (TestPhase testPhase : m_args.getEbs()) {
-		// identity++;
-		// m_workers.add(new WorkersClosed(startTime, testPhase
-		// .getTriggerTime(), testPhase.getStdyTime(), testPhase
-		// .getBaseLoad(), testPhase.getRandomLoad(), testPhase
-		// .getRate(), m_args, identity));
-		// }
-		// } else if (m_args.getRbetype().equalsIgnoreCase("open")) {
-		// for (TestPhase testPhase : m_args.getEbs()) {
-		// identity++;
-		// m_workers.add(new WorkersOpen(startTime, testPhase
-		// .getTriggerTime(), testPhase.getStdyTime(), testPhase
-		// .getBaseLoad(), testPhase.getRandomLoad(), testPhase
-		// .getRate(), m_args, identity));
-		// }
-		// } else {
-		// System.out.println("Error parameter.");
-		// System.out.println("Start closed as default.");
-		// for (TestPhase testPhase : m_args.getEbs()) {
-		// identity++;
-		// m_workers.add(new WorkersClosed(startTime, testPhase
-		// .getTriggerTime(), testPhase.getStdyTime(), testPhase
-		// .getBaseLoad(), testPhase.getRandomLoad(), testPhase
-		// .getRate(), m_args, identity));
-		// }
-		// }
-		//
-		// for (Workers worker : m_workers) {
-		// worker.setDaemon(true);
-		// worker.start();
-		// }
-		//
-		// TestInterval = calculateTestInterval();
-		// long endTime = startTime + TestInterval * 1000L;
-		//
-		// try {
-		// Thread.sleep(TestInterval * 1000L);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		//
-		// boolean flag = true;
-		//
-		// while (((System.currentTimeMillis() - endTime) < 0) && flag) {
-		// flag = false;
-		// for (Workers worker : m_workers) {
-		// if (worker.isAlive()) {
-		// flag = true;
-		// worker.stop();
-		// }
-		// }
-		// try {
-		// Thread.sleep(1000L);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// }
-		//
-		// clear();
 	}
 
 	private void clear() {
@@ -160,7 +70,7 @@ public class RBE implements Runnable {
 		int max = 0;
 		int workerEndTime;
 
-		for (TestPhase testPhase : m_args.getEbs()) {
+		for (TestPhase testPhase : this.m_args.getEbs()) {
 			workerEndTime = testPhase.getStdyTime()
 					+ testPhase.getTriggerTime();
 			if (workerEndTime > max) {
@@ -170,11 +80,8 @@ public class RBE implements Runnable {
 		return max;
 	}
 
-	/**
-	 * @return args
-	 */
 	public Args getArgs() {
-		return m_args;
+		return this.m_args;
 	}
 
 	private String format(Date date) {
@@ -187,12 +94,12 @@ public class RBE implements Runnable {
 	public void run() {
 		long startTime = System.currentTimeMillis();
 
-		long prepairTime = m_args.getPrepair();
-		long cooldown = m_args.getCooldown();
-		long testInterval = 0;
+		long prepairTime = this.m_args.getPrepair();
+		long cooldown = this.m_args.getCooldown();
+		long testInterval = 0L;
 		int testPhaseEndTime;
 		int baseLoadEbs = 0;
-		for (TestPhase testPhase : m_args.getEbs()) {
+		for (TestPhase testPhase : this.m_args.getEbs()) {
 			testPhaseEndTime = testPhase.getTriggerTime()
 					+ testPhase.getStdyTime();
 			if (testPhaseEndTime > testInterval) {
@@ -203,55 +110,55 @@ public class RBE implements Runnable {
 
 		EBStats.getEBStats().init(startTime, prepairTime, testInterval,
 				cooldown);
-		HttpClientFactory.setRetryCount(m_args.getRetry());
+		HttpClientFactory.setRetryCount(this.m_args.getRetry());
 		Date date = new Date();
 		EBStats.getEBStats().setTitle(format(date));
-		EBStats.getEBStats().setVIPrate(m_args.getRate());
+		EBStats.getEBStats().setVIPrate(this.m_args.getRate());
 		int identity = 0;
 
 		FrequencySettings.setQntWorkers(baseLoadEbs);
-		if (m_args.getRbetype().equalsIgnoreCase("closed")) {
-			for (TestPhase testPhase : m_args.getEbs()) {
+		if (this.m_args.getRbetype().equalsIgnoreCase("closed")) {
+			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				m_workers.add(new WorkersClosed(startTime, testPhase
+				this.m_workers.add(new WorkersClosed(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), testPhase, m_args, identity));
+						.getRate(), testPhase, this.m_args, identity));
 			}
-		} else if (m_args.getRbetype().equalsIgnoreCase("open")) {
-			for (TestPhase testPhase : m_args.getEbs()) {
+		} else if (this.m_args.getRbetype().equalsIgnoreCase("open")) {
+			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				m_workers.add(new WorkersOpen(startTime, testPhase
+				this.m_workers.add(new WorkersOpen(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), testPhase, m_args, identity));
+						.getRate(), testPhase, this.m_args, identity));
 			}
 		} else {
 			System.out.println("Error parameter.");
 			System.out.println("Start closed as default.");
-			for (TestPhase testPhase : m_args.getEbs()) {
+			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				m_workers.add(new WorkersClosed(startTime, testPhase
+				this.m_workers.add(new WorkersClosed(startTime, testPhase
 						.getTriggerTime(), testPhase.getStdyTime(), testPhase
 						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), testPhase, m_args, identity));
+						.getRate(), testPhase, this.m_args, identity));
 			}
 		}
 
-		for (Workers worker : m_workers) {
+		for (Workers worker : this.m_workers) {
 			worker.setDaemon(true);
 			worker.start();
 		}
 
-		TestInterval = calculateTestInterval();
-		long endTime = startTime + TestInterval * 1000L;
+		this.TestInterval = calculateTestInterval();
+		long endTime = startTime + this.TestInterval * 1000L;
 		try {
-			Thread.sleep(TestInterval * 1000L);
+			Thread.sleep(this.TestInterval * 1000L);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} finally {
 
-			for (Workers worker : m_workers) {
+			for (Workers worker : this.m_workers) {
 				worker.setStop(true);
 			}
 			Logger.getLogger().info("Test finished.");

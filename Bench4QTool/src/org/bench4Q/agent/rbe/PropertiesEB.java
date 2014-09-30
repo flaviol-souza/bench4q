@@ -15,7 +15,7 @@ public class PropertiesEB {
 		this.indexEB = indexEB;
 	}
 
-	public long getTimeStart() {
+	public synchronized long getTimeStart() {
 		return timeStart;
 	}
 
@@ -23,7 +23,7 @@ public class PropertiesEB {
 		this.timeStart = timeStart;
 	}
 
-	public long getTimeEnd() {
+	public synchronized long getTimeEnd() {
 		return timeEnd;
 	}
 
@@ -31,7 +31,7 @@ public class PropertiesEB {
 		this.timeEnd = timeEnd;
 	}
 
-	public boolean isFrenquency() {
+	public synchronized boolean isFrenquency() {
 		return isFrenquency;
 	}
 

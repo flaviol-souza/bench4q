@@ -261,6 +261,13 @@ public class EBClosed extends EB {
 							this.isVIP);
 					initialize();
 				}
+			} else {
+				try {
+					Thread.sleep(500L);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

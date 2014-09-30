@@ -46,7 +46,6 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.TestPhase;
 import org.bench4Q.agent.rbe.communication.TypeFrequency;
@@ -58,31 +57,19 @@ import org.bench4Q.agent.rbe.communication.TypeFrequency;
 public class WorkersClosed extends Workers {
 
 	private ArrayList<EB> ebs;
-	
 
-	
-
-	/**
-	 * @param startTime
-	 * @param triggerTime
-	 * @param stdyTime
-	 * @param baseLoad
-	 * @param randomLoad
-	 * @param rate
-	 * @param args
-	 */
 	public WorkersClosed(long startTime, long triggerTime, long stdyTime,
 			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
 			Args args, int identity) {
 		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
 				testPhase, args, identity);
-		trace = new ArrayList<ArrayList<Integer>>();
-		if (m_args.isReplay()){
-			FileInputStream fi;
+		this.trace = new ArrayList<ArrayList<Integer>>();
+		if (this.m_args.isReplay()) {
 			try {
-				fi = new FileInputStream(m_args.getTime() + "-" + identity);
+				FileInputStream fi = new FileInputStream(this.m_args.getTime()
+						+ "-" + identity);
 				ObjectInputStream ois = new ObjectInputStream(fi);
-				trace = (ArrayList<ArrayList<Integer>>)ois.readObject();
+				this.trace = ((ArrayList<ArrayList<Integer>>) ois.readObject());
 				ois.close();
 				fi.close();
 			} catch (FileNotFoundException e) {
@@ -97,64 +84,64 @@ public class WorkersClosed extends Workers {
 			}
 
 		}
-		ebs = new ArrayList<EB>();
+		this.ebs = new ArrayList<EB>();
 
 		// initialize the pool
 		for (int j = 0; j < baseLoad; j++) {
 			ArrayList<Integer> tra = new ArrayList<Integer>();
-			if(m_args.isReplay()){
-				tra = trace.get(j);
-				EB eb = new EBClosed(m_args, tra);
+			if (this.m_args.isReplay()) {
+				tra = (ArrayList<Integer>)this.trace.get(j);
+				EB eb = new EBClosed(this.m_args, tra);
 				eb.setDaemon(true);
-//				if(j > baseLoad / 2)
-//					eb.joke = true;
+				// if(j > baseLoad / 2)
+				// eb.joke = true;
 				eb.start();
-				ebs.add(eb);
+				this.ebs.add(eb);
 			} else {
-				EB eb = new EBClosed(m_args, tra);
+				EB eb = new EBClosed(this.m_args, tra);
 				eb.setPropertiesEB(new PropertiesEB());
-			eb.setDaemon(true);
-			eb.start();
-			ebs.add(eb);
-				trace.add(tra);
+				eb.setDaemon(true);
+				eb.start();
+				this.ebs.add(eb);
+				this.trace.add(tra);
 			}
-						
-			
+
 		}
 	}
 
 	void StartEB() {
 		int n = 0;
 		long beginTime = System.currentTimeMillis();
-		long endTime = beginTime + m_stdyTime * 1000L;
+		long endTime = beginTime + this.m_stdyTime * 1000L;
 
-		int baseLoad = m_baseLoad;
+		int baseLoad = this.m_baseLoad;
 
 		TypeFrequency type = TypeFrequency.getType(m_args.getTypeFrenquency());
-		Iterator iterator = ebs.iterator();
+		Iterator iterator = this.ebs.iterator();
 
 		int index = 0;
 		while (iterator.hasNext()) {
 			EBClosed eb = (EBClosed) iterator.next();
-			PropertiesEB propertiesEB = FrequencySettings.createProperties(index++, m_testPhase, type, beginTime);
+			PropertiesEB propertiesEB = FrequencySettings.createProperties(
+					index++, m_testPhase, type, beginTime);
 			eb.setPropertiesEB(propertiesEB);
 			eb.setTest(true);
 		}
 
-		while (!isStop() && (System.currentTimeMillis() - endTime) < 0) {
+		while ((!isStop()) && (System.currentTimeMillis() - endTime < 0L)) {
 			try {
-				Thread.sleep(500);
+				Thread.sleep(500L);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
 		}
 
-		for (EB eb : ebs) {
-			((EBClosed) eb).setTerminate(true);
-			// ((EBClosed) eb).stop();
+		for (EB eb : this.ebs) {
+			//((EBClosed) eb).setTerminate(true);
+			((EBClosed) eb).setTest(false);
 		}
-		ebs = null;
+		this.ebs = null;
 
 	}
-	
+
 }

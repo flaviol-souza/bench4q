@@ -54,6 +54,7 @@ import org.bench4Q.agent.rbe.util.RBEUtil;
 import org.bench4Q.agent.rbe.util.StrStrPattern;
 import org.bench4Q.agent.rbe.util.StringPattern;
 import org.bench4Q.agent.rbe.util.URLUtil;
+import org.bench4Q.common.util.Logger;
 
 /**
  * @author duanzhiquan

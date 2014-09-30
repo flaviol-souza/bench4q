@@ -289,7 +289,7 @@ public final class AgentImplementation implements AgentInterface {
 		m_timer.cancel();
 		m_fanOutStreamSender.shutdown();
 		m_consoleListener.shutdown();
-		System.out.println("finished");
+		Logger.getLogger().info("Finished");
 	}
 
 	private static String getHostName() {
