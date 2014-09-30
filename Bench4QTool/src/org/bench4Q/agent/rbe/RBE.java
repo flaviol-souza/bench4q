@@ -36,6 +36,7 @@ import java.util.Date;
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
 import org.bench4Q.agent.rbe.communication.TestPhase;
+import org.bench4Q.common.util.Logger;
 
 /**
  * @author duanzhiquan
@@ -253,7 +254,7 @@ public class RBE implements Runnable {
 			for (Workers worker : m_workers) {
 				worker.setStop(true);
 			}
-			System.out.println("test finished");
+			Logger.getLogger().info("Test finished.");
 
 			clear();
 		}
