@@ -92,6 +92,7 @@ public class WorkersOpen extends Workers {
 				maximumPoolSize, keepAliveTime, TimeUnit.SECONDS,
 				new ArrayBlockingQueue<Runnable>(workQueueLength),
 				new ThreadPoolExecutor.AbortPolicy());
+		
 		long beginTime = System.currentTimeMillis();
 		long endTime = beginTime + this.m_stdyTime * 1000L;
 		int baseLoad = this.m_baseLoad;

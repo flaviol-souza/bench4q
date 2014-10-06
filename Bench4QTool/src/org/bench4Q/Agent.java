@@ -32,10 +32,15 @@ package org.bench4Q;
 
 import java.io.File;
 
+
+
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.bench4Q.agent.AgentImplementation;
 import org.bench4Q.agent.AgentInterface;
 import org.bench4Q.common.Bench4QException;
-import org.bench4Q.common.util.Logger;
+
 
 /**
  * The entry of Agent.
@@ -48,6 +53,9 @@ public final class Agent {
 	private final AgentInterface m_agent;
 
 	private Agent(String[] args) throws Bench4QException {
+		Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.WARN);
+		Logger.getLogger("httpclient.wire.header").setLevel(Level.WARN);
+		Logger.getLogger("httpclient.wire.content").setLevel(Level.WARN);
 
 		File propertiesFile = null;
 
@@ -71,7 +79,7 @@ public final class Agent {
 			final Agent agent = new Agent(args);
 			agent.run();
 		} catch (Bench4QException e) {
-			Logger.getLogger().fatal("Cann't initiate agent.", e);
+			Logger.getLogger(Agent.class.getName()).fatal("Cann't initiate agent.", e);
 			System.exit(1);
 		}
 		System.exit(0);

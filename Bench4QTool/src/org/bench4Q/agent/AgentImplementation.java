@@ -238,6 +238,7 @@ public final class AgentImplementation implements AgentInterface {
 						Message result = new TestResultMessage(m_agentIdentity,
 								EBStats.getEBStats(),
 								m_fileStore.getCacheHighWaterMark());
+						Logger.getLogger().info(((TestResultMessage)result).getEBStats().getWIPS());
 						consoleCommunication.getSender().send(result);
 					}
 

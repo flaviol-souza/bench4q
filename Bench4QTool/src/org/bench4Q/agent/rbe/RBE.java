@@ -71,8 +71,7 @@ public class RBE implements Runnable {
 		int workerEndTime;
 
 		for (TestPhase testPhase : this.m_args.getEbs()) {
-			workerEndTime = testPhase.getStdyTime()
-					+ testPhase.getTriggerTime();
+			workerEndTime = testPhase.getStdyTime() + testPhase.getTriggerTime();
 			if (workerEndTime > max) {
 				max = workerEndTime;
 			}
@@ -100,16 +99,14 @@ public class RBE implements Runnable {
 		int testPhaseEndTime;
 		int baseLoadEbs = 0;
 		for (TestPhase testPhase : this.m_args.getEbs()) {
-			testPhaseEndTime = testPhase.getTriggerTime()
-					+ testPhase.getStdyTime();
+			testPhaseEndTime = testPhase.getTriggerTime() + testPhase.getStdyTime();
 			if (testPhaseEndTime > testInterval) {
 				testInterval = testPhaseEndTime;
 			}
 			baseLoadEbs += testPhase.getBaseLoad();
 		}
 
-		EBStats.getEBStats().init(startTime, prepairTime, testInterval,
-				cooldown);
+		EBStats.getEBStats().init(startTime, prepairTime, testInterval, cooldown);
 		HttpClientFactory.setRetryCount(this.m_args.getRetry());
 		Date date = new Date();
 		EBStats.getEBStats().setTitle(format(date));
@@ -118,30 +115,31 @@ public class RBE implements Runnable {
 
 		FrequencySettings.setQntWorkers(baseLoadEbs);
 		if (this.m_args.getRbetype().equalsIgnoreCase("closed")) {
+			Logger.getLogger().debug("# EBS Close: "+ this.m_args.getEbs().size());
 			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				this.m_workers.add(new WorkersClosed(startTime, testPhase
-						.getTriggerTime(), testPhase.getStdyTime(), testPhase
-						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), testPhase, this.m_args, identity));
+				this.m_workers.add(new WorkersClosed(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
+						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
+						this.m_args, identity));
+				Logger.getLogger().debug("Close: "+ testPhase.getRate());
 			}
 		} else if (this.m_args.getRbetype().equalsIgnoreCase("open")) {
 			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				this.m_workers.add(new WorkersOpen(startTime, testPhase
-						.getTriggerTime(), testPhase.getStdyTime(), testPhase
-						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), testPhase, this.m_args, identity));
+				this.m_workers.add(new WorkersOpen(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
+						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
+						this.m_args, identity));
+				Logger.getLogger().debug("Open: "+ testPhase.getRate());
 			}
 		} else {
 			System.out.println("Error parameter.");
 			System.out.println("Start closed as default.");
 			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				this.m_workers.add(new WorkersClosed(startTime, testPhase
-						.getTriggerTime(), testPhase.getStdyTime(), testPhase
-						.getBaseLoad(), testPhase.getRandomLoad(), testPhase
-						.getRate(), testPhase, this.m_args, identity));
+				this.m_workers.add(new WorkersClosed(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
+						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
+						this.m_args, identity));
+				Logger.getLogger().debug("Error: "+ testPhase.getRate());
 			}
 		}
 

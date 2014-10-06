@@ -31,7 +31,7 @@ package org.bench4Q.agent.rbe.communication;
 
 import java.util.ArrayList;
 
-
+import org.bench4Q.common.util.Logger;
 
 /**
  * @author duanzhiquan
@@ -43,7 +43,7 @@ public class EBStats implements Sendable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private volatile static EBStats uniqueInstance;
+	private static volatile EBStats uniqueInstance;
 
 	// used to record test info
 	private int[] loadStart;
@@ -58,8 +58,8 @@ public class EBStats implements Sendable {
 	private int[][] webInteractionThroughput;
 	private ResultSet[] wirt = new ResultSet[15];
 	private ResultSet[] tt = new ResultSet[15];
-	private long WIPS = 0;
-	private long WIRT = 0;
+	private long WIPS = 0L;
+	private long WIRT = 0L;
 
 	// used to record session info
 	private int[][] session;
@@ -68,14 +68,14 @@ public class EBStats implements Sendable {
 	private int OrderedSession;
 	private int[] ErrorSession = new int[15];
 
-	private double TotalProfit = 0;
+	private double TotalProfit = 0.0D;
 	private int errorCnt = 0;
 	private ErrorSet[] errors = new ErrorSet[15];
 
-    private String title;
+	private String title;
 
 	private boolean selected = false;
-	
+
 	// QoS record info
 	// author: wangsa
 	private int[][] webInteractionThroughput_vip;
@@ -88,39 +88,33 @@ public class EBStats implements Sendable {
 	private int[][] session_norm;
 	private ArrayList<Integer> sessionLen_vip = new ArrayList<Integer>();
 	private ArrayList<Integer> sessionLen_norm = new ArrayList<Integer>();
-	
+
 	private int OrderedSession_vip;
 	private int OrderedSession_norm;
-	
+
 	private int[] ErrorSession_vip = new int[15];
 	private int[] ErrorSession_norm = new int[15];
-	
+
 	private ErrorSet[] errors_vip = new ErrorSet[15];
 	private ErrorSet[] errors_norm = new ErrorSet[15];
-	
+
 	private int errorCnt_vip = 0;
 	private int errorCnt_norm = 0;
 	private double VIPrate;
-	
-	
-	                                        
-	
-	
-
 
 	private EBStats() {
 		for (int i = 0; i < 15; i++) {
-			wirt[i] = new ResultSet();
-			wirt_norm[i] = new ResultSet();
-			wirt_vip[i] = new ResultSet();
-			
-			tt[i] = new ResultSet();
-			tt_norm[i] = new ResultSet();
-			tt_vip[i] = new ResultSet();
-			
-			errors[i] = new ErrorSet();
-			errors_norm[i] = new ErrorSet();
-			errors_vip[i] = new ErrorSet();
+			this.wirt[i] = new ResultSet();
+			this.wirt_norm[i] = new ResultSet();
+			this.wirt_vip[i] = new ResultSet();
+
+			this.tt[i] = new ResultSet();
+			this.tt_norm[i] = new ResultSet();
+			this.tt_vip[i] = new ResultSet();
+
+			this.errors[i] = new ErrorSet();
+			this.errors_norm[i] = new ErrorSet();
+			this.errors_vip[i] = new ErrorSet();
 		}
 	}
 
@@ -137,22 +131,22 @@ public class EBStats implements Sendable {
 	public void init(long startTime, long prepairTime, long testInterval,
 			long cooldown) {
 		this.startTime = startTime;
-		this.prepairTime = prepairTime * 1000 + startTime;
-		this.testTime = this.prepairTime + testInterval * 1000;
-		this.endTime = testTime + cooldown * 1000;
+		this.prepairTime = (prepairTime * 1000L + startTime);
+		this.testTime = (this.prepairTime + testInterval * 1000L);
+		this.endTime = (this.testTime + cooldown * 1000L);
 
-		m_testduring = (int) testInterval;
+		this.m_testduring = ((int) testInterval);
 
-		webInteractionThroughput = new int[15][(int) (testInterval + 1)];
-		
-		webInteractionThroughput_vip = new int[15][(int) (testInterval + 1)];
-		webInteractionThroughput_norm = new int[15][(int) (testInterval + 1)];
-		
-		loadStart = new int[(int) (testInterval + 1)];
-		session = new int[2][(int) (testInterval + 1)];
-		
-		session_vip = new int[2][(int) (testInterval + 1)];
-		session_norm = new int[2][(int) (testInterval + 1)];
+		this.webInteractionThroughput = new int[15][(int) (testInterval + 1L)];
+
+		this.webInteractionThroughput_vip = new int[15][(int) (testInterval + 1L)];
+		this.webInteractionThroughput_norm = new int[15][(int) (testInterval + 1L)];
+
+		this.loadStart = new int[(int) (testInterval + 1L)];
+		this.session = new int[2][(int) (testInterval + 1L)];
+
+		this.session_vip = new int[2][(int) (testInterval + 1L)];
+		this.session_norm = new int[2][(int) (testInterval + 1L)];
 	}
 
 	/**
@@ -183,9 +177,10 @@ public class EBStats implements Sendable {
 	 *            transition to.
 	 */
 	public final synchronized void transition(int cur, int next) {
-		if (System.currentTimeMillis() < prepairTime)
+		if (System.currentTimeMillis() < this.prepairTime) {
 			return;
-		trans[cur][next]++;
+		}
+		this.trans[cur][next] += 1;
 	}
 
 	/**
@@ -199,32 +194,31 @@ public class EBStats implements Sendable {
 	public synchronized void interaction(int state, long wirt_t1, long wirt_t2,
 			long itt, boolean isVIP) {
 		int b;
-		if ((wirt_t2 >= prepairTime) && (wirt_t2 <= testTime)) {
-			b = (int) ((wirt_t2 - prepairTime) / 1000L);
-			webInteractionThroughput[state][b]++;
-			
-			if(isVIP == true)
-				webInteractionThroughput_vip[state][b]++;
-			else {
-				webInteractionThroughput_norm[state][b]++;
+		if ((wirt_t2 >= this.prepairTime) && (wirt_t2 <= this.testTime)) {
+			b = (int) ((wirt_t2 - this.prepairTime) / 1000L);
+			this.webInteractionThroughput[state][b]++;
+
+			if (isVIP) {
+				this.webInteractionThroughput_vip[state][b]++;
+			} else {
+				this.webInteractionThroughput_norm[state][b]++;
 			}
-			
-			b = (int) ((wirt_t1 - prepairTime) / 1000L);
+
+			b = (int) ((wirt_t1 - this.prepairTime) / 1000L);
 			if (b >= 0) {
-				loadStart[b]++;
+				this.loadStart[b]++;
 			}
-			Long tem = wirt_t2 - wirt_t1;
-			wirt[state].addResult(new Double(tem));
-			tt[state].addResult(new Double(itt));
-			if(isVIP == true){
-				wirt_vip[state].addResult(new Double(tem));
-				tt_vip[state].addResult(new Double(itt));
+			Long tem = Long.valueOf(wirt_t2 - wirt_t1);
+			this.wirt[state].addResult(new Double(tem));
+			this.tt[state].addResult(new Double(itt));
+			if (isVIP) {
+				this.wirt_vip[state].addResult(new Double(tem));
+				this.tt_vip[state].addResult(new Double(itt));
+			} else {
+				this.wirt_norm[state].addResult(new Double(tem));
+				this.tt_norm[state].addResult(new Double(itt));
 			}
-			else {
-				wirt_norm[state].addResult(new Double(tem));
-				tt_norm[state].addResult(new Double(itt));
-			}
-				
+
 		}
 
 	}
@@ -244,38 +238,35 @@ public class EBStats implements Sendable {
 	 */
 	public synchronized void sessionRecorder(long start, long end, int len,
 			boolean ordered, boolean isVIP) {
-		int b;
+		int b = (int) ((start - this.prepairTime) / 1000L);
 
-		b = (int) ((start - prepairTime) / 1000L);
-
-		if ((b >= 0) && (b <= m_testduring)) {
-			session[0][b]++;
-			if(isVIP == true)
-				session_vip[0][b]++;
-			else {
-				session_norm[0][b]++;
+		if ((b >= 0) && (b <= this.m_testduring)) {
+			this.session[0][b]++;
+			if (isVIP){
+				this.session_vip[0][b]++;
+			} else {
+				this.session_norm[0][b]++;
 			}
 		}
 
-		b = (int) ((end - prepairTime) / 1000L);
+		b = (int) ((end - this.prepairTime) / 1000L);
 
-		if ((b >= 0) && (b <= m_testduring)) {
-			session[1][b]++;
-			sessionLen.add(len);
-			if(isVIP == true){
-				session_vip[1][b]++;
-				sessionLen_vip.add(len);
-			}
-			else {
-				session_norm[1][b]++;
-				sessionLen_norm.add(len);
+		if ((b >= 0) && (b <= this.m_testduring)) {
+			this.session[1][b] ++;
+			this.sessionLen.add(Integer.valueOf(len));
+			if (isVIP) {
+				this.session_vip[1][b] ++;
+				this.sessionLen_vip.add(Integer.valueOf(len));
+			} else {
+				this.session_norm[1][b] ++;
+				this.sessionLen_norm.add(Integer.valueOf(len));
 			}
 			if (ordered) {
-				OrderedSession++;
-				if(isVIP == true)
-					OrderedSession_vip++;
-				else {
-					OrderedSession_norm++;
+				this.OrderedSession ++;
+				if (isVIP) {
+					this.OrderedSession_vip ++;
+				} else {
+					this.OrderedSession_norm ++;
 				}
 			}
 		}
@@ -286,7 +277,7 @@ public class EBStats implements Sendable {
 	 * @param profit
 	 */
 	public synchronized void Profit(double profit) {
-		TotalProfit += profit;
+		this.TotalProfit += profit;
 	}
 
 	/**
@@ -296,15 +287,14 @@ public class EBStats implements Sendable {
 	 */
 	public void error(int servlet, String message, String url, boolean isVIP) {
 		EBError error = new EBError(message, url);
-		errors[servlet].add(error);
-		errorCnt++;
-		if(isVIP == true){
-			errors_vip[servlet].add(error);
-			errorCnt_vip++;
-		}
-		else {
-			errors_norm[servlet].add(error);
-			errorCnt_norm++;
+		this.errors[servlet].add(error);
+		this.errorCnt ++;
+		if (isVIP) {
+			this.errors_vip[servlet].add(error);
+			this.errorCnt_vip ++;
+		} else {
+			this.errors_norm[servlet].add(error);
+			this.errorCnt_norm ++;
 		}
 	}
 
@@ -312,11 +302,11 @@ public class EBStats implements Sendable {
 	 * @param state
 	 */
 	public void addErrorSession(int state, boolean isVIP) {
-		ErrorSession[state]++;
-		if(isVIP == true)
-			ErrorSession_vip[state]++;
-		else {
-			ErrorSession_norm[state]++;
+		this.ErrorSession[state] ++;
+		if (isVIP) {
+			this.ErrorSession_vip[state] ++;
+		} else {
+			this.ErrorSession_norm[state] ++;
 		}
 	}
 
@@ -324,91 +314,91 @@ public class EBStats implements Sendable {
 	 * @return
 	 */
 	public long getWIPS() {
-		return WIPS;
+		return this.WIPS;
 	}
 
 	/**
 	 * @return
 	 */
 	public long getWIRT() {
-		return WIRT;
+		return this.WIRT;
 	}
 
 	/**
 	 * @return
 	 */
 	public int[] getErrorSession() {
-		return ErrorSession;
+		return this.ErrorSession;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getErrorCnt() {
-		return errorCnt;
+		return this.errorCnt;
 	}
 
 	/**
 	 * @return
 	 */
 	public ErrorSet[] getErrors() {
-		return errors;
+		return this.errors;
 	}
 
 	/**
 	 * @return
 	 */
 	public int[][] getWebInteractionThroughput() {
-		return webInteractionThroughput;
+		return this.webInteractionThroughput;
 	}
 
 	/**
 	 * @return
 	 */
 	public ResultSet[] getWirt() {
-		return wirt;
+		return this.wirt;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getTestduring() {
-		return m_testduring;
+		return this.m_testduring;
 	}
 
 	/**
 	 * @param testduring
 	 */
 	public void setTestduring(int testduring) {
-		m_testduring = testduring;
+		this.m_testduring = testduring;
 	}
 
 	/**
 	 * @return
 	 */
 	public double getTotalProfit() {
-		return TotalProfit;
+		return this.TotalProfit;
 	}
 
 	/**
 	 * @return
 	 */
 	public int[][] getTrans() {
-		return trans;
+		return this.trans;
 	}
 
 	/**
 	 * @return
 	 */
 	public int[] getLoadStart() {
-		return loadStart;
+		return this.loadStart;
 	}
 
 	/**
 	 * @return
 	 */
 	public long getStartTime() {
-		return startTime;
+		return this.startTime;
 	}
 
 	/**
@@ -422,7 +412,7 @@ public class EBStats implements Sendable {
 	 * @return
 	 */
 	public long getPrepairTime() {
-		return prepairTime;
+		return this.prepairTime;
 	}
 
 	/**
@@ -436,7 +426,7 @@ public class EBStats implements Sendable {
 	 * @return
 	 */
 	public long getTestTime() {
-		return testTime;
+		return this.testTime;
 	}
 
 	/**
@@ -450,7 +440,7 @@ public class EBStats implements Sendable {
 	 * @return
 	 */
 	public long getEndTime() {
-		return endTime;
+		return this.endTime;
 	}
 
 	/**
@@ -464,7 +454,7 @@ public class EBStats implements Sendable {
 	 * @return
 	 */
 	public int getM_testduring() {
-		return m_testduring;
+		return this.m_testduring;
 	}
 
 	/**
@@ -478,28 +468,28 @@ public class EBStats implements Sendable {
 	 * @return
 	 */
 	public ResultSet[] getTt() {
-		return tt;
+		return this.tt;
 	}
 
 	/**
 	 * @return
 	 */
 	public int[][] getSession() {
-		return session;
+		return this.session;
 	}
 
 	/**
 	 * @return
 	 */
 	public ArrayList<Integer> getSessionLen() {
-		return sessionLen;
+		return this.sessionLen;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getOrderedSession() {
-		return OrderedSession;
+		return this.OrderedSession;
 	}
 
 	/**
@@ -508,11 +498,12 @@ public class EBStats implements Sendable {
 	public void setLoadStart(int[] loadStart) {
 		this.loadStart = loadStart;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
 
 	/**
@@ -521,12 +512,12 @@ public class EBStats implements Sendable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
-    /**
-     * @return
-     */
-    public boolean isSelected() {
-		return selected;
+
+	/**
+	 * @return
+	 */
+	public boolean isSelected() {
+		return this.selected;
 	}
 
 	/**
@@ -535,157 +526,159 @@ public class EBStats implements Sendable {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+
 	public int[][] getWebInteractionThroughput_vip() {
-		return webInteractionThroughput_vip;
+		return this.webInteractionThroughput_vip;
 	}
 
-	public void setWebInteractionThroughput_vip(int[][] webInteractionThroughputVip) {
-		webInteractionThroughput_vip = webInteractionThroughputVip;
+	public void setWebInteractionThroughput_vip(
+			int[][] webInteractionThroughputVip) {
+		this.webInteractionThroughput_vip = webInteractionThroughputVip;
 	}
 
 	public int[][] getWebInteractionThroughput_norm() {
-		return webInteractionThroughput_norm;
+		return this.webInteractionThroughput_norm;
 	}
 
 	public void setWebInteractionThroughput_norm(
 			int[][] webInteractionThroughputNorm) {
-		webInteractionThroughput_norm = webInteractionThroughputNorm;
+		this.webInteractionThroughput_norm = webInteractionThroughputNorm;
 	}
 
 	public ResultSet[] getWirt_vip() {
-		return wirt_vip;
+		return this.wirt_vip;
 	}
 
 	public void setWirt_vip(ResultSet[] wirtVip) {
-		wirt_vip = wirtVip;
+		this.wirt_vip = wirtVip;
 	}
 
 	public ResultSet[] getWirt_norm() {
-		return wirt_norm;
+		return this.wirt_norm;
 	}
 
 	public void setWirt_norm(ResultSet[] wirtNorm) {
-		wirt_norm = wirtNorm;
+		this.wirt_norm = wirtNorm;
 	}
 
 	public ResultSet[] getTt_vip() {
-		return tt_vip;
+		return this.tt_vip;
 	}
 
 	public void setTt_vip(ResultSet[] ttVip) {
-		tt_vip = ttVip;
+		this.tt_vip = ttVip;
 	}
 
 	public ResultSet[] getTt_norm() {
-		return tt_norm;
+		return this.tt_norm;
 	}
 
 	public void setTt_norm(ResultSet[] ttNorm) {
-		tt_norm = ttNorm;
+		this.tt_norm = ttNorm;
 	}
 
 	public int[][] getSession_vip() {
-		return session_vip;
+		return this.session_vip;
 	}
 
 	public void setSession_vip(int[][] sessionVip) {
-		session_vip = sessionVip;
+		this.session_vip = sessionVip;
 	}
 
 	public int[][] getSession_norm() {
-		return session_norm;
+		return this.session_norm;
 	}
 
 	public void setSession_norm(int[][] sessionNorm) {
-		session_norm = sessionNorm;
+		this.session_norm = sessionNorm;
 	}
 
 	public ArrayList<Integer> getSessionLen_vip() {
-		return sessionLen_vip;
+		return this.sessionLen_vip;
 	}
 
 	public void setSessionLen_vip(ArrayList<Integer> sessionLenVip) {
-		sessionLen_vip = sessionLenVip;
+		this.sessionLen_vip = sessionLenVip;
 	}
 
 	public ArrayList<Integer> getSessionLen_norm() {
-		return sessionLen_norm;
+		return this.sessionLen_norm;
 	}
 
 	public void setSessionLen_norm(ArrayList<Integer> sessionLenNorm) {
-		sessionLen_norm = sessionLenNorm;
+		this.sessionLen_norm = sessionLenNorm;
 	}
 
 	public int getOrderedSession_vip() {
-		return OrderedSession_vip;
+		return this.OrderedSession_vip;
 	}
 
 	public void setOrderedSession_vip(int orderedSessionVip) {
-		OrderedSession_vip = orderedSessionVip;
+		this.OrderedSession_vip = orderedSessionVip;
 	}
 
 	public int getOrderedSession_norm() {
-		return OrderedSession_norm;
+		return this.OrderedSession_norm;
 	}
 
 	public void setOrderedSession_norm(int orderedSessionNorm) {
-		OrderedSession_norm = orderedSessionNorm;
+		this.OrderedSession_norm = orderedSessionNorm;
 	}
 
 	public int[] getErrorSession_vip() {
-		return ErrorSession_vip;
+		return this.ErrorSession_vip;
 	}
 
 	public void setErrorSession_vip(int[] errorSessionVip) {
-		ErrorSession_vip = errorSessionVip;
+		this.ErrorSession_vip = errorSessionVip;
 	}
 
 	public int[] getErrorSession_norm() {
-		return ErrorSession_norm;
+		return this.ErrorSession_norm;
 	}
 
 	public void setErrorSession_norm(int[] errorSessionNorm) {
-		ErrorSession_norm = errorSessionNorm;
+		this.ErrorSession_norm = errorSessionNorm;
 	}
 
 	public ErrorSet[] getErrors_vip() {
-		return errors_vip;
+		return this.errors_vip;
 	}
 
 	public void setErrors_vip(ErrorSet[] errorsVip) {
-		errors_vip = errorsVip;
+		this.errors_vip = errorsVip;
 	}
 
 	public ErrorSet[] getErrors_norm() {
-		return errors_norm;
+		return this.errors_norm;
 	}
 
 	public void setErrors_norm(ErrorSet[] errorsNorm) {
-		errors_norm = errorsNorm;
+		this.errors_norm = errorsNorm;
 	}
 
 	public int getErrorCnt_vip() {
-		return errorCnt_vip;
+		return this.errorCnt_vip;
 	}
 
 	public void setErrorCnt_vip(int errorCntVip) {
-		errorCnt_vip = errorCntVip;
+		this.errorCnt_vip = errorCntVip;
 	}
 
 	public int getErrorCnt_norm() {
-		return errorCnt_norm;
+		return this.errorCnt_norm;
 	}
 
 	public void setErrorCnt_norm(int errorCntNorm) {
-		errorCnt_norm = errorCntNorm;
+		this.errorCnt_norm = errorCntNorm;
 	}
+
 	public double getVIPrate() {
-		return VIPrate;
+		return this.VIPrate;
 	}
 
 	public void setVIPrate(double vIPrate) {
-		VIPrate = vIPrate;
+		this.VIPrate = vIPrate;
 	}
-
 
 }

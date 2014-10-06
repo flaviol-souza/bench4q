@@ -44,7 +44,6 @@ import org.bench4Q.common.util.Logger;
 public class EBClosed extends EB {
 	public boolean test;
 	public boolean terminate;
-	private static final boolean DEBUG = false;
 
 	public EBClosed(Args args, ArrayList<Integer> trace) {
 		this.m_args = args;
@@ -139,7 +138,7 @@ public class EBClosed extends EB {
 					Thread.sleep(1000L);
 				} catch (InterruptedException ie) {
 					Thread.currentThread().interrupt();
-					System.out.println("Unable to sleep!");
+					Logger.getLogger().error("Unable to sleep!");
 				}
 			}
 		}
@@ -154,19 +153,18 @@ public class EBClosed extends EB {
 
 		while ((this.maxTrans == -1) || (this.maxTrans > 0)) {
 			currentTimeMillis = System.currentTimeMillis();
-			// permite terminar as requisicoes so se for esculhida a opcao frequency
+			// permite terminar as requisicoes antes do fim do experimento
 			if (currentTimeMillis > this.propertiesEB.getTimeEnd() && this.propertiesEB.isFrenquency()) {
-				Logger.getLogger().debug(this.cid + " is ENDING ... "
-								+ (this.propertiesEB.getTimeEnd() - currentTimeMillis));
+				Logger.getLogger().debug(
+						this.cid + " is ENDING ... " + (this.propertiesEB.getTimeEnd() - currentTimeMillis));
 				this.test = false;
 			}
 
 			if (currentTimeMillis >= this.propertiesEB.getTimeStart()) {
 				if (this.terminate || !this.test) {
 					this.sessionEnd = System.currentTimeMillis();
-					EBStats.getEBStats().sessionRecorder(this.sessionStart,
-							this.sessionEnd, this.sessionLen, this.Ordered,
-							this.isVIP);
+					EBStats.getEBStats().sessionRecorder(this.sessionStart, this.sessionEnd, this.sessionLen,
+							this.Ordered, this.isVIP);
 					return;
 				}
 
@@ -176,23 +174,17 @@ public class EBClosed extends EB {
 					if (this.toHome) {
 						// User session is complete. Start new user session.
 						this.sessionEnd = System.currentTimeMillis();
-						EBStats.getEBStats().sessionRecorder(this.sessionStart,
-								this.sessionEnd, this.sessionLen, this.Ordered,
-								this.isVIP);
+						EBStats.getEBStats().sessionRecorder(this.sessionStart, this.sessionEnd, this.sessionLen,
+								this.Ordered, this.isVIP);
 						initialize();
 						return;
 					}
 					if (this.nextReq.equals("")) {
-						EBStats.getEBStats().addErrorSession(this.curState,
-								this.isVIP);
-						// sessionEnd = System.currentTimeMillis();
-						// EBStats.getEBStats().sessionRecorder(sessionStart,
-						// sessionEnd, sessionLen, Ordered);
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						initialize();
 						continue;
 					}
 					// Receive HTML response page.
-
 					if (this.rate > 0) {
 						if (isVIP) {
 							if (this.nextReq.contains("?")) {
@@ -208,8 +200,7 @@ public class EBClosed extends EB {
 					}
 					if (this.first) {
 						this.m_Client = HttpClientFactory.getInstance();
-						this.m_Client.getParams().setCookiePolicy(
-								CookiePolicy.RFC_2965);
+						this.m_Client.getParams().setCookiePolicy(CookiePolicy.RFC_2965);
 					}
 
 					startGet = System.currentTimeMillis();
@@ -217,16 +208,14 @@ public class EBClosed extends EB {
 					endGet = System.currentTimeMillis();
 
 					if (!sign) {
-						EBStats.getEBStats().addErrorSession(this.curState,
-								this.isVIP);
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						initialize();
 						continue;
 					}
 					this.first = false;
 
 					// Compute and store Web Interaction Response Time (WIRT)
-					EBStats.getEBStats().interaction(this.curState, startGet,
-							endGet, tt, this.isVIP);
+					EBStats.getEBStats().interaction(this.curState, startGet, endGet, tt, this.isVIP);
 					this.sessionLen++;
 					if (this.curState == 4) {
 						this.Ordered = true;
@@ -257,12 +246,12 @@ public class EBClosed extends EB {
 						this.maxTrans--;
 					}
 				} else {
-					EBStats.getEBStats().addErrorSession(this.curState,
-							this.isVIP);
+					EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 					initialize();
 				}
 			} else {
 				try {
+					// libera de sobrecarga
 					Thread.sleep(500L);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

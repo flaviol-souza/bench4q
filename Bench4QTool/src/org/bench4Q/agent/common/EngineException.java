@@ -38,6 +38,11 @@ import org.bench4Q.common.Bench4QException;
  */
 public class EngineException extends Bench4QException {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Creates a new <code>EngineException</code> instance.
 	 * 
 	 * @param s

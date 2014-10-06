@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.bench4Q.agent.rbe.communication.TestPhase;
 import org.bench4Q.agent.rbe.communication.TypeFrequency;
+import org.bench4Q.common.util.Logger;
 
 public class FrequencySettings implements Serializable {
 
@@ -22,8 +23,7 @@ public class FrequencySettings implements Serializable {
 		settings(index, eb, testPhase, type);
 	}
 
-	public static void settings(int index, EB eb, TestPhase testPhase,
-			TypeFrequency type) {
+	public static void settings(int index, EB eb, TestPhase testPhase, TypeFrequency type) {
 
 		if (eb.getPropertiesEB() == null) {
 			eb.setPropertiesEB(new PropertiesEB());
@@ -34,15 +34,13 @@ public class FrequencySettings implements Serializable {
 
 		if (TypeFrequency.RAMP.equals(type)) {
 			int time = (testPhase.getStdyTime() / qntEbs) * index;
-			System.out.println("EB index:"+index+" time:"+time);
+			Logger.getLogger().debug("EB index:"+index+" time:"+time);
 			eb.getPropertiesEB().setTimeStart(time);
 			eb.getPropertiesEB().setTimeEnd(testPhase.getStdyTime());
 		} else if (TypeFrequency.STILE.equals(type)) {
 			if (index >= testPhase.getFrequency().getQuantity()) {
-				eb.getPropertiesEB().setTimeStart(
-						testPhase.getFrequency().getStartTime());
-				eb.getPropertiesEB().setTimeEnd(
-						testPhase.getFrequency().getDurationTime());
+				eb.getPropertiesEB().setTimeStart(testPhase.getFrequency().getStartTime());
+				eb.getPropertiesEB().setTimeEnd(testPhase.getFrequency().getDurationTime());
 			} else {
 				eb.getPropertiesEB().setTimeStart(0);
 				eb.getPropertiesEB().setTimeEnd(testPhase.getStdyTime());
@@ -51,8 +49,10 @@ public class FrequencySettings implements Serializable {
 		}
 	}
 
-	public static PropertiesEB createProperties(int index, TestPhase testPhase,
-			TypeFrequency type, long timeInt) {
+	/**
+	 * Permite definir os tipos de properties
+	 * */
+	public static PropertiesEB createProperties(int index, TestPhase testPhase, TypeFrequency type, long timeInt) {
 
 		PropertiesEB propertiesEB = new PropertiesEB();
 		propertiesEB.isFrenquency = true;
@@ -68,16 +68,17 @@ public class FrequencySettings implements Serializable {
 				propertiesEB.setTimeStart(testPhase.getFrequency().getStartTime());
 				propertiesEB.setTimeEnd(testPhase.getFrequency().getStartTime() + timeStart);
 			}
-		} else if (TypeFrequency.STILE.equals(type)) {
+		} else if (TypeFrequency.STILE.equals(type)) { 
 //			if(testPhase.getFrequency().isPolarity()){
+				//os primeiros 
 				if (index >= testPhase.getFrequency().getQuantity()) {
 					propertiesEB.setTimeStart(0);
 					propertiesEB.setTimeEnd(testPhase.getStdyTime());
+					Logger.getLogger().debug("normal: "+index);
 				} else {
-					propertiesEB.setTimeStart(testPhase.getFrequency()
-							.getStartTime());
-					propertiesEB.setTimeEnd(testPhase.getFrequency()
-							.getDurationTime());
+					propertiesEB.setTimeStart(testPhase.getFrequency().getStartTime());
+					propertiesEB.setTimeEnd(testPhase.getFrequency().getDurationTime());
+					Logger.getLogger().debug("special: "+index);
 				}	
 //			}else{
 //				if (index >= testPhase.getFrequency().getQuantity()) {

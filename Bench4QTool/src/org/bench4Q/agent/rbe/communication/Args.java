@@ -61,8 +61,6 @@ public class Args implements Sendable {
 
 	private boolean MoniWeb;
 	private boolean MoniDB;
-	
-
 
 	private double tolerance;
 	private int retry;
@@ -71,29 +69,29 @@ public class Args implements Sendable {
 	private boolean replay;
 	private boolean record;
 	private String time;
-	
 
 	private ArrayList<TestPhase> testPhase;
 
 	private String typeFrenquency;
+
 	/**
 	 * constructor
 	 */
 	public Args() {
-		testPhase = new ArrayList<TestPhase>();
+		this.testPhase = new ArrayList<TestPhase>();
 		// initiate the argument
-		rbetype = "closed";
-		interval = 1;
-		prepair = 600;
-		cooldown = 300;
-		out = "out";
-		mix = "shopping";
-		slow = 1.0;
-		getImage = true;
-		tolerance = 1.0;
-		thinktime = 1.0;
-		ttMMPP = true; // with stagger
-		baseURL = "http://localhost:8080/jaspte";
+		this.rbetype = "closed";
+		this.interval = 1.0D;
+		this.prepair = 600;
+		this.cooldown = 300;
+		this.out = "out";
+		this.mix = "shopping";
+		this.slow = 1.0D;
+		this.getImage = true;
+		this.tolerance = 1.0D;
+		this.thinktime = 1.0D;
+		this.ttMMPP = true; // with stagger
+		this.baseURL = "http://localhost:8080/jaspte";
 
 	}
 
@@ -101,7 +99,7 @@ public class Args implements Sendable {
 	 * @return rbe type
 	 */
 	public String getRbetype() {
-		return rbetype;
+		return this.rbetype;
 	}
 
 	/**
@@ -115,7 +113,7 @@ public class Args implements Sendable {
 	 * @return prepair
 	 */
 	public int getPrepair() {
-		return prepair;
+		return this.prepair;
 	}
 
 	/**
@@ -129,7 +127,7 @@ public class Args implements Sendable {
 	 * @return cooldown
 	 */
 	public int getCooldown() {
-		return cooldown;
+		return this.cooldown;
 	}
 
 	/**
@@ -143,7 +141,7 @@ public class Args implements Sendable {
 	 * @return out name
 	 */
 	public String getOut() {
-		return out;
+		return this.out;
 	}
 
 	/**
@@ -157,7 +155,7 @@ public class Args implements Sendable {
 	 * @return mix
 	 */
 	public String getMix() {
-		return mix;
+		return this.mix;
 	}
 
 	/**
@@ -171,7 +169,7 @@ public class Args implements Sendable {
 	 * @return slow rate
 	 */
 	public double getSlow() {
-		return slow;
+		return this.slow;
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class Args implements Sendable {
 	 * @return base URL
 	 */
 	public String getBaseURL() {
-		return baseURL;
+		return this.baseURL;
 	}
 
 	/**
@@ -199,7 +197,7 @@ public class Args implements Sendable {
 	 * @return tolerance time
 	 */
 	public double getTolerance() {
-		return tolerance;
+		return this.tolerance;
 	}
 
 	/**
@@ -213,7 +211,7 @@ public class Args implements Sendable {
 	 * @return think time
 	 */
 	public double getThinktime() {
-		return thinktime;
+		return this.thinktime;
 	}
 
 	/**
@@ -222,10 +220,9 @@ public class Args implements Sendable {
 	public void setThinktime(double thinktime) {
 		this.thinktime = thinktime;
 	}
-	
 
 	public boolean isTtMMPP() {
-		return ttMMPP;
+		return this.ttMMPP;
 	}
 
 	public void setTtMMPP(boolean ttMMPP) {
@@ -236,7 +233,7 @@ public class Args implements Sendable {
 	 * @return whether get Image
 	 */
 	public boolean isGetImage() {
-		return getImage;
+		return this.getImage;
 	}
 
 	/**
@@ -250,7 +247,7 @@ public class Args implements Sendable {
 	 * @return retry time
 	 */
 	public int getRetry() {
-		return retry;
+		return this.retry;
 	}
 
 	/**
@@ -264,7 +261,7 @@ public class Args implements Sendable {
 	 * @return testPhase
 	 */
 	public ArrayList<TestPhase> getEbs() {
-		return testPhase;
+		return this.testPhase;
 	}
 
 	/**
@@ -292,7 +289,7 @@ public class Args implements Sendable {
 	 * @return interval
 	 */
 	public double getInterval() {
-		return interval;
+		return this.interval;
 	}
 
 	/**
@@ -306,7 +303,7 @@ public class Args implements Sendable {
 	 * @return test name
 	 */
 	public String getTestName() {
-		return testName;
+		return this.testName;
 	}
 
 	/**
@@ -320,7 +317,7 @@ public class Args implements Sendable {
 	 * @return test description
 	 */
 	public String getTestDescription() {
-		return testDescription;
+		return this.testDescription;
 	}
 
 	/**
@@ -329,15 +326,16 @@ public class Args implements Sendable {
 	public void setTestDescription(String testDescription) {
 		this.testDescription = testDescription;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public boolean isReplay() {
-		return replay;
-        }
+		return this.replay;
+	}
+
 	public String getDBURL() {
-		return DBURL;
+		return this.DBURL;
 	}
 
 	/**
@@ -345,85 +343,87 @@ public class Args implements Sendable {
 	 */
 	public void setReplay(boolean replay) {
 		this.replay = replay;
-        }
-	public void setDBURL(String dBURL) {
-		DBURL = dBURL;
 	}
+
+	public void setDBURL(String dBURL) {
+		this.DBURL = dBURL;
+	}
+
 	/**
 	 * @return
 	 */
 	public int getWebPort() {
-		return WebPort;
+		return this.WebPort;
 	}
 
 	/**
 	 * @param webPort
 	 */
 	public void setWebPort(int webPort) {
-		WebPort = webPort;
+		this.WebPort = webPort;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getDBPort() {
-		return DBPort;
+		return this.DBPort;
 	}
 
 	/**
 	 * @param dBPort
 	 */
 	public void setDBPort(int dBPort) {
-		DBPort = dBPort;
+		this.DBPort = dBPort;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public boolean isUseEJB() {
-		return UseEJB;
+		return this.UseEJB;
 	}
 
 	/**
 	 * @param useEJB
 	 */
 	public void setUseEJB(boolean useEJB) {
-		UseEJB = useEJB;
+		this.UseEJB = useEJB;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public boolean isMoniWeb() {
-		return MoniWeb;
+		return this.MoniWeb;
 	}
 
 	/**
 	 * @param moniWeb
 	 */
 	public void setMoniWeb(boolean moniWeb) {
-		MoniWeb = moniWeb;
+		this.MoniWeb = moniWeb;
 	}
 
 	/**
 	 * @return
 	 */
 	public boolean isMoniDB() {
-		return MoniDB;
+		return this.MoniDB;
 	}
 
 	/**
 	 * @param moniDB
 	 */
 	public void setMoniDB(boolean moniDB) {
-		MoniDB = moniDB;
+		this.MoniDB = moniDB;
 	}
 
 	/**
 	 * @return
 	 */
 	public boolean isRecord() {
-		return record;
+		return this.record;
 	}
 
 	/**
@@ -432,13 +432,12 @@ public class Args implements Sendable {
 	public void setRecord(boolean record) {
 		this.record = record;
 	}
-	
-	
+
 	/**
 	 * @return
 	 */
 	public String getTime() {
-		return time;
+		return this.time;
 	}
 
 	/**
@@ -447,40 +446,41 @@ public class Args implements Sendable {
 	public void setTime(String time) {
 		this.time = time;
 	}
-	
+
 	public double getP_s_to_l() {
-		return p_s_to_l;
+		return this.p_s_to_l;
 	}
 
 	public void setP_s_to_l(double pSToL) {
-		p_s_to_l = pSToL;
+		this.p_s_to_l = pSToL;
 	}
 
 	public double getP_l_to_s() {
-		return p_l_to_s;
+		return this.p_l_to_s;
 	}
 
 	public void setP_l_to_s(double pLToS) {
-		p_l_to_s = pLToS;
+		this.p_l_to_s = pLToS;
 	}
-	
+
 	public double getLambda_short() {
-		return lambda_short;
+		return this.lambda_short;
 	}
 
 	public void setLambda_short(double lambdaShort) {
-		lambda_short = lambdaShort;
+		this.lambda_short = lambdaShort;
 	}
 
 	public double getLambda_long() {
-		return lambda_long;
+		return this.lambda_long;
 	}
 
 	public void setLambda_long(double lambdaLong) {
-		lambda_long = lambdaLong;
+		this.lambda_long = lambdaLong;
 	}
+
 	public double getRate() {
-		return rate;
+		return this.rate;
 	}
 
 	public void setRate(double rate) {
@@ -488,9 +488,9 @@ public class Args implements Sendable {
 	}
 
 	public String getTypeFrenquency() {
-		return typeFrenquency;
+		return this.typeFrenquency;
 	}
-	
+
 	public void setTypeFrenquency(String typeFrenquency) {
 		this.typeFrenquency = typeFrenquency;
 	}

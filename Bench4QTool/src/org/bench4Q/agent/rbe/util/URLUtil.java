@@ -36,8 +36,6 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.StringTokenizer;
 
-import javax.swing.text.html.MinimalHTMLWriter;
-
 /**
  * @author duanzhiquan
  * 
@@ -288,7 +286,7 @@ public class URLUtil {
 	 * @return
 	 */
 	public static String astring(Random rand, int min, int max) {
-		return (rstring(rand, min, max, achars));
+		return rstring(rand, min, max, achars);
 	}
 
 	/**
@@ -298,15 +296,13 @@ public class URLUtil {
 	 * @return
 	 */
 	public static String nstring(Random rand, int min, int max) {
-		return (rstring(rand, min, max, nchars));
+		return rstring(rand, min, max, nchars);
 	}
 
 	private static String rstring(Random rand, int min, int max, String[] cset) {
 		int r = rand.nextInt(max - min + 1) + min;
 		String s;
-
-		for (s = ""; s.length() < r; s = s + cset[rand.nextInt(1)])
-			;
+		for (s = ""; s.length() < r; s = s + cset[rand.nextInt(1)]);
 		return s;
 	}
 
@@ -331,14 +327,14 @@ public class URLUtil {
 			"Philippines", "Poland", "Portugal", "Romania", "Russia",
 			"Saudi+Arabia", "Singapore", "Slovakia", "South+Africa",
 			"South+Korea", "Spain", "Sudan", "Sweden", "Taiwan", "Thailand",
-			"Trinidad", "Turkey", "Venezuela", "Zambia", };
+			"Trinidad", "Turkey", "Venezuela", "Zambia" };
 
 	/**
 	 * @param rand
 	 * @return
 	 */
 	public static String unifCountry(Random rand) {
-		return (countries[rand.nextInt(countries.length)]);
+		return countries[rand.nextInt(countries.length)];
 	}
 
 	/**
@@ -348,11 +344,11 @@ public class URLUtil {
 	/**
 	 * 
 	 */
-	public static final long dobStart = c.getTime().getTime();;
+	public static final long dobStart = c.getTime().getTime();
 	/**
 	 * 
 	 */
-	public static final long dobEnd = System.currentTimeMillis();;
+	public static final long dobEnd = System.currentTimeMillis();
 
 	/**
 	 * @param rand
@@ -364,7 +360,7 @@ public class URLUtil {
 		Calendar c = new GregorianCalendar();
 		c.setTime(d);
 
-		return ("" + c.get(Calendar.DAY_OF_MONTH) + "%2f"
+		return (c.get(Calendar.DAY_OF_MONTH) + "%2f"
 				+ c.get(Calendar.DAY_OF_WEEK) + "%2f" + c.get(Calendar.YEAR));
 	}
 
@@ -379,7 +375,7 @@ public class URLUtil {
 	 * @return
 	 */
 	public static String unifCCType(Random rand) {
-		return (ccTypes[rand.nextInt(ccTypes.length)]);
+		return ccTypes[rand.nextInt(ccTypes.length)];
 	}
 
 	/**
@@ -392,7 +388,7 @@ public class URLUtil {
 		Calendar c = new GregorianCalendar();
 		c.setTime(d);
 
-		return ("" + c.get(Calendar.DAY_OF_MONTH) + "%2f"
+		return (c.get(Calendar.DAY_OF_MONTH) + "%2f"
 				+ c.get(Calendar.DAY_OF_WEEK) + "%2f" + c.get(Calendar.YEAR));
 
 	}
@@ -444,7 +440,7 @@ public class URLUtil {
 		} catch (NoSuchElementException e) {
 		}
 
-		return (return_val);
+		return return_val;
 	}
 
 	/**
@@ -458,7 +454,7 @@ public class URLUtil {
 	 * @return
 	 */
 	public static String addField(String i, String f, String v) {
-		if (i.indexOf((int) '?') == -1) {
+		if (i.indexOf('?') == -1) {
 			// First field
 			i = i + '?';
 		} else {
@@ -467,7 +463,7 @@ public class URLUtil {
 		}
 		i = i + f + "=" + v;
 
-		return (i);
+		return i;
 	}
 
 	/**
@@ -492,8 +488,8 @@ public class URLUtil {
 	 * @return
 	 */
 	public static final int NURand(Random rand, int A, int x, int y) {
-		return ((((rand.nextInt(A + 1)) | (rand.nextInt(y - x + 1) + x)) % (y
-				- x + 1)) + x);
+		return (rand.nextInt(A + 1) | rand.nextInt(y - x + 1) + x)
+				% (y - x + 1) + x;
 	}
 
 	/**
@@ -506,19 +502,21 @@ public class URLUtil {
 			StrStrPattern etag) {
 		// Find the tag string.
 		int i = tag.find(html);
-		if (i == -1)
+		if (i == -1) {
 			return null;
-		i = i + tag.length();
+		}
+		i += tag.length();
 		// Find end of the digits.
 		StrStrPattern yin = new StrStrPattern("\"");
 		int j = yin.find(html, i);
-		
-		if (j == -1)
+
+		if (j == -1) {
 			return null;
-		String mid = html.substring(i,j);
-		if(mid.contains("?")){
+		}
+		String mid = html.substring(i, j);
+		if (mid.contains("?")) {
 			int k = etag.find(mid);
-			mid = mid.substring(0,k);
+			mid = mid.substring(0, k);
 		}
 		return mid;
 	}
@@ -535,16 +533,17 @@ public class URLUtil {
 	public static String digSyl(int d, int n) {
 		String s = "";
 
-		if (n == 0)
-			return (digSyl(d));
+		if (n == 0) {
+			return digSyl(d);
+		}
 
 		for (; n > 0; n--) {
 			int c = d % 10;
 			s = digS[c] + s;
-			d = d / 10;
+			d /= 10;
 		}
 
-		return (s);
+		return s;
 	}
 
 	/**
@@ -554,12 +553,12 @@ public class URLUtil {
 	public static String digSyl(int d) {
 		String s = "";
 
-		for (; d != 0; d = d / 10) {
+		for (; d != 0; d /= 10) {
 			int c = d % 10;
 			s = digS[c] + s;
 		}
 
-		return (s);
+		return s;
 	}
 
 	/**
@@ -571,8 +570,7 @@ public class URLUtil {
 	 */
 	public static String unameAndPass(int cid) {
 		String un = digSyl(cid);
-		return (field_uname + "=" + un + "&" + field_passwd + "=" + un
-				.toLowerCase());
+		return (field_uname + "=" + un + "&" + field_passwd + "=" + un.toLowerCase());
 	}
 
 	/**
@@ -583,7 +581,7 @@ public class URLUtil {
 	 * @return
 	 */
 	public static String unifSubject(Random rand) {
-		return (subjects[rand.nextInt(subjects.length)]);
+		return subjects[rand.nextInt(subjects.length)];
 	}
 
 	/**
@@ -596,11 +594,11 @@ public class URLUtil {
 	 * @return
 	 */
 	public static String unifHomeSubject(Random rand) {
-		return (unifSubject(rand));
+		return unifSubject(rand);
 	}
 
 	/**
-	 *Finds any non-URLable characters and converts them to URL form. All alpha
+	 * Finds any non-URLable characters and converts them to URL form. All alpha
 	 * numerics are left alone.<space> goes to '+' All others go to %xx
 	 * (hexadecimal representation.)
 	 * 
@@ -608,20 +606,19 @@ public class URLUtil {
 	 * @return
 	 */
 	public static String mungeURL(String url) {
-		int i;
 		String mURL = "";
-		for (i = 0; i < url.length(); i++) {
+		for (int i = 0; i < url.length(); i++) {
 			char ch = url.charAt(i);
 			if (((ch >= '0') && (ch <= '9')) || ((ch >= 'a') && (ch <= 'z'))
-					|| ((ch >= 'A') && (ch <= 'Z'))
-					|| ((ch == '.') || (ch == '/'))) {
+					|| ((ch >= 'A') && (ch <= 'Z')) || (ch == '.')
+					|| (ch == '/')) {
 				mURL = mURL + ch;
 			} else if (ch == ' ') {
 				mURL = mURL + '+';
 			} else {
 				int d = ch;
 				int d1 = d >> 4;
-				int d2 = d & 0xf;
+				int d2 = d & 0xF;
 				char c1 = (char) ((d1 > 9) ? ('A' + d1 - 10) : '0' + d1);
 				char c2 = (char) ((d2 > 9) ? ('A' + d2 - 10) : '0' + d2);
 				mURL = mURL + "%" + c1 + c2;
@@ -636,7 +633,7 @@ public class URLUtil {
 	 */
 	public static String unifImage(Random rand) {
 		int i = rand.nextInt(numItem) + 1;
-		return (mungeURL("item_" + i + ".jpg"));
+		return mungeURL("item_" + i + ".jpg");
 	}
 
 	/**
@@ -645,7 +642,7 @@ public class URLUtil {
 	 */
 	public static String unifThumbnail(Random rand) {
 		int i = rand.nextInt(numItem) + 1;
-		return (mungeURL("thumb_" + i + ".jpg"));
+		return mungeURL("thumb_" + i + ".jpg");
 	}
 
 }
