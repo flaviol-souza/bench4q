@@ -59,15 +59,13 @@ public class WorkersClosed extends Workers {
 
 	private ArrayList<EB> ebs;
 
-	public WorkersClosed(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
-			Args args, int identity) {
-		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
-				testPhase, args, identity);
+	public WorkersClosed(long startTime, long triggerTime, long stdyTime, int baseLoad, int randomLoad, int rate,
+			TestPhase testPhase, Args args, int identity) {
+		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate, testPhase, args, identity);
 		this.trace = new ArrayList<ArrayList<Integer>>();
 		if (this.m_args.isReplay()) {
 			try {
-				FileInputStream fi = new FileInputStream(this.m_args.getTime()+ "-" + identity);
+				FileInputStream fi = new FileInputStream(this.m_args.getTime() + "-" + identity);
 				ObjectInputStream ois = new ObjectInputStream(fi);
 				this.trace = ((ArrayList<ArrayList<Integer>>) ois.readObject());
 				ois.close();
@@ -90,21 +88,20 @@ public class WorkersClosed extends Workers {
 		for (int j = 0; j < baseLoad; j++) {
 			ArrayList<Integer> tra = new ArrayList<Integer>();
 			if (this.m_args.isReplay()) {
-				tra = (ArrayList<Integer>)this.trace.get(j);
-				Logger.getLogger().debug(j+"\t"+tra.toArray().toString());
+				tra = (ArrayList<Integer>) this.trace.get(j);
+				Logger.getLogger().debug(j + "\t" + tra.toArray().toString());
 				EB eb = new EBClosed(this.m_args, tra);
 				eb.setDaemon(true);
 				// if(j > baseLoad / 2)
 				// eb.joke = true;
 				eb.start();
 				this.ebs.add(eb);
-				
+
 			} else {
 				EB eb = new EBClosed(this.m_args, tra);
 				eb.setPropertiesEB(new PropertiesEB());
 				eb.setDaemon(true);
 				eb.start();
-				Logger.getLogger().debug(j);
 				this.ebs.add(eb);
 				this.trace.add(tra);
 			}
@@ -120,14 +117,12 @@ public class WorkersClosed extends Workers {
 		int baseLoad = this.m_baseLoad;
 
 		TypeFrequency type = TypeFrequency.getType(m_args.getTypeFrenquency());
-		
 
 		int index = 0;
-		for(EB eb : ebs){
-			PropertiesEB propertiesEB = 
-					FrequencySettings.createProperties(index++, m_testPhase, type, beginTime);
+		for (EB eb : ebs) {
+			PropertiesEB propertiesEB = FrequencySettings.createProperties(index++, m_testPhase, type, beginTime);
 			eb.setPropertiesEB(propertiesEB);
-			((EBClosed)eb).setTest(true);
+			((EBClosed) eb).setTest(true);
 		}
 
 		while ((!isStop()) && (System.currentTimeMillis() - endTime < 0L)) {
@@ -139,7 +134,7 @@ public class WorkersClosed extends Workers {
 		}
 
 		for (EB eb : this.ebs) {
-			//((EBClosed) eb).setTerminate(true);
+			// ((EBClosed) eb).setTerminate(true);
 			((EBClosed) eb).setTest(false);
 		}
 		this.ebs = null;

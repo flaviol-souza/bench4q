@@ -18,6 +18,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.bench4Q.agent.rbe.communication.TestPhase;
 import org.bench4Q.agent.rbe.communication.TypeFrequency;
+import org.bench4Q.common.util.Logger;
 import org.bench4Q.console.common.Resources;
 import org.bench4Q.console.model.ConfigModel;
 
@@ -72,11 +73,13 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 			}
 		});
 		painelButtons.add(functionCombo);
+		// inicializando com o STEP
+		createPanelFunction(TypeFrequency.STEP);
 	}
 
 	private void createPanelFunction(final TypeFrequency type) {
 		JPanel functionPanelOld = null;
-		if(functionPanel != null){
+		if (functionPanel != null) {
 			functionPanelOld = functionPanel;
 		}
 		functionPanel = new JPanel(new GridLayout());
@@ -84,7 +87,7 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 		functionPanel.setMinimumSize(new Dimension(300, 200));
 
 		m_configModel.getArgs().setTypeFrenquency(type.getName());
-		
+
 		// Object[][] dados = { { stdyTime / 2, stdyTime / 2, "+" } };
 		this.dataSet = m_configModel.getArgs().getEbs();
 
@@ -97,12 +100,12 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 		scrollTable.setViewportView(table);
 
 		functionPanel.add(scrollTable);
-		
-		if(functionPanelOld != null){
+
+		if (functionPanelOld != null) {
 			functionPanelOld.setVisible(false);
 			mainPanel.remove(functionPanelOld);
 		}
-		
+
 		functionPanel.setVisible(true);
 		mainPanel.add(functionPanel);
 		mainPanel.revalidate();
@@ -118,7 +121,7 @@ public class M_LoadFrequencyPanel extends JPanel implements ActionListener {
 
 	protected void resetConfig(TypeFrequency type) {
 		dataSet = m_configModel.getArgs().getEbs();
-		MyTableModel myTableModel = new MyTableModel( type, dataSet);
+		MyTableModel myTableModel = new MyTableModel(type, dataSet);
 		this.table.setModel(myTableModel);
 		this.table.revalidate();
 	}

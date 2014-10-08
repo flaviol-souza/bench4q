@@ -102,6 +102,7 @@ public class RBE implements Runnable {
 			testPhaseEndTime = testPhase.getTriggerTime() + testPhase.getStdyTime();
 			if (testPhaseEndTime > testInterval) {
 				testInterval = testPhaseEndTime;
+				Logger.getLogger().debug("testInterval: "+testInterval);
 			}
 			baseLoadEbs += testPhase.getBaseLoad();
 		}
@@ -115,21 +116,20 @@ public class RBE implements Runnable {
 
 		FrequencySettings.setQntWorkers(baseLoadEbs);
 		if (this.m_args.getRbetype().equalsIgnoreCase("closed")) {
-			Logger.getLogger().debug("# EBS Close: "+ this.m_args.getEbs().size());
+			Logger.getLogger().debug("# EBS Close: " + this.m_args.getEbs().size());
 			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
 				this.m_workers.add(new WorkersClosed(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
 						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
 						this.m_args, identity));
-				Logger.getLogger().debug("Close: "+ testPhase.getRate());
 			}
 		} else if (this.m_args.getRbetype().equalsIgnoreCase("open")) {
+			Logger.getLogger().debug("# EBS Open: " + this.m_args.getEbs().size());
 			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
 				this.m_workers.add(new WorkersOpen(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
 						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
 						this.m_args, identity));
-				Logger.getLogger().debug("Open: "+ testPhase.getRate());
 			}
 		} else {
 			System.out.println("Error parameter.");
@@ -139,10 +139,10 @@ public class RBE implements Runnable {
 				this.m_workers.add(new WorkersClosed(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
 						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
 						this.m_args, identity));
-				Logger.getLogger().debug("Error: "+ testPhase.getRate());
+				Logger.getLogger().debug("Error: " + testPhase.getRate());
 			}
 		}
-
+		Logger.getLogger().debug("m_workers: " + this.m_workers.size());
 		for (Workers worker : this.m_workers) {
 			worker.setDaemon(true);
 			worker.start();

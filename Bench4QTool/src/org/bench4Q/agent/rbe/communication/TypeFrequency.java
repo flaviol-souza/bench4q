@@ -5,8 +5,8 @@ import java.util.ArrayList;
 //Create by ICMC-USP Brazil - Flavio Souza
 public enum TypeFrequency {
 
-	STILE("Stile", new String[] { "Start Time", "Duration Stile", "Polarity", "Quantity" }), //
-	RAMP("Ramp", new String[] {"Start Time", "Quantity", "Polarity"});
+	STEP("Step", new String[] { "Start Time", "Duration Step", "Polarity", "Quantity" }), //
+	RAMP("Ramp", new String[] { "Start Time", "Quantity", "Polarity" });
 
 	private final String name;
 	private final String[] attributes;
@@ -43,8 +43,8 @@ public enum TypeFrequency {
 
 		if (TypeFrequency.RAMP.equals(this)) {
 			return this.getValueAtRamp(data, rowIndex, columnIndex);
-		} else if (TypeFrequency.STILE.equals(this)) {
-			return this.getValueAtStile(data, rowIndex, columnIndex);
+		} else if (TypeFrequency.STEP.equals(this)) {
+			return this.getValueAtStep(data, rowIndex, columnIndex);
 		}
 
 		return null;
@@ -54,8 +54,8 @@ public enum TypeFrequency {
 
 		if (TypeFrequency.RAMP.equals(this)) {
 			this.setValueAtRamp(data, value, row, col);
-		} else if (TypeFrequency.STILE.equals(this)) {
-			this.setValueAtStile(data, value, row, col);
+		} else if (TypeFrequency.STEP.equals(this)) {
+			this.setValueAtStep(data, value, row, col);
 		}
 
 		// resetShowPanel();
@@ -64,11 +64,9 @@ public enum TypeFrequency {
 	private void setValueAtRamp(ArrayList data, Object value, int row, int col) {
 
 		if (col == 0) {
-			((TestPhase) data.get(row)).getFrequency().setStartTime(
-					Integer.valueOf((String) value));
+			((TestPhase) data.get(row)).getFrequency().setStartTime(Integer.valueOf((String) value));
 		} else if (col == 1) {
-			((TestPhase) data.get(row)).getFrequency().setDurationTime(
-					Integer.valueOf((String) value));
+			((TestPhase) data.get(row)).getFrequency().setDurationTime(Integer.valueOf((String) value));
 		} else if (col == 2) {
 			if (((String) value).equals("-"))
 				((TestPhase) data.get(row)).getFrequency().setPolarity(false);
@@ -79,35 +77,30 @@ public enum TypeFrequency {
 		}
 	}
 
-	private void setValueAtStile(ArrayList data, Object value, int row, int col) {
+	private void setValueAtStep(ArrayList data, Object value, int row, int col) {
 
 		if (col == 0) {
-			((TestPhase) data.get(row)).getFrequency().setStartTime(
-					Integer.valueOf((String) value));
+			((TestPhase) data.get(row)).getFrequency().setStartTime(Integer.valueOf((String) value));
 		} else if (col == 1) {
-			((TestPhase) data.get(row)).getFrequency().setDurationTime(
-					Integer.valueOf((String) value));
+			((TestPhase) data.get(row)).getFrequency().setDurationTime(Integer.valueOf((String) value));
 		} else if (col == 2) {
 			if (((String) value).equals("-"))
 				((TestPhase) data.get(row)).getFrequency().setPolarity(false);
 			else
 				((TestPhase) data.get(row)).getFrequency().setPolarity(true);
 		} else if (col == 3) {
-			((TestPhase) data.get(row)).getFrequency().setQuantity(
-					Integer.valueOf((String) value));
+			((TestPhase) data.get(row)).getFrequency().setQuantity(Integer.valueOf((String) value));
 		} else {
-			
+
 		}
 	}
 
 	private Object getValueAtRamp(ArrayList data, int rowIndex, int columnIndex) {
 
 		if (columnIndex == 0) {
-			return ((TestPhase) data.get(rowIndex)).getFrequency()
-					.getStartTime();
+			return ((TestPhase) data.get(rowIndex)).getFrequency().getStartTime();
 		} else if (columnIndex == 1) {
-			return ((TestPhase) data.get(rowIndex)).getFrequency()
-					.getDurationTime();
+			return ((TestPhase) data.get(rowIndex)).getFrequency().getDurationTime();
 		} else if (columnIndex == 2) {
 			if (((TestPhase) data.get(rowIndex)).getFrequency().isPolarity())
 				return "+";
@@ -118,14 +111,12 @@ public enum TypeFrequency {
 		}
 	}
 
-	private Object getValueAtStile(ArrayList data, int rowIndex, int columnIndex) {
+	private Object getValueAtStep(ArrayList data, int rowIndex, int columnIndex) {
 
 		if (columnIndex == 0) {
-			return ((TestPhase) data.get(rowIndex)).getFrequency()
-					.getStartTime();
+			return ((TestPhase) data.get(rowIndex)).getFrequency().getStartTime();
 		} else if (columnIndex == 1) {
-			return ((TestPhase) data.get(rowIndex)).getFrequency()
-					.getDurationTime();
+			return ((TestPhase) data.get(rowIndex)).getFrequency().getDurationTime();
 		} else if (columnIndex == 2) {
 			if (((TestPhase) data.get(rowIndex)).getFrequency().isPolarity())
 				return "+";

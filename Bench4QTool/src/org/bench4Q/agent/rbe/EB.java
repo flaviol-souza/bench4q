@@ -271,8 +271,7 @@ public abstract class EB extends Thread {
 	/**
 	 * 
 	 */
-	public final StrStrPattern inputPat = new StrStrPattern(
-			"<INPUT TYPE=\"IMAGE\"");
+	public final StrStrPattern inputPat = new StrStrPattern("<INPUT TYPE=\"IMAGE\"");
 	/**
 	 * 
 	 */
@@ -328,13 +327,11 @@ public abstract class EB extends Thread {
 			}
 
 			if (statusCode != HttpStatus.SC_OK) {
-				EBStats.getEBStats().error(state,
-						"HTTP response ERROR: " + statusCode, url, isVIP);
+				EBStats.getEBStats().error(state, "HTTP response ERROR: " + statusCode, url, isVIP);
 				return false;
 			}
 
-			BufferedReader bin = new BufferedReader(new InputStreamReader(
-					httpget.getResponseBodyAsStream()));
+			BufferedReader bin = new BufferedReader(new InputStreamReader(httpget.getResponseBodyAsStream()));
 			StringBuilder result = new StringBuilder();
 			String s;
 			while ((s = bin.readLine()) != null) {
@@ -359,14 +356,12 @@ public abstract class EB extends Thread {
 		try {
 			u = new URL(url);
 		} catch (MalformedURLException e) {
-			EBStats.getEBStats().error(state, "get image ERROR.", url,
-					this.isVIP);
+			EBStats.getEBStats().error(state, "get image ERROR.", url, this.isVIP);
 			return false;
 		}
 
 		findImg(this.html, u, this.imgPat, this.srcPat, this.quotePat, imageRd);
-		findImg(this.html, u, this.inputPat, this.srcPat, this.quotePat,
-				imageRd);
+		findImg(this.html, u, this.inputPat, this.srcPat, this.quotePat, imageRd);
 		while (imageRd.size() > 0) {
 			int max = imageRd.size();
 			int min = Math.max(max - RBEUtil.maxImageRd, 0);
@@ -380,8 +375,7 @@ public abstract class EB extends Thread {
 					}
 				}
 			} catch (InterruptedException inte) {
-				EBStats.getEBStats().error(state, "get image ERROR.", url,
-						this.isVIP);
+				EBStats.getEBStats().error(state, "get image ERROR.", url, this.isVIP);
 				return true;
 			}
 		}
@@ -490,8 +484,8 @@ public abstract class EB extends Thread {
 		int LONG = 80;
 		int SHORT = 8;
 
-		int[] tolerance = { SHORT, LONG, LONG, SHORT, LONG, LONG, LONG, SHORT,
-				SHORT, LONG, LONG, SHORT, SHORT, SHORT, LONG };
+		int[] tolerance = { SHORT, LONG, LONG, SHORT, LONG, LONG, LONG, SHORT, SHORT, LONG, LONG, SHORT, SHORT, SHORT,
+				LONG };
 
 		return tolerance_scale * tolerance[cur];
 
@@ -505,15 +499,13 @@ public abstract class EB extends Thread {
 	 * @param quotePat
 	 * @param imageRd
 	 */
-	public void findImg(String html, URL url, StringPattern imgPat,
-			StringPattern srcPat, StringPattern quotePat,
+	public void findImg(String html, URL url, StringPattern imgPat, StringPattern srcPat, StringPattern quotePat,
 			Vector<ImageReader> imageRd) {
 		int cur = 0;
 		while ((cur = imgPat.find(html, cur)) > -1) {
 			cur = srcPat.find(html, imgPat.end() + 1);
 			quotePat.find(html, srcPat.end() + 1);
-			String imageURLString = html.substring(srcPat.end() + 1,
-					quotePat.start());
+			String imageURLString = html.substring(srcPat.end() + 1, quotePat.start());
 			imageRd.addElement(new ImageReader(url, imageURLString, buffer));
 			cur = quotePat.start() + 1;
 		}

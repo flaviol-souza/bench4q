@@ -137,7 +137,8 @@ public class EBOpen extends EB {
 			currentTimeMillis = System.currentTimeMillis();
 			// se o tempo do degrao foi alcancado
 			if (currentTimeMillis > this.propertiesEB.getTimeEnd()) {
-				Logger.getLogger().debug(this.cid + " is ending ...");
+				// O EB termina porque ultrapassou o tempo limite do experimento
+				//Logger.getLogger().debug(this.cid + " is ending ...");
 				maxTrans = 0;
 			}
 			if (currentTimeMillis >= this.propertiesEB.getTimeStart()) {
@@ -145,14 +146,12 @@ public class EBOpen extends EB {
 					// Check if user session is finished.
 					if (this.toHome) {
 						this.sessionEnd = System.currentTimeMillis();
-						EBStats.getEBStats().sessionRecorder(this.sessionStart,
-								this.sessionEnd, this.sessionLen, this.Ordered,
-								this.isVIP);
+						EBStats.getEBStats().sessionRecorder(this.sessionStart, this.sessionEnd, this.sessionLen,
+								this.Ordered, this.isVIP);
 						return;
 					}
 					if (this.nextReq.equals("")) {
-						EBStats.getEBStats().addErrorSession(this.curState,
-								this.isVIP);
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						return;
 					}
 					// Send HTTP request.
@@ -160,29 +159,25 @@ public class EBOpen extends EB {
 					try {
 						httpReq = new URL(nextReq);
 					} catch (MalformedURLException e) {
-						EBStats.getEBStats().addErrorSession(this.curState,
-								this.isVIP);
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						return;
 					}
 
 					if (this.first) {
 						this.m_Client = HttpClientFactory.getInstance();
-						this.m_Client.getParams().setCookiePolicy(
-								CookiePolicy.RFC_2965);
+						this.m_Client.getParams().setCookiePolicy(CookiePolicy.RFC_2965);
 					}
 
 					wirt_t1 = System.currentTimeMillis();
 					sign = getHTML(this.curState, this.nextReq);
 					if (!sign) {
-						EBStats.getEBStats().addErrorSession(this.curState,
-								this.isVIP);
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						return;
 					}
 
 					wirt_t2 = System.currentTimeMillis();
 
-					EBStats.getEBStats().interaction(this.curState, wirt_t1,
-							wirt_t2, tt, this.isVIP);
+					EBStats.getEBStats().interaction(this.curState, wirt_t1, wirt_t2, tt, this.isVIP);
 					this.sessionLen++;
 
 					if (this.curState == 4) {
@@ -191,6 +186,8 @@ public class EBOpen extends EB {
 
 					this.curTrans.postProcess(this, this.html);
 				} else {
+					//  termina porque ja fez todo o recorrido dentro de uma sessao aberta 
+					//Logger.getLogger().debug(this.cid+" NORMAL ENDING ...");;
 					this.html = null;
 					wirt_t2 = wirt_t1;
 				}
@@ -204,8 +201,7 @@ public class EBOpen extends EB {
 					try {
 						sleep(tt);
 					} catch (InterruptedException inte) {
-						EBStats.getEBStats().addErrorSession(this.curState,
-								this.isVIP);
+						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						Logger.getLogger().error("Caught an interrupted exception!");
 						return;
 					}
@@ -213,8 +209,7 @@ public class EBOpen extends EB {
 						this.maxTrans--;
 					}
 				} else {
-					EBStats.getEBStats().addErrorSession(this.curState,
-							this.isVIP);
+					EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 				}
 			} else {
 				try {

@@ -45,25 +45,25 @@ import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
 import org.bench4Q.agent.rbe.communication.TestPhase;
 import org.bench4Q.agent.rbe.communication.TypeFrequency;
+import org.bench4Q.common.util.Logger;
 
 /**
  * @author duanzhiquan
  * 
  */
 public class WorkersOpen extends Workers {
+	
+	private MMPP mmpp_tt = new MMPP();
 
-	public WorkersOpen(long startTime, long triggerTime, long stdyTime,
-			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
-			Args args, int identity) {
+	public WorkersOpen(long startTime, long triggerTime, long stdyTime, int baseLoad, int randomLoad, int rate,
+			TestPhase testPhase, Args args, int identity) {
 
-		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate,
-				testPhase, args, identity);
+		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate, testPhase, args, identity);
 
 		this.trace = new ArrayList<ArrayList<Integer>>();
 		if (this.m_args.isReplay()) {
 			try {
-				FileInputStream fi = new FileInputStream(this.m_args.getTime()
-						+ "-" + identity);
+				FileInputStream fi = new FileInputStream(this.m_args.getTime() + "-" + identity);
 				ObjectInputStream ois = new ObjectInputStream(fi);
 				this.trace = ((ArrayList<ArrayList<Integer>>) ois.readObject());
 				fi.close();
@@ -88,23 +88,21 @@ public class WorkersOpen extends Workers {
 		int keepAliveTime = 60;
 		int workQueueLength = (int) (this.m_baseLoad * 0.8D);
 
-		ThreadPoolExecutor threadPool = new ThreadPoolExecutor(corePoolSize,
-				maximumPoolSize, keepAliveTime, TimeUnit.SECONDS,
-				new ArrayBlockingQueue<Runnable>(workQueueLength),
+		ThreadPoolExecutor threadPool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,
+				TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(workQueueLength),
 				new ThreadPoolExecutor.AbortPolicy());
-		
+
 		long beginTime = System.currentTimeMillis();
 		long endTime = beginTime + this.m_stdyTime * 1000L;
 		int baseLoad = this.m_baseLoad;
 
 		int realLoad = baseLoad + m_randomLoad;
 		long timeInt = System.currentTimeMillis();
+		
 		Map<Integer, PropertiesEB> mapProperties = new HashMap<Integer, PropertiesEB>();
 		for (int indexEB = 0; indexEB < realLoad; indexEB++) {
-			TypeFrequency type = TypeFrequency.getType(m_args
-					.getTypeFrenquency());
-			PropertiesEB propertiesEB = FrequencySettings.createProperties(
-					indexEB, m_testPhase, type, timeInt);
+			TypeFrequency type = TypeFrequency.getType(m_args.getTypeFrenquency());
+			PropertiesEB propertiesEB = FrequencySettings.createProperties(indexEB, m_testPhase, type, timeInt);
 			mapProperties.put(indexEB, propertiesEB);
 		}
 
@@ -121,19 +119,26 @@ public class WorkersOpen extends Workers {
 				}
 				boolean isVIP = Math.random() < this.m_args.getRate() / 100.0D;
 				EB eb = new EBOpen(this.m_args, tra, isVIP);
+				
 				eb.setPropertiesEB(mapProperties.get(j2));
 				eb.setDaemon(true);
 				try {
 					threadPool.execute(eb);
 				} catch (RejectedExecutionException e) {
 					EBStats.getEBStats().addErrorSession(0, eb.isVIP);
-					EBStats.getEBStats().error(0, "Request is rejected!",
-							this.m_args.getBaseURL(), eb.isVIP);
+					EBStats.getEBStats().error(0, "Request is rejected!", this.m_args.getBaseURL(), eb.isVIP);
 				}
+				//Iniciando um novo grupo de EBS Segundo um tempo
+				//Logger.getLogger().debug(eb.getName());
 			}
 			baseLoad += this.m_rate;
 			long etime = System.currentTimeMillis();
+			double r = mmpp_tt.gen_interval();
+			
+			// XXX para teste com o MMPP
 			long interval = (long) (1000.0D * this.m_args.getInterval());
+			//long interval = (long) (50/r);
+			
 			if (etime - stime < interval) {
 				try {
 					Thread.sleep(interval - (etime - stime));
