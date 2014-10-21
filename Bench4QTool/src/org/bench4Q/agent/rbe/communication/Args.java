@@ -42,6 +42,9 @@ public class Args implements Sendable {
 	private String testDescription;
 	private String rbetype;
 	private double interval;
+	private String lbHost;
+	private int lbPort;
+	private int nvms;
 	private int prepair;
 	private int cooldown;
 	private String out;
@@ -82,6 +85,7 @@ public class Args implements Sendable {
 		// initiate the argument
 		this.rbetype = "closed";
 		this.interval = 1.0D;
+		this.nvms = 0;
 		this.prepair = 600;
 		this.cooldown = 300;
 		this.out = "out";
@@ -165,7 +169,7 @@ public class Args implements Sendable {
 		this.mix = mix;
 	}
 
-	/**
+	/**int
 	 * @return slow rate
 	 */
 	public double getSlow() {
@@ -299,6 +303,47 @@ public class Args implements Sendable {
 		this.interval = interval;
 	}
 
+	/**
+	 * @return number of machines
+	 */
+	public int getNvms() {
+		return this.nvms;
+	}
+
+	/**
+	 * @param number of machines
+	 */
+	public void setNvms(int nvms) {
+		this.nvms = nvms;
+	}
+
+	/**
+	 * @return number of machines
+	 */
+	public String getLbHost() {
+		return this.lbHost;
+	}
+
+	/**
+	 * @param number of machines
+	 */
+	public void setLbHost(String host) {
+		this.lbHost = host;
+	}
+	
+	/**
+	 * @return number of machines
+	 */
+	public int getLbPort() {
+		return this.lbPort;
+	}
+
+	/**
+	 * @param number of machines
+	 */
+	public void setLbPort(int port) {
+		this.lbPort = port;
+	}
 	/**
 	 * @return test name
 	 */

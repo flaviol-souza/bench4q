@@ -96,6 +96,11 @@ public final class ResourcesImplementation implements Resources {
 	public String getString(String key) {
 		return getString(key, true);
 	}
+	
+	public int getInt(String key) {
+		String value = getString(key, true);
+		return Integer.valueOf(value).intValue(); 
+	}
 
 	/**
 	 * Use key to look up resource which names image URL. Return the image.

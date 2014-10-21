@@ -71,13 +71,9 @@ public final class ConfigModel {
 	public ConfigModel() {
 		try {
 			m_builder = new SAXBuilder(false);
-			m_builder.setFeature(
-					"http://apache.org/xml/features/validation/schema", true);
-			m_builder
-					.setProperty(
-							"http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
-							getClass().getClassLoader().getResource(schema)
-									.toString());
+			m_builder.setFeature("http://apache.org/xml/features/validation/schema", true);
+			m_builder.setProperty("http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
+					getClass().getClassLoader().getResource(schema).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,56 +135,43 @@ public final class ConfigModel {
 		Element root = new Element("bench4Q");
 		m_doc.setRootElement(root);
 
-		Element testName = new Element("testName")
-				.setText(m_args.getTestName());
+		Element testName = new Element("testName").setText(m_args.getTestName());
 		root.addContent(testName);
-		Element testDescription = new Element("testDescription").setText(m_args
-				.getTestDescription());
+		Element testDescription = new Element("testDescription").setText(m_args.getTestDescription());
 		root.addContent(testDescription);
 
 		Element rbe = new Element("rbe");
 		root.addContent(rbe);
 		rbe.setAttribute(new Attribute("rbetype", "closed"));
-		Element interval = new Element("interval").setText(String
-				.valueOf(m_args.getInterval()));
+		Element interval = new Element("interval").setText(String.valueOf(m_args.getInterval()));
 		rbe.addContent(interval);
-		Element prepair = new Element("prepair").setText(String.valueOf(m_args
-				.getPrepair()));
+		Element prepair = new Element("prepair").setText(String.valueOf(m_args.getPrepair()));
 		rbe.addContent(prepair);
-		Element cooldown = new Element("cooldown").setText(String
-				.valueOf(m_args.getCooldown()));
+		Element cooldown = new Element("cooldown").setText(String.valueOf(m_args.getCooldown()));
 		rbe.addContent(cooldown);
 		Element out = new Element("out").setText(m_args.getOut());
 		rbe.addContent(out);
-		Element tolerance = new Element("tolerance").setText(String
-				.valueOf(m_args.getTolerance()));
+		Element tolerance = new Element("tolerance").setText(String.valueOf(m_args.getTolerance()));
 		rbe.addContent(tolerance);
-		Element retry = new Element("retry").setText(String.valueOf(m_args
-				.getRetry()));
+		Element retry = new Element("retry").setText(String.valueOf(m_args.getRetry()));
 		rbe.addContent(retry);
-		Element vIPrate = new Element("VIPrate").setText(String.valueOf(m_args
-				.getRate()));
+		Element vIPrate = new Element("VIPrate").setText(String.valueOf(m_args.getRate()));
 		rbe.addContent(vIPrate);
-		Element thinktime = new Element("thinktime").setText(String
-				.valueOf(m_args.getThinktime()));
+		Element thinktime = new Element("thinktime").setText(String.valueOf(m_args.getThinktime()));
 		rbe.addContent(thinktime);
 		Element mix = new Element("mix").setText(m_args.getMix());
 		rbe.addContent(mix);
-		Element slow = new Element("slow").setText(String.valueOf(m_args
-				.getSlow()));
+		Element slow = new Element("slow").setText(String.valueOf(m_args.getSlow()));
 		rbe.addContent(slow);
-		Element getImage = new Element("getImage").setText(String
-				.valueOf(m_args.isGetImage()));
+		Element getImage = new Element("getImage").setText(String.valueOf(m_args.isGetImage()));
 		rbe.addContent(getImage);
 		Element baseURL = new Element("baseURL").setText(m_args.getBaseURL());
 		rbe.addContent(baseURL);
-		Element webport = new Element("webport").setText(String.valueOf(m_args
-				.getWebPort()));
+		Element webport = new Element("webport").setText(String.valueOf(m_args.getWebPort()));
 		rbe.addContent(webport);
 		Element DBURL = new Element("databaseURL").setText(m_args.getDBURL());
 		rbe.addContent(DBURL);
-		Element DBPort = new Element("dbport").setText(String.valueOf(m_args
-				.getDBPort()));
+		Element DBPort = new Element("dbport").setText(String.valueOf(m_args.getDBPort()));
 		rbe.addContent(DBPort);
 		if (m_args.getEbs().isEmpty()) {
 			Element ebs = new Element("ebs");
@@ -208,20 +191,15 @@ public final class ConfigModel {
 			for (TestPhase testPhase : m_args.getEbs()) {
 				Element ebs = new Element("ebs");
 				rbe.addContent(ebs);
-				Element baseLoad = new Element("baseLoad").setText(String
-						.valueOf(testPhase.getBaseLoad()));
+				Element baseLoad = new Element("baseLoad").setText(String.valueOf(testPhase.getBaseLoad()));
 				ebs.addContent(baseLoad);
-				Element randomLoad = new Element("randomLoad").setText(String
-						.valueOf(testPhase.getRandomLoad()));
+				Element randomLoad = new Element("randomLoad").setText(String.valueOf(testPhase.getRandomLoad()));
 				ebs.addContent(randomLoad);
-				Element rate = new Element("rate").setText(String
-						.valueOf(testPhase.getRate()));
+				Element rate = new Element("rate").setText(String.valueOf(testPhase.getRate()));
 				ebs.addContent(rate);
-				Element triggerTime = new Element("triggerTime").setText(String
-						.valueOf(testPhase.getTriggerTime()));
+				Element triggerTime = new Element("triggerTime").setText(String.valueOf(testPhase.getTriggerTime()));
 				ebs.addContent(triggerTime);
-				Element stdyTime = new Element("stdyTime").setText(String
-						.valueOf(testPhase.getStdyTime()));
+				Element stdyTime = new Element("stdyTime").setText(String.valueOf(testPhase.getStdyTime()));
 				ebs.addContent(stdyTime);
 			}
 		}
@@ -254,80 +232,61 @@ public final class ConfigModel {
 
 		Element root = m_doc.getRootElement();
 		root.removeChildren("testName");
-		Element testName = new Element("testName")
-				.setText(m_args.getTestName());
+		Element testName = new Element("testName").setText(m_args.getTestName());
 		root.addContent(testName);
 		root.removeChildren("testDescription");
-		Element testDescription = new Element("testDescription").setText(m_args
-				.getTestDescription());
+		Element testDescription = new Element("testDescription").setText(m_args.getTestDescription());
 		root.addContent(testDescription);
 
 		root.removeChildren("rbe");
 		Element rbe = new Element("rbe");
 		root.addContent(rbe);
 		rbe.setAttribute(new Attribute("rbetype", m_args.getRbetype()));
-		Element interval = new Element("interval").setText(String
-				.valueOf(m_args.getInterval()));
+		Element interval = new Element("interval").setText(String.valueOf(m_args.getInterval()));
 		rbe.addContent(interval);
-		Element prepair = new Element("prepair").setText(String.valueOf(m_args
-				.getPrepair()));
+		Element prepair = new Element("prepair").setText(String.valueOf(m_args.getPrepair()));
 		rbe.addContent(prepair);
-		Element cooldown = new Element("cooldown").setText(String
-				.valueOf(m_args.getCooldown()));
+		Element cooldown = new Element("cooldown").setText(String.valueOf(m_args.getCooldown()));
 		rbe.addContent(cooldown);
 		Element out = new Element("out").setText(m_args.getOut());
 		rbe.addContent(out);
-		Element tolerance = new Element("tolerance").setText(String
-				.valueOf(m_args.getTolerance()));
+		Element tolerance = new Element("tolerance").setText(String.valueOf(m_args.getTolerance()));
 		rbe.addContent(tolerance);
-		Element retry = new Element("retry").setText(String.valueOf(m_args
-				.getRetry()));
+		Element retry = new Element("retry").setText(String.valueOf(m_args.getRetry()));
 		rbe.addContent(retry);
-		Element vIPrate = new Element("VIPrate").setText(String.valueOf(m_args
-				.getRate()));
+		Element vIPrate = new Element("VIPrate").setText(String.valueOf(m_args.getRate()));
 		rbe.addContent(vIPrate);
-		Element thinktime = new Element("thinktime").setText(String
-				.valueOf(m_args.getThinktime()));
+		Element thinktime = new Element("thinktime").setText(String.valueOf(m_args.getThinktime()));
 		rbe.addContent(thinktime);
 		Element mix = new Element("mix").setText(m_args.getMix());
 		rbe.addContent(mix);
-		Element slow = new Element("slow").setText(String.valueOf(m_args
-				.getSlow()));
+		Element slow = new Element("slow").setText(String.valueOf(m_args.getSlow()));
 		rbe.addContent(slow);
-		Element getImage = new Element("getImage").setText(String
-				.valueOf(m_args.isGetImage()));
+		Element getImage = new Element("getImage").setText(String.valueOf(m_args.isGetImage()));
 		rbe.addContent(getImage);
 		Element baseURL = new Element("baseURL").setText(m_args.getBaseURL());
 		rbe.addContent(baseURL);
-		Element webport = new Element("webport").setText(String.valueOf(m_args
-				.getWebPort()));
+		Element webport = new Element("webport").setText(String.valueOf(m_args.getWebPort()));
 		rbe.addContent(webport);
 
-		Element DatabaseURL = new Element("databaseURL").setText(m_args
-				.getDBURL());
+		Element DatabaseURL = new Element("databaseURL").setText(m_args.getDBURL());
 		rbe.addContent(DatabaseURL);
 
-		Element DBPort = new Element("dbport").setText(String.valueOf(m_args
-				.getDBPort()));
+		Element DBPort = new Element("dbport").setText(String.valueOf(m_args.getDBPort()));
 		rbe.addContent(DBPort);
 
 		for (TestPhase testPhase : m_args.getEbs()) {
 			Element ebs = new Element("ebs");
 			rbe.addContent(ebs);
-			Element baseLoad = new Element("baseLoad").setText(String
-					.valueOf(testPhase.getBaseLoad()));
+			Element baseLoad = new Element("baseLoad").setText(String.valueOf(testPhase.getBaseLoad()));
 			ebs.addContent(baseLoad);
-			Element randomLoad = new Element("randomLoad").setText(String
-					.valueOf(testPhase.getRandomLoad()));
+			Element randomLoad = new Element("randomLoad").setText(String.valueOf(testPhase.getRandomLoad()));
 			ebs.addContent(randomLoad);
-			Element rate = new Element("rate").setText(String.valueOf(testPhase
-					.getRate()));
+			Element rate = new Element("rate").setText(String.valueOf(testPhase.getRate()));
 			ebs.addContent(rate);
-			Element triggerTime = new Element("triggerTime").setText(String
-					.valueOf(testPhase.getTriggerTime()));
+			Element triggerTime = new Element("triggerTime").setText(String.valueOf(testPhase.getTriggerTime()));
 			ebs.addContent(triggerTime);
-			Element stdyTime = new Element("stdyTime").setText(String
-					.valueOf(testPhase.getStdyTime()));
+			Element stdyTime = new Element("stdyTime").setText(String.valueOf(testPhase.getStdyTime()));
 			ebs.addContent(stdyTime);
 
 		}
@@ -377,14 +336,12 @@ public final class ConfigModel {
 		args.setTestName(root.getChildText("testName").trim());
 		args.setTestDescription(root.getChildText("testDescription").trim());
 		args.setRbetype(rbe.getAttribute("rbetype").getValue().trim());
-		args.setInterval(Double
-				.parseDouble(rbe.getChildText("interval").trim()));
+		args.setInterval(Double.parseDouble(rbe.getChildText("interval").trim()));
 		args.setCooldown(Integer.parseInt(rbe.getChildText("cooldown").trim()));
 		args.setPrepair(Integer.parseInt(rbe.getChildText("prepair").trim()));
 		args.setMix(rbe.getChildText("mix").trim());
 		args.setOut(rbe.getChildText("out").trim());
-		args.setTolerance(Double.parseDouble(rbe.getChildText("tolerance")
-				.trim()));
+		args.setTolerance(Double.parseDouble(rbe.getChildText("tolerance").trim()));
 		args.setRetry(Integer.parseInt(rbe.getChildText("retry").trim()));
 		args.setThinktime(Double.parseDouble(rbe.getChildText("thinktime")));
 		if (rbe.getChildText("slow") != null)
@@ -397,6 +354,9 @@ public final class ConfigModel {
 			}
 		}
 		args.setBaseURL(rbe.getChildText("baseURL").trim());
+		args.setLbHost(rbe.getChildText("lbHost").trim());
+		args.setLbPort(Integer.parseInt(rbe.getChildText("lbPort").trim()));
+		args.setNvms(Integer.parseInt(rbe.getChildText("nvms").trim()));
 		args.setWebPort(Integer.parseInt(rbe.getChildText("webport").trim()));
 		args.setDBURL(rbe.getChildText("databaseURL").trim());
 		args.setDBPort(Integer.parseInt(rbe.getChildText("dbport").trim()));
@@ -405,15 +365,11 @@ public final class ConfigModel {
 		for (int j = 0; j < ebs.size(); j++) {
 			Element eb = (Element) ebs.get(j);
 			TestPhase testPhase = new TestPhase();
-			testPhase
-					.setBaseLoad(Integer.parseInt(eb.getChildText("baseLoad")));
-			testPhase.setRandomLoad(Integer.parseInt(eb
-					.getChildText("randomLoad")));
+			testPhase.setBaseLoad(Integer.parseInt(eb.getChildText("baseLoad")));
+			testPhase.setRandomLoad(Integer.parseInt(eb.getChildText("randomLoad")));
 			testPhase.setRate(Integer.parseInt(eb.getChildText("rate")));
-			testPhase.setTriggerTime(Integer.parseInt(eb
-					.getChildText("triggerTime")));
-			testPhase
-					.setStdyTime(Integer.parseInt(eb.getChildText("stdyTime")));
+			testPhase.setTriggerTime(Integer.parseInt(eb.getChildText("triggerTime")));
+			testPhase.setStdyTime(Integer.parseInt(eb.getChildText("stdyTime")));
 			args.getEbs().add(testPhase);
 		}
 		this.m_args = args;

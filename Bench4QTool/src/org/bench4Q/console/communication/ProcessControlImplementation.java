@@ -64,7 +64,6 @@ public class ProcessControlImplementation implements ProcessControl {
 
 	private final AllocateLowestNumber m_agentNumberMap = new AllocateLowestNumberImplementation();
 
-
 	/**
 	 * Constructor.
 	 * 
@@ -73,37 +72,26 @@ public class ProcessControlImplementation implements ProcessControl {
 	 * @param consoleCommunication
 	 *            The console communication handler.
 	 */
-	public ProcessControlImplementation(Timer timer,
-			ConsoleCommunication consoleCommunication) {
+	public ProcessControlImplementation(Timer timer, ConsoleCommunication consoleCommunication) {
 
 		m_consoleCommunication = consoleCommunication;
-		m_processStatusSet = new ProcessStatusImplementation(timer,
-				m_agentNumberMap);
-		m_processResultSet = new ProcessResultImplementation(timer,
-				m_agentNumberMap);
-		
-		
+		m_processStatusSet = new ProcessStatusImplementation(timer, m_agentNumberMap);
+		m_processResultSet = new ProcessResultImplementation(timer, m_agentNumberMap);
 
-		final MessageDispatchRegistry messageDispatchRegistry = consoleCommunication
-				.getMessageDispatchRegistry();
+		final MessageDispatchRegistry messageDispatchRegistry = consoleCommunication.getMessageDispatchRegistry();
 
-		messageDispatchRegistry.set(AgentProcessReportMessage.class,
-				new AbstractHandler() {
-					public void send(Message message) {
-						m_processStatusSet
-								.addAgentStatusReport((AgentProcessReportMessage) message);
-					}
-				});
+		messageDispatchRegistry.set(AgentProcessReportMessage.class, new AbstractHandler() {
+			public void send(Message message) {
+				m_processStatusSet.addAgentStatusReport((AgentProcessReportMessage) message);
+			}
+		});
 
-		messageDispatchRegistry.set(TestResultMessage.class,
-				new AbstractHandler() {
-					public void send(Message message) {
-						m_processResultSet
-								.addAgentTestResultReport((TestResultMessage) message);
-					}
-				});
+		messageDispatchRegistry.set(TestResultMessage.class, new AbstractHandler() {
+			public void send(Message message) {
+				m_processResultSet.addAgentTestResultReport((TestResultMessage) message);
+			}
+		});
 	}
-	
 
 	/**
 	 * Signal the worker processes to start.
@@ -112,20 +100,17 @@ public class ProcessControlImplementation implements ProcessControl {
 	 *            Properties that override the agent's local properties.
 	 */
 	public void startWorkerProcesses(Bench4QProperties properties, Args args) {
-		final Bench4QProperties propertiesToSend = properties != null ? properties
-				: new Bench4QProperties();
+		final Bench4QProperties propertiesToSend = properties != null ? properties : new Bench4QProperties();
 
 		final Args m_args = args;
 
 		m_agentNumberMap.forEach(new AllocateLowestNumber.IteratorCallback() {
 			public void objectAndNumber(Object object, int number) {
-				m_consoleCommunication.sendToAddressedAgents(new AgentAddress(
-						(AgentIdentity) object), new StartJASptEMessage(
-						propertiesToSend, m_args, number));
+				m_consoleCommunication.sendToAddressedAgents(new AgentAddress((AgentIdentity) object),
+						new StartJASptEMessage(propertiesToSend, m_args, number));
 			}
 		});
-		
-		
+
 	}
 
 	/**
@@ -139,16 +124,17 @@ public class ProcessControlImplementation implements ProcessControl {
 		m_consoleCommunication.sendToAgents(new CollectResultMessage());
 	}
 
-	/** Signal the agent and worker processes to stop.
+	/**
+	 * Signal the agent and worker processes to stop.
 	 */
 	public void stopAgentAndWorkerProcesses() {
 		m_agentNumberMap.forEach(new AllocateLowestNumber.IteratorCallback() {
 			public void objectAndNumber(Object object, int number) {
-				m_consoleCommunication.sendToAddressedAgents(new AgentAddress(
-						(AgentIdentity) object), new StopJASptEMessage());
+				m_consoleCommunication.sendToAddressedAgents(new AgentAddress((AgentIdentity) object),
+						new StopJASptEMessage());
 			}
 		});
-//		m_consoleCommunication.sendToAgents(new StopJASptEMessage());
+		// m_consoleCommunication.sendToAgents(new StopJASptEMessage());
 	}
 
 	/**

@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bench4Q xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="src/org/bench4Q/resources/bench4Q-schema.xsd">
-  <testName>testName</testName>
-  <testDescription>testDescription</testDescription>
-  <rbe rbetype="closed">
-    <interval>1.0</interval>
-    <prepair>10</prepair>
-    <cooldown>10</cooldown>
-    <out>out</out>
-    <tolerance>0.0</tolerance>
-    <retry>0</retry>
-    <thinktime>0.0</thinktime>
-    <urlConnectionTimeOut>0</urlConnectionTimeOut>
-    <urlReadTimeOut>0</urlReadTimeOut>
-    <mix>shopping</mix>
-    <getImage>false</getImage>
-    <baseURL>http://localhost:8080/bench4Q</baseURL>
-    <ebs>
-      <baseLoad>10</baseLoad>
-      <randomLoad>0</randomLoad>
-      <rate>0</rate>
-      <triggerTime>0</triggerTime>
-      <stdyTime>60</stdyTime>
-    </ebs>
-  </rbe>
+<bench4Q xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="bench4Q-schema.xsd">
+	<testName>default name</testName>
+	<testDescription>default description</testDescription>
+	<rbe rbetype="closed">
+		<interval>1</interval>
+		<prepair>0</prepair>
+		<cooldown>0</cooldown>
+		<out>out</out>
+		<tolerance>0.0</tolerance>
+		<retry>3</retry>
+		<thinktime>0.1</thinktime>
+		<mix>shopping</mix>
+		<slow>0.0</slow>
+		<getImage>false</getImage>
+		<baseURL>http://srv11:8080/bench4q</baseURL>
+		<lbHost>bench4qbalancer</lbHost>
+		<lbPort>8889</lbPort>
+		<nvms>0</nvms>
+		<webport>10724</webport>
+		<databaseURL>133.133.133.135</databaseURL>
+		<dbport>10724</dbport>
+		<ebs>
+			<baseLoad>8</baseLoad>
+			<randomLoad>0</randomLoad>
+			<rate>0</rate>
+			<triggerTime>0</triggerTime>
+			<stdyTime>30</stdyTime>
+		</ebs>
+	</rbe>
 </bench4Q>

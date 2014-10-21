@@ -46,6 +46,16 @@ public interface Resources {
 	 * @return The string.
 	 */
 	String getString(String key);
+	
+	/**
+	 * Overloaded version of {@link #getString(String, boolean)} which writes
+	 * out a waning if the resource is missing.
+	 * 
+	 * @param key
+	 *            The resource key.
+	 * @return The int value.
+	 */
+	int getInt(String key);
 
 	/**
 	 * Use key to look up resource which names image URL. Return the image.
