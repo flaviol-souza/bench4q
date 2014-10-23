@@ -666,7 +666,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		String hostNB = m_configModel.getArgs().getLbHost();
 		int portNB = m_configModel.getArgs().getLbPort();
 		String message = "{\"expmanager\":\"reset\"}";
-
+		System.out.println(hostNB + ":" + portNB + "/" + message);
 		Socket client = null;
 		PrintStream out = null;
 		System.out.println(message);
@@ -689,7 +689,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		String hostNB = m_configModel.getArgs().getLbHost();
 		int portNB = m_configModel.getArgs().getLbPort();
 		String message = "{\"expmanager\":\"shutdown\"}";
-
+		System.out.println(hostNB + ":" + portNB + "/" + message);
 		Socket client = null;
 		PrintStream out = null;
 		System.out.println(message);

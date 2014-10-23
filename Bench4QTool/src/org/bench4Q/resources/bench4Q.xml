@@ -15,7 +15,7 @@
 		<slow>0.0</slow>
 		<getImage>false</getImage>
 		<baseURL>http://srv11:8080/bench4q</baseURL>
-		<lbHost>desk-05</lbHost>
+		<lbHost>bench4qbalancer</lbHost>
 		<lbPort>8889</lbPort>
 		<nvms>0</nvms>
 		<webport>10724</webport>
