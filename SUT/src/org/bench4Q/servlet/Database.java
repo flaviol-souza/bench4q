@@ -314,7 +314,8 @@ public class Database {
 			statement = con.prepareStatement("SELECT i_id, i_title, a_fname, a_lname "
 					+ "FROM item, author " + "WHERE item.i_a_id = author.a_id "
 					+ "AND item.i_subject = ? " + "ORDER BY item.i_pub_date DESC,item.i_title "
-					+ "FETCH FIRST 50 ROWS ONLY");
+					+ "LIMIT 50");
+//					+ "FETCH FIRST 50 ROWS ONLY");
 
 			// Set parameter
 			statement.setString(1, subject);
@@ -349,7 +350,7 @@ public class Database {
 					+ "AND item.i_a_id = author.a_id "
 					+ "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)"
 					+ "AND item.i_subject = ? " + "GROUP BY i_id, i_title, a_fname, a_lname "
-					+ "ORDER BY SUM(ol_qty) DESC " + "FETCH FIRST 50 ROWS ONLY ");
+					+ "ORDER BY SUM(ol_qty) DESC " + "LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, subject);
@@ -432,7 +433,7 @@ public class Database {
 							+ "                      AND orders.o_id > (SELECT MAX(o_id)-10000 FROM orders)"
 							+ "                      AND order_line.ol_i_id = ?) "
 							+ "GROUP BY ol_i_id " + "ORDER BY SUM(ol_qty) DESC "
-							+ "FETCH FIRST 5 ROWS ONLY");
+							+ "LIMIT 5");
 
 			// Set parameter
 			related.setInt(1, i_id);
@@ -580,7 +581,7 @@ public class Database {
 			get_most_recent_order_id = con.prepareStatement("SELECT o_id "
 					+ "FROM customer, orders " + "WHERE customer.c_id = orders.o_c_id "
 					+ "AND c_uname = ? " + "ORDER BY o_date, orders.o_id DESC "
-					+ "FETCH FIRST 1 ROW ONLY");
+					+ "LIMIT 1");
 
 			// Set parameter
 			get_most_recent_order_id.setString(1, c_uname);

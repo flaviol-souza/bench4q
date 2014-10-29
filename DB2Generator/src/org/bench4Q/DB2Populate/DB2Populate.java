@@ -50,6 +50,7 @@ class DB2Populate {
 
 	// These variables are dependent on the JDBC database driver used.
 	private static final String driverName = "com.ibm.db2.jcc.DB2Driver";
+	//private static final String driverName = "com.mysql.jdbc.Driver";
 
 	private static String dbName;
 
