@@ -1068,7 +1068,13 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			} else {
 				m_treeModel.setMoniDB(false);
 			}
-
+			
+			
+			new SaveResultsAction().actionPerformed(null);
+//			long timeFile = System.currentTimeMillis();
+//			m_resultModel.setSelectedFile(new File("C:\\result-"+timeFile));
+//			m_resultModel.SaveToFile();
+			
 		}
 	}
 
