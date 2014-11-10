@@ -222,7 +222,7 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			statement = con
-					.prepareStatement("SELECT * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_subject = ? ORDER BY item.i_title FETCH FIRST 50 ROWS ONLY");
+					.prepareStatement("SELECT * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_subject = ? ORDER BY item.i_title LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, search_key);
@@ -252,7 +252,7 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			statement = con
-					.prepareStatement("SELECT * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_title LIKE ? ORDER BY item.i_title FETCH FIRST 50 ROWS ONLY");
+					.prepareStatement("SELECT * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_title LIKE ? ORDER BY item.i_title LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, search_key + "%");
@@ -282,7 +282,7 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			statement = con
-					.prepareStatement("SELECT * FROM author, item WHERE author.a_lname LIKE ? AND item.i_a_id = author.a_id ORDER BY item.i_title FETCH FIRST 50 ROWS ONLY");
+					.prepareStatement("SELECT * FROM author, item WHERE author.a_lname LIKE ? AND item.i_a_id = author.a_id ORDER BY item.i_title LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, search_key + "%");
@@ -413,7 +413,7 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			statement = con
-					.prepareStatement("UPDATE item SET i_cost = ?, i_image = ?, i_thumbnail = ?, i_pub_date = CURRENT DATE WHERE i_id = ?");
+					.prepareStatement("UPDATE item SET i_cost = ?, i_image = ?, i_thumbnail = ?, i_pub_date = CURRENT_DATE WHERE i_id = ?");
 
 			// Set parameter
 			statement.setDouble(1, cost);
@@ -670,7 +670,8 @@ public class Database {
 			rs = null;
 			insert_cart = con.createStatement();
 			insert_cart.executeUpdate(
-					"INSERT INTO shopping_cart (sc_time) VALUES (CURRENT TIMESTAMP )",
+					"INSERT INTO shopping_cart (sc_time) VALUES (CURRENT_TIMESTAMP)",
+					//"INSERT INTO shopping_cart (sc_time) VALUES (CURRENT TIMESTAMP )",
 					Statement.RETURN_GENERATED_KEYS);
 			rs = insert_cart.getGeneratedKeys();
 			if (rs.next()) {
@@ -831,7 +832,8 @@ public class Database {
 		PreparedStatement statement = null;
 		try {
 			statement = con
-					.prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT TIMESTAMP WHERE sc_id = ?");
+					.prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT_TIMESTAMP WHERE sc_id = ?");
+			//.prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT TIMESTAMP WHERE sc_id = ?");
 			// Set parameter
 			statement.setInt(1, SHOPPING_ID);
 			statement.executeUpdate();
@@ -889,7 +891,8 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			updateLogin = con
-					.prepareStatement("UPDATE customer SET c_login = CURRENT TIMESTAMP, c_expiration = CURRENT TIMESTAMP + 2 HOURS WHERE c_id = ?");
+					.prepareStatement("UPDATE customer SET c_login = CURRENT_TIMESTAMP, c_expiration = (CURRENT_TIMESTAMP + INTERVAL 2 HOUR) WHERE c_id = ?");
+			//.prepareStatement("UPDATE customer SET c_login = CURRENT TIMESTAMP, c_expiration = CURRENT TIMESTAMP + 2 HOURS WHERE c_id = ?");
 
 			// Set parameter
 			updateLogin.setInt(1, C_ID);
@@ -1118,7 +1121,7 @@ public class Database {
 			// Prepare SQL
 			statement = con
 					.prepareStatement("INSERT into cc_xacts (cx_o_id, cx_type, cx_num, cx_name, cx_expire, cx_xact_amt, cx_xact_date, cx_co_id) "
-							+ "VALUES (?, ?, ?, ?, ?, ?, CURRENT DATE, (SELECT co_id FROM address, country WHERE addr_id = ? AND addr_co_id = co_id))");
+							+ "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, (SELECT co_id FROM address, country WHERE addr_id = ? AND addr_co_id = co_id))");
 
 			// Set parameter
 			statement.setInt(1, o_id); // cx_o_id
@@ -1232,7 +1235,7 @@ public class Database {
 			insert_row = con
 					.prepareStatement(
 							"INSERT into orders (o_c_id, o_date, o_sub_total, o_tax, o_total, o_ship_type, o_ship_date, o_bill_addr_id, o_ship_addr_id, o_status) "
-									+ "VALUES ( ?, CURRENT DATE, ?, 8.25, ?, ?, CURRENT DATE + ? DAYS, ?, ?, 'Pending')",
+									+ "VALUES ( ?, CURRENT_DATE, ?, 8.25, ?, ?, CURRENT_DATE + INTERVAL ? DAY, ?, ?, 'Pending')",
 							Statement.RETURN_GENERATED_KEYS);
 			insert_row.setInt(1, customer_id);
 			insert_row.setDouble(2, cart.SC_SUB_TOTAL);
