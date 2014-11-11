@@ -154,6 +154,7 @@ public class ResultModel implements AgentInfoObserver {
 
 	/**
 	 * save test result to the selected file.
+	 * @throws IOException 
 	 */
 	public void SaveToFile() {
 		CalTotalResult();
@@ -168,6 +169,7 @@ public class ResultModel implements AgentInfoObserver {
 			}
 			lastname = nameS.concat(".csv");
 			File file = new File(lastname);
+			printAllResult(file);
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
@@ -357,14 +359,7 @@ public class ResultModel implements AgentInfoObserver {
 		}
 	}
 
-	private void printAllResult(File file) throws IOException {
-		FileWriter outstream = new FileWriter(file);
-
-		try {
-			file.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private void printPageWithArray(FileWriter outstream, ResultSet[] array) throws IOException{
 		
 		String[] name = { new String("INIT"), new String("ADMC"),
 				new String("ADMR"), new String("BESS"), new String("BUYC"),
@@ -373,51 +368,63 @@ public class ResultModel implements AgentInfoObserver {
 				new String("PROD"), new String("SREQ"), new String("SRES"),
 				new String("SHOP") };
 		
-		outstream.write("trans table: " + "\n");
+//		outstream.write("trans table: " + "\n");
 		for (int i = 0; i < name.length; i++) {
-			outstream.write(name[i] + "	");
+			outstream.write(name[i] + "\t"+array[i].getResult()+"\n");
 		}
-		outstream.write("\n\n");
-		for (int i = 0; i < 15; i++) {
-			outstream.write(wirt[i].getResult() + "	");
-		}
+	}
+	
+	private void printPageWithArray(FileWriter outstream, ErrorSet[] array) throws IOException{
+		
+		String[] name = { new String("INIT"), new String("ADMC"),
+				new String("ADMR"), new String("BESS"), new String("BUYC"),
+				new String("BUYR"), new String("CREG"), new String("HOME"),
+				new String("NEWP"), new String("ORDD"), new String("ORDI"),
+				new String("PROD"), new String("SREQ"), new String("SRES"),
+				new String("SHOP") };
+		
 		outstream.write("\n");
-		for (int i = 0; i < 15; i++) {
-			outstream.write(wirt_norm[i].getResult() + "	");
+		for (int i = 0; i < name.length; i++) {
+			outstream.write(name[i] + "\t"+array[i].getResult()+"\n");
 		}
-		outstream.write("\n");
-		for (int i = 0; i < 15; i++) {
-			outstream.write(wirt_vip[i].getResult() + "	");
+	}
+	
+	private void printAllResult(File file) throws IOException {
+		String path = file.getParentFile().getPath();
+		File newFile = new File(path+File.separator+"total-result.cvs");
+		FileWriter outstream = new FileWriter(newFile);
+
+		try {
+			newFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		outstream.write("\n\n");
-		for (int i = 0; i < 15; i++) {
-			outstream.write(errors[i].getResult() + "	");
-		}
-		outstream.write("\n");
-		for (int i = 0; i < 15; i++) {
-			outstream.write(errors_norm[i].getResult() + "	");
-		}
-		outstream.write("\n");
-		for (int i = 0; i < 15; i++) {
-			outstream.write(errors_vip[i].getResult() + "	");
-		}
+		outstream.write("****************************************************\n");
+
+		printPageWithArray(outstream, wirt);
+		printPageWithArray(outstream, wirt_norm);
+		printPageWithArray(outstream, wirt_vip);
+
+		outstream.write("\n\n");
+		outstream.write("****************************************************\n");
 		
-		
-		/*
+		printPageWithArray(outstream, errors);
+		printPageWithArray(outstream, errors_norm);
+		printPageWithArray(outstream, errors_vip);
+
 		outstream.write("\n");
-		outstream.write("All result\n\n");
-		outstream
-				.write("****************************************************\n");
+		outstream.write("All result ****************************************************\n");
 		outstream.write("The Total Statistics\n");
 		outstream.write("WIPS:" + "\t" + WIPS + "\n");
 		outstream.write("WIRT average:" + "\t" + WIRT_AVG + "\n");
 		outstream.write("WIRT 95%:" + "\t" + WIRT_95 + "\n");
 		outstream.write("Complete Session:" + "\t" + sessionLen.size() + "\n");
 		outstream.write("Error Session:" + "\t" + errorCnt + "\n");
-		outstream
-				.write("****************************************************\n");
-		 */
+		outstream.write("****************************************************\n");
+		
+		outstream.close();
 	}
 
 	private void CalTotalResult() {
