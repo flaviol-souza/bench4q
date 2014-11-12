@@ -154,7 +154,8 @@ public class ResultModel implements AgentInfoObserver {
 
 	/**
 	 * save test result to the selected file.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public void SaveToFile() {
 		CalTotalResult();
@@ -359,39 +360,41 @@ public class ResultModel implements AgentInfoObserver {
 		}
 	}
 
-	private void printPageWithArray(FileWriter outstream, ResultSet[] array) throws IOException{
-		
+	private void printPageWithArray(FileWriter outstream, ResultSet[] array)
+			throws IOException {
+
 		String[] name = { new String("INIT"), new String("ADMC"),
 				new String("ADMR"), new String("BESS"), new String("BUYC"),
 				new String("BUYR"), new String("CREG"), new String("HOME"),
 				new String("NEWP"), new String("ORDD"), new String("ORDI"),
 				new String("PROD"), new String("SREQ"), new String("SRES"),
 				new String("SHOP") };
-		
-//		outstream.write("trans table: " + "\n");
+
+		// outstream.write("trans table: " + "\n");
 		for (int i = 0; i < name.length; i++) {
-			outstream.write(name[i] + "\t"+array[i].getResult()+"\n");
+			outstream.write(name[i] + "\t" + array[i].getResult() + "\n");
 		}
 	}
-	
-	private void printPageWithArray(FileWriter outstream, ErrorSet[] array) throws IOException{
-		
+
+	private void printPageWithArray(FileWriter outstream, ErrorSet[] array)
+			throws IOException {
+
 		String[] name = { new String("INIT"), new String("ADMC"),
 				new String("ADMR"), new String("BESS"), new String("BUYC"),
 				new String("BUYR"), new String("CREG"), new String("HOME"),
 				new String("NEWP"), new String("ORDD"), new String("ORDI"),
 				new String("PROD"), new String("SREQ"), new String("SRES"),
 				new String("SHOP") };
-		
+
 		outstream.write("\n");
 		for (int i = 0; i < name.length; i++) {
-			outstream.write(name[i] + "\t"+array[i].getResult()+"\n");
+			outstream.write(name[i] + "\t" + array[i].getResult() + "\n");
 		}
 	}
-	
+
 	private void printAllResult(File file) throws IOException {
 		String path = file.getParentFile().getPath();
-		File newFile = new File(path+File.separator+"total-result.cvs");
+		File newFile = new File(path + File.separator + "total-result.cvs");
 		FileWriter outstream = new FileWriter(newFile);
 
 		try {
@@ -399,19 +402,29 @@ public class ResultModel implements AgentInfoObserver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		outstream.write("\n\n");
-		outstream.write("****************************************************\n");
 
+		outstream.write("\n\n");
+		outstream.write("*********************************  Web Interaction Response Time (WIRT) *********************************\n");
 		printPageWithArray(outstream, wirt);
+		outstream.write("*** WIRT-Normal ***************************************************************\n");
 		printPageWithArray(outstream, wirt_norm);
+		outstream.write("*** WIRT-Vip ***************************************************************\n");
 		printPageWithArray(outstream, wirt_vip);
 
 		outstream.write("\n\n");
-		outstream.write("****************************************************\n");
+		outstream.write("*********************************  Think Time (TT) *********************************\n");
+		printPageWithArray(outstream, tt);
+		outstream.write("*** TT-Normal ***************************************************************\n");
+		printPageWithArray(outstream, tt_norm);
+		outstream.write("*** TT-Vip ***************************************************************\n");
+		printPageWithArray(outstream, tt_vip);
 		
+		outstream.write("\n\n");
+		outstream.write("*********************************  Errors  *********************************\n");
 		printPageWithArray(outstream, errors);
+		outstream.write("*** Error-Normal ***************************************************************\n");
 		printPageWithArray(outstream, errors_norm);
+		outstream.write("*** Error-Vip ***************************************************************\n");
 		printPageWithArray(outstream, errors_vip);
 
 		outstream.write("\n");
@@ -423,7 +436,7 @@ public class ResultModel implements AgentInfoObserver {
 		outstream.write("Complete Session:" + "\t" + sessionLen.size() + "\n");
 		outstream.write("Error Session:" + "\t" + errorCnt + "\n");
 		outstream.write("****************************************************\n");
-		
+
 		outstream.close();
 	}
 
@@ -480,7 +493,23 @@ public class ResultModel implements AgentInfoObserver {
 						wirtofAgent_norm[i].getResult());
 			}
 
+			// get total wirt of all agents
+			ResultSet[] ttOfAgent = stat.getTt();
+			ResultSet[] ttOfAgent_vip = stat.getTt_vip();
+			ResultSet[] ttOfAgent_norm = stat.getTt_norm();
 			for (int i = 0; i < 15; i++) {
+				if (this.tt[i] == null) {
+					this.tt[i] = new ResultSet();
+				}
+				if (this.tt_vip[i] == null) {
+					this.tt_vip[i] = new ResultSet();
+				}
+				if (this.tt_norm[i] == null) {
+					this.tt_norm[i] = new ResultSet();
+				}
+				this.tt[i].getResult().addAll(ttOfAgent[i].getResult());
+				this.tt_vip[i].getResult().addAll(ttOfAgent_vip[i].getResult());
+				this.tt_norm[i].getResult().addAll(ttOfAgent_norm[i].getResult());
 
 			}
 
