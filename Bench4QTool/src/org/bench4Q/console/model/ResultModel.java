@@ -29,6 +29,7 @@
  */
 package org.bench4Q.console.model;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -39,10 +40,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.bench4Q.agent.rbe.communication.EBError;
 import org.bench4Q.agent.rbe.communication.EBStats;
 import org.bench4Q.agent.rbe.communication.ErrorSet;
 import org.bench4Q.agent.rbe.communication.ResultSet;
+import org.bench4Q.common.util.Logger;
 import org.bench4Q.console.common.ConsoleException;
 import org.bench4Q.console.common.Resources;
 import org.bench4Q.console.rm.ServerInfo;
@@ -148,7 +151,6 @@ public class ResultModel implements AgentInfoObserver {
 		this(resources);
 		this.m_agentsCollection = agentsCollection;
 		this.m_agentsCollection.registerObserver(this);
-
 	}
 
 	/**
@@ -156,29 +158,28 @@ public class ResultModel implements AgentInfoObserver {
 	 */
 	public void SaveToFile() {
 		CalTotalResult();
-
+		FileWriter outstream;
+		FileWriter outstreamCSV;
 		try {
-			FileWriter outstream = new FileWriter(this.m_selectedFile);
-			
+			outstream = new FileWriter(m_selectedFile);
+
 			String nameS = m_selectedFile.getAbsolutePath();
 			String lastname;
-			if(nameS.endsWith(".bq")){
-				nameS = nameS.substring(0, nameS.length()-3);
+			if (nameS.endsWith(".bq")) {
+				nameS = nameS.substring(0, nameS.length() - 3);
 			}
 			lastname = nameS.concat(".csv");
 			File file = new File(lastname);
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.getLogger().info(e.toString());
 			}
-			FileWriter outstreamCSV = new FileWriter(file);
-
+			outstreamCSV = new FileWriter(file);
 
 			outstream.write("bench4Q test result\n\n");
 
-			outstream
-					.write("****************************************************\n");
+			outstream.write("****************************************************\n");
 
 			outstream.write("The Total Statistics\n");
 
@@ -188,14 +189,12 @@ public class ResultModel implements AgentInfoObserver {
 
 			outstream.write("WIRT 95%:\t" + this.WIRT_95 + "\n");
 
-			outstream.write("Complete Session:\t" + this.sessionLen.size()
-					+ "\n");
+			outstream.write("Complete Session:\t" + this.sessionLen.size() + "\n");
 
 			outstream.write("Error Session:\t" + this.errorCnt + "\n");
 			if (!this.sessionLen_vip.isEmpty()) {
 
-				outstream
-						.write("****************************************************\n");
+				outstream.write("****************************************************\n");
 
 				outstream.write("The VIP customers Statistics\n");
 
@@ -205,14 +204,12 @@ public class ResultModel implements AgentInfoObserver {
 
 				outstream.write("WIRT 95%:\t" + this.WIRT_VIP_95 + "\n");
 
-				outstream.write("Complete Session:\t"
-						+ this.sessionLen_vip.size() + "\n");
+				outstream.write("Complete Session:\t" + this.sessionLen_vip.size() + "\n");
 
 				outstream.write("Error Session:\t" + this.errorCnt_vip + "\n");
 			}
 			if (!this.sessionLen_norm.isEmpty()) {
-				outstream
-						.write("****************************************************\n");
+				outstream.write("****************************************************\n");
 
 				outstream.write("The normal customers Statistics\n");
 
@@ -222,13 +219,11 @@ public class ResultModel implements AgentInfoObserver {
 
 				outstream.write("WIRT 95%:\t" + this.WIRT_NORM_95 + "\n");
 
-				outstream.write("Complete Session:\t"
-						+ this.sessionLen_norm.size() + "\n");
+				outstream.write("Complete Session:\t" + this.sessionLen_norm.size() + "\n");
 
 				outstream.write("Error Session:\t" + this.errorCnt_norm + "\n");
 			}
-			outstream
-					.write("****************************************************\n");
+			outstream.write("****************************************************\n");
 
 			Iterator it = this.m_serverMon.iterator();
 			while (it.hasNext()) {
@@ -236,26 +231,24 @@ public class ResultModel implements AgentInfoObserver {
 
 				outstream.write(sMon.address + "\n");
 				outstream.write("CPU Average Usage:\t" + sMon.CPU_avg + "\n");
-				outstream.write("Memory average Usage:\t" + sMon.memory_avg
-						+ "\n");
+				outstream.write("Memory average Usage:\t" + sMon.memory_avg + "\n");
 			}
-			String[] name = { new String("INIT"), new String("ADMC"),
-					new String("ADMR"), new String("BESS"), new String("BUYC"),
-					new String("BUYR"), new String("CREG"), new String("HOME"),
-					new String("NEWP"), new String("ORDD"), new String("ORDI"),
-					new String("PROD"), new String("SREQ"), new String("SRES"),
+			String[] name = { new String("INIT"), new String("ADMC"), new String("ADMR"), new String("BESS"),
+					new String("BUYC"), new String("BUYR"), new String("CREG"), new String("HOME"), new String("NEWP"),
+					new String("ORDD"), new String("ORDI"), new String("PROD"), new String("SREQ"), new String("SRES"),
 					new String("SHOP") };
-			
+
 			outstreamCSV.write("Transaction name,Response Time,Throughput,Ratio\n");
 			for (int i = 1; i < 15; i++) {
-				String out = String.format("trans " + name[i] + "          " + "%-10.1f ms\t\t" + "%-10.1f\t\t" +"%-3.1f %%\n", trans_avg_res[i], trans_avg_thp[i], trans_avg_ratio[i]);
-				outstreamCSV.write("trans " + name[i] + "," + trans_avg_res[i] + "," + trans_avg_thp[i] + "," + trans_avg_ratio[i] + "\n");
+				String out = String.format("trans " + name[i] + "          " + "%-10.1f ms\t\t" + "%-10.1f\t\t"
+						+ "%-3.1f %%\n", trans_avg_res[i], trans_avg_thp[i], trans_avg_ratio[i]);
+				outstreamCSV.write("trans " + name[i] + "," + trans_avg_res[i] + "," + trans_avg_thp[i] + ","
+						+ trans_avg_ratio[i] + "\n");
 				outstream.write(out);
 			}
 			outstreamCSV.close();
-			
-			outstream
-					.write("****************************************************\n");
+
+			outstream.write("****************************************************\n");
 			outstream.write("ERROR: \n");
 			int totalerror = 0;
 			for (int i = 0; i < 15; i++) {
@@ -274,9 +267,9 @@ public class ResultModel implements AgentInfoObserver {
 			outstream.close();
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Logger.getLogger().info(e.toString());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.getLogger().info(e.toString());
 		} finally {
 			restartTest();
 		}
@@ -284,6 +277,7 @@ public class ResultModel implements AgentInfoObserver {
 
 	private void CalTotalResult() {
 
+		int cont = 1;
 		for (EBStats stat : m_stats) {
 			// get total wips of all agents
 			if (time == -1) {
@@ -304,6 +298,27 @@ public class ResultModel implements AgentInfoObserver {
 					this.webInteractionThroughput_vip[i][j] += wips_vip[i][j];
 					this.webInteractionThroughput_norm[i][j] += wips_norm[i][j];
 				}
+			}
+
+			// escrevendo o arquivo
+			if (this.m_selectedFile.canWrite()) {
+				try {
+					// Sao 15 colunas porque existem 15 sites
+					BufferedWriter outputWriter = new BufferedWriter(
+							new FileWriter(this.m_selectedFile.getAbsolutePath()+ "-"
+							+ cont));
+					for (int j = 0; j < (m_testduring + 1); j++) {
+						for (int i = 0; i < 15; i++) {
+							outputWriter.write(wips[i][j] + " ");
+						}
+						outputWriter.write("\n");
+					}
+					outputWriter.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Logger.getLogger().info(e.toString());
+				}
+				cont++;
 			}
 
 			// get total wirt of all agents
@@ -341,8 +356,7 @@ public class ResultModel implements AgentInfoObserver {
 				}
 				this.errors[i].getResult().addAll(errorOfAgent[i].getResult());
 				this.errors_vip[i].getResult().addAll(error_vip[i].getResult());
-				this.errors_norm[i].getResult().addAll(
-						error_norm[i].getResult());
+				this.errors_norm[i].getResult().addAll(error_norm[i].getResult());
 			}
 
 			// count errors
@@ -405,6 +419,24 @@ public class ResultModel implements AgentInfoObserver {
 		if (!this.m_MultiServers.isEmpty()) {
 			ServerCal();
 		}
+		// guardando o load
+		if (this.m_selectedFile.canWrite()) {
+			try {
+				// Sao 15 colunas porque existem 15 sites
+				BufferedWriter outputWriter = new BufferedWriter(
+						new FileWriter(this.m_selectedFile.getAbsolutePath()+"-0"));
+				for (int j = 0; j < (m_testduring + 1); j++) {
+					for (int i = 0; i < 15; i++) {
+						outputWriter.write(webInteractionThroughput[i][j] + " ");
+					}
+					outputWriter.write("\n");
+				}
+				outputWriter.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Logger.getLogger().info(e.toString());
+			}
+		}
 
 	}
 
@@ -420,8 +452,7 @@ public class ResultModel implements AgentInfoObserver {
 			total += sum;
 		}
 		for (int i = 0; i < 15; i++) {
-			trans_avg_ratio[i] = Double.parseDouble(df.format(trans_avg_thp[i]
-					/ total * 100));
+			trans_avg_ratio[i] = Double.parseDouble(df.format(trans_avg_thp[i] / total * 100));
 		}
 
 	}
@@ -559,7 +590,7 @@ public class ResultModel implements AgentInfoObserver {
 				webInteraction[0][j] += webInteraction[i][j];
 			}
 		}
-		
+
 		int i;
 		for (i = this.m_testduring; i >= 0; i--) {
 			if (webInteraction[0][i] > 0) {
@@ -621,8 +652,7 @@ public class ResultModel implements AgentInfoObserver {
 
 			double Mem_avg = 0.0D;
 			for (int i = 0; i < sInfo.getMemory_usage().size(); i++) {
-				Mem_avg += ((Double) sInfo.getMemory_usage().get(i))
-						.doubleValue();
+				Mem_avg += ((Double) sInfo.getMemory_usage().get(i)).doubleValue();
 			}
 			Mem_avg /= sInfo.getMemory_usage().size();
 			serMon.memory_avg = Double.parseDouble(df.format(Mem_avg));
@@ -635,15 +665,25 @@ public class ResultModel implements AgentInfoObserver {
 		double sum;
 		int size;
 		for (int i = 1; i < 15; i++) {
-			sum = 0;
-			size = 0;
-			for (Iterator<Double> iterator = wirt[i].getResult().iterator(); iterator
-					.hasNext();) {
-				sum += iterator.next();
-				size++;
-			}
-			trans_avg_res[i] = Double.parseDouble(df.format(sum / size));
+			try {
+				sum = 0;
+				size = 0;
+				System.out.println(wirt[i].getResult().toArray().toString());
+				ArrayList<Double> results = wirt[i].getResult();
+				if (results != null) {
+					for (Double double1 : results) {
+						System.out.println(double1);
+						sum += double1;
+						size++;
+					}
+					trans_avg_res[i] = Double.parseDouble(df.format(sum / size));
+				}
 
+			} catch (Exception e) {
+				// TODO: handle exception
+				Logger.getLogger().error("em i=" + i + " - " + e.toString());
+			}
 		}
+
 	}
 }

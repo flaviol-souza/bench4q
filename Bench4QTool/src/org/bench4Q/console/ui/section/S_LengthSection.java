@@ -156,10 +156,8 @@ public class S_LengthSection extends JPanel implements AgentInfoObserver {
 		renderer.setSeriesPaint(1, new Color(0, 255, 0));
 		renderer.setSeriesOutlinePaint(1, Color.red);
 		renderer.setItemMargin(0.1);
-		renderer
-				.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-//		renderer.setItemLabelFont(new Font("����", Font.BOLD, 12));
-//		renderer.setItemLabelPaint(Color.black);
+		renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+
 		renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(
 				ItemLabelAnchor.OUTSIDE12, TextAnchor.BASELINE_CENTER));
 		renderer.setBaseItemLabelsVisible(true);

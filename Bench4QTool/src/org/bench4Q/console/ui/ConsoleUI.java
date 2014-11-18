@@ -63,8 +63,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
-import javax.swing.Timer;
 
+import javax.swing.Timer;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -98,6 +98,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.bench4Q.common.Bench4QException;
+import org.bench4Q.common.util.Logger;
 import org.bench4Q.console.ConsoleFoundation;
 import org.bench4Q.console.ConsoleProperties;
 import org.bench4Q.console.common.ConsoleException;
@@ -1085,7 +1086,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		public void actionPerformed(ActionEvent e) {
 			File file = new File(time + ".xml");
 			if (!file.isFile()) {
-				System.out.println("û�и��ļ�");
+				Logger.getLogger().error("Problems when opening xml files");
 				return;
 			}
 			m_configModel.setSelectedFile(file);

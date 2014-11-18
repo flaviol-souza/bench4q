@@ -22,11 +22,11 @@
 		<databaseURL>133.133.133.135</databaseURL>
 		<dbport>10724</dbport>
 		<ebs>
-			<baseLoad>200</baseLoad>
+			<baseLoad>150</baseLoad>
 			<randomLoad>0</randomLoad>
 			<rate>0</rate>
 			<triggerTime>0</triggerTime>
-			<stdyTime>250</stdyTime>
+			<stdyTime>300</stdyTime>
 		</ebs>
 	</rbe>
 </bench4Q>
