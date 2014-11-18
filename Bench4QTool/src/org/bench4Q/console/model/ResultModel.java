@@ -668,11 +668,9 @@ public class ResultModel implements AgentInfoObserver {
 			try {
 				sum = 0;
 				size = 0;
-				System.out.println(wirt[i].getResult().toArray().toString());
 				ArrayList<Double> results = wirt[i].getResult();
 				if (results != null) {
 					for (Double double1 : results) {
-						System.out.println(double1);
 						sum += double1;
 						size++;
 					}
