@@ -340,7 +340,7 @@ public abstract class EB extends Thread {
 			this.html = new String(result);
 		} catch (Exception e) {
 			EBStats.getEBStats().error(state, "get methed ERROR.", url, isVIP);
-			Logger.getLogger().error("get methed ERROR. " + e.toString());
+			Logger.getLogger().debug("get methed ERROR. " + e.toString());
 			return false;
 		} finally {
 			httpget.releaseConnection();
@@ -357,7 +357,7 @@ public abstract class EB extends Thread {
 			u = new URL(url);
 		} catch (MalformedURLException e) {
 			EBStats.getEBStats().error(state, "get image ERROR.", url, this.isVIP);
-			Logger.getLogger().equals("get image ERROR. "+e.toString());
+			Logger.getLogger().debug("get image ERROR. "+e.toString());
 			return false;
 		}
 
