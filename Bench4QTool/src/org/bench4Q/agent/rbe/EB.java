@@ -340,7 +340,7 @@ public abstract class EB extends Thread {
 			this.html = new String(result);
 		} catch (Exception e) {
 			EBStats.getEBStats().error(state, "get methed ERROR.", url, isVIP);
-			e.printStackTrace();
+			Logger.getLogger().error("get methed ERROR. " + e.toString());
 			return false;
 		} finally {
 			httpget.releaseConnection();
@@ -357,6 +357,7 @@ public abstract class EB extends Thread {
 			u = new URL(url);
 		} catch (MalformedURLException e) {
 			EBStats.getEBStats().error(state, "get image ERROR.", url, this.isVIP);
+			Logger.getLogger().equals("get image ERROR. "+e.toString());
 			return false;
 		}
 
@@ -441,7 +442,7 @@ public abstract class EB extends Thread {
 			// tt_scale)+"\tscale:\t"+tt_scale);
 			return ((long) (result * tt_scale));
 		} else {
-
+			//XXX nao é o lugar para este tipo de think time
 			/****************************************************
 			 * generate the user think times from a 2-state MAP e.g., the MAP
 			 * has mean = 7second, so r=1000*mean(ms)

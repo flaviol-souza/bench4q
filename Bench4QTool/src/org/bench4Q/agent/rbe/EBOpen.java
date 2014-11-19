@@ -160,6 +160,7 @@ public class EBOpen extends EB {
 						httpReq = new URL(nextReq);
 					} catch (MalformedURLException e) {
 						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
+						Logger.getLogger().error(e.toString());
 						return;
 					}
 
@@ -169,7 +170,15 @@ public class EBOpen extends EB {
 					}
 
 					wirt_t1 = System.currentTimeMillis();
-					sign = getHTML(this.curState, this.nextReq);
+					try {
+						sign = getHTML(this.curState, this.nextReq);
+					} catch (Exception e) {
+						// TODO: handle exception
+						Logger.getLogger().error("getHTML: "+e.toString());
+					} finally {
+						sign = false;
+					}
+					
 					if (!sign) {
 						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						return;

@@ -204,7 +204,15 @@ public class EBClosed extends EB {
 					}
 
 					startGet = System.currentTimeMillis();
-					sign = getHTML(this.curState, this.nextReq);
+					try {
+						sign = getHTML(this.curState, this.nextReq);	
+					} catch (Exception e) {
+						// TODO: handle exception
+						Logger.getLogger().error("getHTML: " + e.toString());
+					} finally {
+						sign = false;
+					} 
+					
 					endGet = System.currentTimeMillis();
 
 					if (!sign) {
