@@ -54,12 +54,16 @@ import org.bench4Q.common.util.Logger;
 public class WorkersOpen extends Workers {
 	
 	private MMPP mmpp_tt = new MMPP();
+	
+	private int lengthIntervalArray;
 
 	public WorkersOpen(long startTime, long triggerTime, long stdyTime, int baseLoad, int randomLoad, int rate,
 			TestPhase testPhase, Args args, int identity) {
 
 		super(startTime, triggerTime, stdyTime, baseLoad, randomLoad, rate, testPhase, args, identity);
-
+		
+		lengthIntervalArray = 0;
+		
 		this.trace = new ArrayList<ArrayList<Integer>>();
 		if (this.m_args.isReplay()) {
 			try {
@@ -136,7 +140,18 @@ public class WorkersOpen extends Workers {
 			double r = mmpp_tt.gen_interval();
 			
 			// XXX para teste com o MMPP
-			long interval = (long) (1000.0D * this.m_args.getInterval());
+			long interval;
+			
+			if(m_args.getIntervalMulti() == null || m_args.getIntervalMulti().length == 0){
+				interval = (long) (1000.0D * this.m_args.getInterval());
+			}else{
+				interval = (long) (1000.0D * m_args.getIntervalMulti()[lengthIntervalArray]);
+				if(lengthIntervalArray >= m_args.getIntervalMulti().length-1 )
+					lengthIntervalArray = 0;
+				else
+					lengthIntervalArray++;
+			}
+			
 			//long interval = (long) (50/r);
 			
 			if (etime - stime < interval) {

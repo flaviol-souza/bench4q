@@ -30,16 +30,24 @@
 package org.bench4Q.console.ui.section;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -49,14 +57,7 @@ import javax.swing.event.DocumentListener;
 
 import org.bench4Q.console.common.Resources;
 import org.bench4Q.console.model.ConfigModel;
-
-import java.net.Socket;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.net.UnknownHostException;
+import org.bench4Q.console.ui.ListModelInterval;
 
 /**
  * @author duanzhiquan
@@ -116,6 +117,10 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JButton bt_modeling;
 	private JTextField n_vms;
 
+	private JButton bt_interval_mult;
+
+	private ListModelInterval listInterval;
+
 	/**
 	 * @param resources
 	 * @param fileLoader
@@ -127,39 +132,79 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		this.setLayout(new GridBagLayout());
 
-		typeLabel = new JLabel(m_resources.getString("GenelPanel.typeLabel"), SwingConstants.RIGHT);
-		l_resetEnvironment = new JLabel(m_resources.getString("GenelPanel.resetEnvLabel"), SwingConstants.RIGHT);
-		l_lbModeling = new JLabel(m_resources.getString("GenelPanel.lbModelingLabel"), SwingConstants.RIGHT);
-		bt_reset = new JButton(m_resources.getString("GenelPanel.resetEnvLabelBt"));
-		bt_shutdown = new JButton(m_resources.getString("GenelPanel.shutdownEnvLabelBt"));
-		bt_modeling = new JButton(m_resources.getString("GenelPanel.modelingEnvLabelBt"));
+		typeLabel = new JLabel(m_resources.getString("GenelPanel.typeLabel"),
+				SwingConstants.RIGHT);
+		l_resetEnvironment = new JLabel(
+				m_resources.getString("GenelPanel.resetEnvLabel"),
+				SwingConstants.RIGHT);
+		l_lbModeling = new JLabel(
+				m_resources.getString("GenelPanel.lbModelingLabel"),
+				SwingConstants.RIGHT);
+		bt_reset = new JButton(
+				m_resources.getString("GenelPanel.resetEnvLabelBt"));
+		bt_shutdown = new JButton(
+				m_resources.getString("GenelPanel.shutdownEnvLabelBt"));
+		bt_modeling = new JButton(
+				m_resources.getString("GenelPanel.modelingEnvLabelBt"));
+		bt_interval_mult = new JButton(
+				m_resources.getString("GenelPanel.intervalLabelBt"));
+		bt_interval_mult.setPreferredSize(new Dimension(30, 20));
 
-		intervalLabel = new JLabel(m_resources.getString("GenelPanel.intervalLabel"), SwingConstants.RIGHT);
-		URLLabel = new JLabel(m_resources.getString("GenelPanel.URLLabel"), SwingConstants.RIGHT);
-		DBURLLabel = new JLabel(m_resources.getString("GenelPanel.DBURLLabel"), SwingConstants.RIGHT);
-		WebPortLabel = new JLabel(m_resources.getString("GenelPanel.WebPortLabel"), SwingConstants.RIGHT);
-		DBPortLabel = new JLabel(m_resources.getString("GenelPanel.DBPortLabel"), SwingConstants.RIGHT);
+		intervalLabel = new JLabel(
+				m_resources.getString("GenelPanel.intervalLabel"),
+				SwingConstants.RIGHT);
+		URLLabel = new JLabel(m_resources.getString("GenelPanel.URLLabel"),
+				SwingConstants.RIGHT);
+		DBURLLabel = new JLabel(m_resources.getString("GenelPanel.DBURLLabel"),
+				SwingConstants.RIGHT);
+		WebPortLabel = new JLabel(
+				m_resources.getString("GenelPanel.WebPortLabel"),
+				SwingConstants.RIGHT);
+		DBPortLabel = new JLabel(
+				m_resources.getString("GenelPanel.DBPortLabel"),
+				SwingConstants.RIGHT);
 
-		mixLabel = new JLabel(m_resources.getString("GenelPanel.mixLabel"), SwingConstants.RIGHT);
+		mixLabel = new JLabel(m_resources.getString("GenelPanel.mixLabel"),
+				SwingConstants.RIGHT);
 
-		warmupLabel = new JLabel(m_resources.getString("GenelPanel.warmupLabel"), SwingConstants.RIGHT);
-		cooldownLabel = new JLabel(m_resources.getString("GenelPanel.cooldownLabel"), SwingConstants.RIGHT);
+		warmupLabel = new JLabel(
+				m_resources.getString("GenelPanel.warmupLabel"),
+				SwingConstants.RIGHT);
+		cooldownLabel = new JLabel(
+				m_resources.getString("GenelPanel.cooldownLabel"),
+				SwingConstants.RIGHT);
 		EJB = new JCheckBox(m_resources.getString("GenelPanel.EJBLabel"));
 		MoniWeb = new JCheckBox(m_resources.getString("GenelPanel.MoniWeb"));
 		MoniDB = new JCheckBox(m_resources.getString("GenelPanel.MoniDB"));
 
-		typeExplain1 = new JLabel(m_resources.getString("GenelPanel.typeExplain1"), SwingConstants.RIGHT);
+		typeExplain1 = new JLabel(
+				m_resources.getString("GenelPanel.typeExplain1"),
+				SwingConstants.RIGHT);
 		// typeExplain1.setFont();
 		typeExplain1.setBackground(Color.gray);
-		typeExplain2 = new JLabel(m_resources.getString("GenelPanel.typeExplain2"), SwingConstants.RIGHT);
-		URLExplain = new JLabel(m_resources.getString("GenelPanel.URLExplain"), SwingConstants.RIGHT);
-		DBURLExplain = new JLabel(m_resources.getString("GenelPanel.DBURLExplain"), SwingConstants.RIGHT);
-		WebPortExplain = new JLabel(m_resources.getString("GenelPanel.WebPortExplain"), SwingConstants.RIGHT);
-		DBPortExplain = new JLabel(m_resources.getString("GenelPanel.DBPortExplain"), SwingConstants.RIGHT);
-		mixExplain = new JLabel(m_resources.getString("GenelPanel.mixExplain"), SwingConstants.RIGHT);
+		typeExplain2 = new JLabel(
+				m_resources.getString("GenelPanel.typeExplain2"),
+				SwingConstants.RIGHT);
+		URLExplain = new JLabel(m_resources.getString("GenelPanel.URLExplain"),
+				SwingConstants.RIGHT);
+		DBURLExplain = new JLabel(
+				m_resources.getString("GenelPanel.DBURLExplain"),
+				SwingConstants.RIGHT);
+		WebPortExplain = new JLabel(
+				m_resources.getString("GenelPanel.WebPortExplain"),
+				SwingConstants.RIGHT);
+		DBPortExplain = new JLabel(
+				m_resources.getString("GenelPanel.DBPortExplain"),
+				SwingConstants.RIGHT);
+		mixExplain = new JLabel(m_resources.getString("GenelPanel.mixExplain"),
+				SwingConstants.RIGHT);
 
-		warmupExplain = new JLabel(m_resources.getString("GenelPanel.warmupExplain"), SwingConstants.RIGHT);
-		cooldownExplain = new JLabel(m_resources.getString("GenelPanel.cooldownExplain"), SwingConstants.RIGHT);
+		warmupExplain = new JLabel(
+				m_resources.getString("GenelPanel.warmupExplain"),
+				SwingConstants.RIGHT);
+		cooldownExplain = new JLabel(
+				m_resources.getString("GenelPanel.cooldownExplain"),
+				SwingConstants.RIGHT);
 
 		type = new JComboBox();
 		mix = new JComboBox();
@@ -185,7 +230,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 			// error handle
 		}
 
-		interval = new JTextField(String.valueOf(fileLoader.getArgs().getInterval()));
+		interval = new JTextField(String.valueOf(fileLoader.getArgs()
+				.getInterval()));
 		interval.getDocument().addDocumentListener(new Intervallistener());
 
 		n_vms = new JTextField(String.valueOf(fileLoader.getArgs().getNvms()));
@@ -196,21 +242,26 @@ public class M_LoadSimulatorPanel extends JPanel {
 		DBURL = new JTextField(fileLoader.getArgs().getDBURL());
 		DBURL.getDocument().addDocumentListener(new DBURLListener());
 
-		WebPort = new JTextField(String.valueOf(fileLoader.getArgs().getWebPort()));
+		WebPort = new JTextField(String.valueOf(fileLoader.getArgs()
+				.getWebPort()));
 		WebPort.getDocument().addDocumentListener(new WebPortListener());
 
-		DBPort = new JTextField(String.valueOf(fileLoader.getArgs().getDBPort()));
+		DBPort = new JTextField(
+				String.valueOf(fileLoader.getArgs().getDBPort()));
 		DBPort.getDocument().addDocumentListener(new DBPortListener());
 
-		warmup = new JTextField(String.valueOf(fileLoader.getArgs().getPrepair()));
+		warmup = new JTextField(String.valueOf(fileLoader.getArgs()
+				.getPrepair()));
 		warmup.getDocument().addDocumentListener(new WarmupListener());
 
-		cooldown = new JTextField(String.valueOf(fileLoader.getArgs().getCooldown()));
+		cooldown = new JTextField(String.valueOf(fileLoader.getArgs()
+				.getCooldown()));
 		cooldown.getDocument().addDocumentListener(new CooldownListener());
 
 		if ((type.getSelectedIndex() == 1) && (interval != null)) {
 			interval.setVisible(false);
 			intervalLabel.setVisible(false);
+			bt_interval_mult.setVisible(false);
 		}
 		if (!MoniWeb.isSelected()) {
 			WebPort.setEnabled(false);
@@ -230,81 +281,118 @@ public class M_LoadSimulatorPanel extends JPanel {
 		MoniWeb.addActionListener(new MoniWeblistener());
 		MoniDB.addActionListener(new MoniDBlistener());
 
-		this.add(typeLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(type, new GridBagConstraints(1, 0, 1, 1, 100.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+		this.add(typeLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(type, new GridBagConstraints(1, 0, 1, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
+
+		this.add(intervalLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(interval, new GridBagConstraints(3, 0, 1, 1, 50.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 5, 5, 5), 1, 1));
-
-		this.add(intervalLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(interval, new GridBagConstraints(3, 0, 1, 1, 50.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(new JLabel(" "), new GridBagConstraints(4, 0, 1, 1, 50.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
-
-		this.add(typeExplain1, new GridBagConstraints(0, 1, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 0, 5), 1, 1));
-		this.add(typeExplain2, new GridBagConstraints(0, 2, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(0, 5, 5, 5), 1, 1));
-
-		this.add(mixLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(mix, new GridBagConstraints(1, 3, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(mixExplain, new GridBagConstraints(0, 4, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-
-		this.add(URLLabel, new GridBagConstraints(0, 5, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(URL, new GridBagConstraints(1, 5, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(URLExplain, new GridBagConstraints(0, 6, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(EJB, new GridBagConstraints(0, 7, 5, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+		this.add(bt_interval_mult, new GridBagConstraints(4, 0, 1, 1, 50.0,
+				0.0, GridBagConstraints.EAST, GridBagConstraints.BOTH,
 				new Insets(5, 5, 5, 5), 1, 1));
+		bt_interval_mult.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				intervalMultiListener(evt);
+			}
+		});
 
-		this.add(warmupLabel, new GridBagConstraints(0, 8, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(warmup, new GridBagConstraints(1, 8, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(warmupExplain, new GridBagConstraints(0, 9, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(typeExplain1, new GridBagConstraints(0, 1, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 0, 5), 1, 1));
+		this.add(typeExplain2, new GridBagConstraints(0, 2, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,
+						5, 5, 5), 1, 1));
 
-		this.add(cooldownLabel, new GridBagConstraints(0, 10, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(cooldown, new GridBagConstraints(1, 10, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(cooldownExplain, new GridBagConstraints(0, 11, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(mixLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(mix, new GridBagConstraints(1, 3, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(mixExplain, new GridBagConstraints(0, 4, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 
-		this.add(MoniWeb, new GridBagConstraints(0, 12, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(URLLabel, new GridBagConstraints(0, 5, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(URL, new GridBagConstraints(1, 5, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(URLExplain, new GridBagConstraints(0, 6, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(EJB, new GridBagConstraints(0, 7, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 
-		this.add(WebPortLabel, new GridBagConstraints(0, 13, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(WebPort, new GridBagConstraints(1, 13, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(WebPortExplain, new GridBagConstraints(0, 14, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(warmupLabel, new GridBagConstraints(0, 8, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(warmup, new GridBagConstraints(1, 8, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(warmupExplain, new GridBagConstraints(0, 9, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 
-		this.add(MoniDB, new GridBagConstraints(0, 15, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(DBURLLabel, new GridBagConstraints(0, 16, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(DBURL, new GridBagConstraints(1, 16, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(DBURLExplain, new GridBagConstraints(0, 17, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(cooldownLabel, new GridBagConstraints(0, 10, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(cooldown, new GridBagConstraints(1, 10, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(cooldownExplain, new GridBagConstraints(0, 11, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 
-		this.add(DBPortLabel, new GridBagConstraints(0, 18, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(DBPort, new GridBagConstraints(1, 18, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(DBPortExplain, new GridBagConstraints(0, 19, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(MoniWeb, new GridBagConstraints(0, 12, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 
-		this.add(new JLabel(""), new GridBagConstraints(0, 20, 5, 1, 100.0, 100.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(WebPortLabel, new GridBagConstraints(0, 13, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(WebPort, new GridBagConstraints(1, 13, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(WebPortExplain, new GridBagConstraints(0, 14, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
+
+		this.add(MoniDB, new GridBagConstraints(0, 15, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(DBURLLabel, new GridBagConstraints(0, 16, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(DBURL, new GridBagConstraints(1, 16, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(DBURLExplain, new GridBagConstraints(0, 17, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
+
+		this.add(DBPortLabel, new GridBagConstraints(0, 18, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(DBPort, new GridBagConstraints(1, 18, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(DBPortExplain, new GridBagConstraints(0, 19, 5, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
+
+		this.add(new JLabel(""), new GridBagConstraints(0, 20, 5, 1, 100.0,
+				100.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+				new Insets(5, 5, 5, 5), 1, 1));
 
 		m_configModel.addListener(new ConfigModel.AbstractListener() {
 			public void isArgsChanged() {
@@ -312,36 +400,39 @@ public class M_LoadSimulatorPanel extends JPanel {
 			}
 		});
 
-		this.add(l_resetEnvironment, new GridBagConstraints(0, 21, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		
-		this.add(bt_reset, new GridBagConstraints(1, 21, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(l_resetEnvironment, new GridBagConstraints(0, 21, 1, 1, 0.0,
+				0.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
+				new Insets(5, 5, 5, 5), 1, 1));
+
+		this.add(bt_reset, new GridBagConstraints(1, 21, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 		bt_reset.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				resetVMlistener(evt);
 			}
 		});
 
-		this.add(bt_shutdown, new GridBagConstraints(2, 21, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(bt_shutdown, new GridBagConstraints(2, 21, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 		bt_shutdown.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				shutdownVMlistener(evt);
 			}
 		});
 
-		
-		this.add(l_lbModeling, new GridBagConstraints(0, 22, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		
-		
+		this.add(l_lbModeling, new GridBagConstraints(0, 22, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 
-		this.add(n_vms, new GridBagConstraints(2, 22, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
-				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
-		
-		this.add(bt_modeling, new GridBagConstraints(1, 22, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		this.add(n_vms, new GridBagConstraints(2, 22, 4, 1, 100.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 5, 5, 5), 1, 1));
+
+		this.add(bt_modeling, new GridBagConstraints(1, 22, 4, 1, 100.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,
+						5, 5, 5), 1, 1));
 		bt_modeling.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				modelingVMlistener(evt);
@@ -354,26 +445,33 @@ public class M_LoadSimulatorPanel extends JPanel {
 		if (m_configModel.getArgs().getRbetype().equalsIgnoreCase("open")) {
 			type.setSelectedIndex(0);
 			if (interval != null) {
-				interval.setText(String.valueOf(m_configModel.getArgs().getInterval()));
+				interval.setText(String.valueOf(m_configModel.getArgs()
+						.getInterval()));
 				interval.setVisible(true);
 				intervalLabel.setVisible(true);
+				bt_interval_mult.setVisible(true);
 			}
 
-		} else if (m_configModel.getArgs().getRbetype().equalsIgnoreCase("closed")) {
+		} else if (m_configModel.getArgs().getRbetype()
+				.equalsIgnoreCase("closed")) {
 			type.setSelectedIndex(1);
 			if (interval != null) {
-				interval.setText(String.valueOf(m_configModel.getArgs().getInterval()));
+				interval.setText(String.valueOf(m_configModel.getArgs()
+						.getInterval()));
 				interval.setVisible(false);
 				intervalLabel.setVisible(false);
+				bt_interval_mult.setVisible(false);
 			}
 		}
 
 		if (m_configModel.getArgs().getMix().equalsIgnoreCase("browsing")) {
 			mix.setSelectedIndex(0);
 
-		} else if (m_configModel.getArgs().getMix().equalsIgnoreCase("shopping")) {
+		} else if (m_configModel.getArgs().getMix()
+				.equalsIgnoreCase("shopping")) {
 			mix.setSelectedIndex(1);
-		} else if (m_configModel.getArgs().getMix().equalsIgnoreCase("ordering")) {
+		} else if (m_configModel.getArgs().getMix()
+				.equalsIgnoreCase("ordering")) {
 			mix.setSelectedIndex(2);
 		}
 		URL.setText(String.valueOf(m_configModel.getArgs().getBaseURL()));
@@ -397,7 +495,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void insertUpdate(DocumentEvent event) {
 			double intervalValue = 1;
-			if ((interval.getText().trim() != null) && (!interval.getText().trim().equals(""))) {
+			if ((interval.getText().trim() != null)
+					&& (!interval.getText().trim().equals(""))) {
 				intervalValue = Double.parseDouble(interval.getText().trim());
 			}
 			m_configModel.getArgs().setInterval(intervalValue);
@@ -405,7 +504,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void removeUpdate(DocumentEvent event) {
 			double intervalValue = 1;
-			if ((interval.getText().trim() != null) && (!interval.getText().trim().equals(""))) {
+			if ((interval.getText().trim() != null)
+					&& (!interval.getText().trim().equals(""))) {
 				intervalValue = Double.parseDouble(interval.getText().trim());
 			}
 			m_configModel.getArgs().setInterval(intervalValue);
@@ -413,7 +513,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void changedUpdate(DocumentEvent event) {
 			double intervalValue = 1;
-			if ((interval.getText().trim() != null) && (!interval.getText().trim().equals(""))) {
+			if ((interval.getText().trim() != null)
+					&& (!interval.getText().trim().equals(""))) {
 				intervalValue = Double.parseDouble(interval.getText().trim());
 			}
 			m_configModel.getArgs().setInterval(intervalValue);
@@ -459,7 +560,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private class WebPortListener implements DocumentListener {
 		public void insertUpdate(DocumentEvent event) {
 			int WebPortValue = 0;
-			if ((WebPort.getText().trim() != null) && (!WebPort.getText().equals(""))) {
+			if ((WebPort.getText().trim() != null)
+					&& (!WebPort.getText().equals(""))) {
 				WebPortValue = Integer.parseInt(WebPort.getText().trim());
 			}
 			m_configModel.getArgs().setWebPort(WebPortValue);
@@ -467,7 +569,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void removeUpdate(DocumentEvent event) {
 			int WebPortValue = 0;
-			if ((WebPort.getText().trim() != null) && (!WebPort.getText().equals(""))) {
+			if ((WebPort.getText().trim() != null)
+					&& (!WebPort.getText().equals(""))) {
 				WebPortValue = Integer.parseInt(WebPort.getText().trim());
 			}
 			m_configModel.getArgs().setWebPort(WebPortValue);
@@ -475,7 +578,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void changedUpdate(DocumentEvent event) {
 			int WebPortValue = 0;
-			if ((WebPort.getText().trim() != null) && (!WebPort.getText().equals(""))) {
+			if ((WebPort.getText().trim() != null)
+					&& (!WebPort.getText().equals(""))) {
 				WebPortValue = Integer.parseInt(WebPort.getText().trim());
 			}
 			m_configModel.getArgs().setWebPort(WebPortValue);
@@ -485,7 +589,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private class DBPortListener implements DocumentListener {
 		public void insertUpdate(DocumentEvent event) {
 			int DBPortValue = 0;
-			if ((DBPort.getText().trim() != null) && (!DBPort.getText().equals(""))) {
+			if ((DBPort.getText().trim() != null)
+					&& (!DBPort.getText().equals(""))) {
 				DBPortValue = Integer.parseInt(DBPort.getText().trim());
 			}
 			m_configModel.getArgs().setDBPort(DBPortValue);
@@ -493,7 +598,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void removeUpdate(DocumentEvent event) {
 			int DBPortValue = 0;
-			if ((DBPort.getText().trim() != null) && (!DBPort.getText().equals(""))) {
+			if ((DBPort.getText().trim() != null)
+					&& (!DBPort.getText().equals(""))) {
 				DBPortValue = Integer.parseInt(DBPort.getText().trim());
 			}
 			m_configModel.getArgs().setDBPort(DBPortValue);
@@ -501,7 +607,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void changedUpdate(DocumentEvent event) {
 			int DBPortValue = 0;
-			if ((DBPort.getText().trim() != null) && (!DBPort.getText().equals(""))) {
+			if ((DBPort.getText().trim() != null)
+					&& (!DBPort.getText().equals(""))) {
 				DBPortValue = Integer.parseInt(DBPort.getText().trim());
 			}
 			m_configModel.getArgs().setDBPort(DBPortValue);
@@ -512,7 +619,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void insertUpdate(DocumentEvent event) {
 			int warmupValue = 0;
-			if ((warmup.getText().trim() != null) && (!warmup.getText().equals(""))) {
+			if ((warmup.getText().trim() != null)
+					&& (!warmup.getText().equals(""))) {
 				warmupValue = Integer.parseInt(warmup.getText().trim());
 			}
 			m_configModel.getArgs().setPrepair(warmupValue);
@@ -520,7 +628,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void removeUpdate(DocumentEvent event) {
 			int warmupValue = 0;
-			if ((warmup.getText().trim() != null) && (!warmup.getText().equals(""))) {
+			if ((warmup.getText().trim() != null)
+					&& (!warmup.getText().equals(""))) {
 				warmupValue = Integer.parseInt(warmup.getText().trim());
 			}
 			m_configModel.getArgs().setPrepair(warmupValue);
@@ -528,7 +637,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void changedUpdate(DocumentEvent event) {
 			int warmupValue = 0;
-			if ((warmup.getText().trim() != null) && (!warmup.getText().equals(""))) {
+			if ((warmup.getText().trim() != null)
+					&& (!warmup.getText().equals(""))) {
 				warmupValue = Integer.parseInt(warmup.getText().trim());
 			}
 			m_configModel.getArgs().setPrepair(warmupValue);
@@ -539,7 +649,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void insertUpdate(DocumentEvent event) {
 			int cooldownValue = 0;
-			if ((cooldown.getText().trim() != null) && (!cooldown.getText().equals(""))) {
+			if ((cooldown.getText().trim() != null)
+					&& (!cooldown.getText().equals(""))) {
 				cooldownValue = Integer.parseInt(cooldown.getText().trim());
 			}
 			m_configModel.getArgs().setPrepair(cooldownValue);
@@ -547,7 +658,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void removeUpdate(DocumentEvent event) {
 			int cooldownValue = 0;
-			if ((cooldown.getText().trim() != null) && (!cooldown.getText().equals(""))) {
+			if ((cooldown.getText().trim() != null)
+					&& (!cooldown.getText().equals(""))) {
 				cooldownValue = Integer.parseInt(cooldown.getText().trim());
 			}
 			m_configModel.getArgs().setPrepair(cooldownValue);
@@ -555,7 +667,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		public void changedUpdate(DocumentEvent event) {
 			int cooldownValue = 0;
-			if ((cooldown.getText().trim() != null) && (!cooldown.getText().equals(""))) {
+			if ((cooldown.getText().trim() != null)
+					&& (!cooldown.getText().equals(""))) {
 				cooldownValue = Integer.parseInt(cooldown.getText().trim());
 			}
 			m_configModel.getArgs().setPrepair(cooldownValue);
@@ -569,6 +682,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 				if (interval != null) {
 					interval.setVisible(true);
 					intervalLabel.setVisible(true);
+					bt_interval_mult.setVisible(true);
 				}
 
 			} else if (type.getSelectedIndex() == 1) {
@@ -576,6 +690,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 				if (interval != null) {
 					interval.setVisible(false);
 					intervalLabel.setVisible(false);
+					bt_interval_mult.setVisible(false);
 				}
 			} else {
 
@@ -661,6 +776,30 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 	}
 
+	private void intervalMultiListener(java.awt.event.ActionEvent evt) {
+
+		JFrame frame = new JFrame("List Model Interval");
+		if (listInterval == null) {
+			listInterval = new ListModelInterval();
+		}
+		frame.setContentPane(listInterval);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setSize(260, 200);
+		frame.setVisible(true);
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				List<Double> intervalList = listInterval.getListInterval();
+				Double[] arrayInterval = new Double[intervalList.size()];
+				intervalList.toArray(arrayInterval);
+				
+				m_configModel.getArgs().setIntervalMulti(arrayInterval);
+			}
+		});
+
+	}
+
 	private void resetVMlistener(java.awt.event.ActionEvent evt) {
 
 		String hostNB = m_configModel.getArgs().getLbHost();
@@ -712,7 +851,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 		String hostNB = m_configModel.getArgs().getLbHost();
 		int portNB = m_configModel.getArgs().getLbPort();
 		int nvms = Integer.parseInt(n_vms.getText());
-		String message = "{\"expmanager\":\"shutdown\",\"vms\":\"" + nvms + "\"}";
+		String message = "{\"expmanager\":\"shutdown\",\"vms\":\"" + nvms
+				+ "\"}";
 
 		Socket client = null;
 		PrintStream out = null;

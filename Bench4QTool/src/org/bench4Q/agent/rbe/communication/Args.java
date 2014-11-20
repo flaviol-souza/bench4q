@@ -77,6 +77,8 @@ public class Args implements Sendable {
 
 	private String typeFrenquency;
 
+	private Double intervalMulti[];
+
 	/**
 	 * constructor
 	 */
@@ -169,7 +171,9 @@ public class Args implements Sendable {
 		this.mix = mix;
 	}
 
-	/**int
+	/**
+	 * int
+	 * 
 	 * @return slow rate
 	 */
 	public double getSlow() {
@@ -311,7 +315,8 @@ public class Args implements Sendable {
 	}
 
 	/**
-	 * @param number of machines
+	 * @param number
+	 *            of machines
 	 */
 	public void setNvms(int nvms) {
 		this.nvms = nvms;
@@ -325,12 +330,13 @@ public class Args implements Sendable {
 	}
 
 	/**
-	 * @param number of machines
+	 * @param number
+	 *            of machines
 	 */
 	public void setLbHost(String host) {
 		this.lbHost = host;
 	}
-	
+
 	/**
 	 * @return number of machines
 	 */
@@ -339,11 +345,13 @@ public class Args implements Sendable {
 	}
 
 	/**
-	 * @param number of machines
+	 * @param number
+	 *            of machines
 	 */
 	public void setLbPort(int port) {
 		this.lbPort = port;
 	}
+
 	/**
 	 * @return test name
 	 */
@@ -538,6 +546,21 @@ public class Args implements Sendable {
 
 	public void setTypeFrenquency(String typeFrenquency) {
 		this.typeFrenquency = typeFrenquency;
+	}
+
+	/**
+	 * @return the intervalMulti
+	 */
+	public Double[] getIntervalMulti() {
+		return intervalMulti;
+	}
+
+	/**
+	 * @param intervalMulti
+	 *            the intervalMulti to set
+	 */
+	public void setIntervalMulti(Double[] intervalMulti) {
+		this.intervalMulti = intervalMulti;
 	}
 
 }
