@@ -29,12 +29,24 @@ public class ListModelInterval extends JPanel {
 		JScrollPane pane = new JScrollPane(list);
 		
 		JButton addButton = new JButton("Add Interval");
+		JButton editButton = new JButton("Edit Selected");
 		JButton removeButton = new JButton("Remove Selected");
+
 
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
                 String value = JOptionPane.showInputDialog(ListModelInterval.this, "Input value interval" );
 				model.addElement(Double.valueOf(value));
+			}
+		});
+
+		editButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent event) {
+				if (model.getSize() > 0){
+					String value = JOptionPane.showInputDialog(ListModelInterval.this, "Edit value interval", list.getSelectedValue());
+					model.setElementAt(value, list.getSelectedIndex());
+				}
 			}
 		});
 
@@ -46,8 +58,9 @@ public class ListModelInterval extends JPanel {
 		});
 
 		add(pane, BorderLayout.NORTH);
-		add(addButton, BorderLayout.WEST);
-		add(removeButton, BorderLayout.EAST);
+		add(addButton, BorderLayout.LINE_START);
+		add(editButton, BorderLayout.CENTER);
+		add(removeButton, BorderLayout.LINE_END);
 	}
 	
 	public List<Double> getListInterval(){
