@@ -785,7 +785,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		frame.setContentPane(listInterval);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setSize(340, 200);
+		frame.setSize(400, 500);
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
