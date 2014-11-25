@@ -286,7 +286,7 @@ public abstract class EB extends Thread {
 	 * @param url
 	 * @return boolean
 	 */
-	public boolean getHTML(int state, String url) {
+	public synchronized boolean getHTML(int state, String url) {
 
 		double tolerance = tolerance(this.curState);
 		html = "";

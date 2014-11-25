@@ -183,4 +183,13 @@ public class MMPP {
 		} // for i
 	} // print_P
 	
+	public static void main(String[] args){
+		MMPP mmpp_tt = new MMPP();
+		for (int i = 0; i < 100; i++) {
+			double r = 1000 * mmpp_tt.gen_interval();
+			System.out.println((int)(r*0.0005));
+		}
+		
+	}
+	
 } // class MMPP
