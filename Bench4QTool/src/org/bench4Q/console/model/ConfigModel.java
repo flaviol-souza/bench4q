@@ -344,6 +344,7 @@ public final class ConfigModel {
 		args.setTolerance(Double.parseDouble(rbe.getChildText("tolerance").trim()));
 		args.setRetry(Integer.parseInt(rbe.getChildText("retry").trim()));
 		args.setThinktime(Double.parseDouble(rbe.getChildText("thinktime")));
+		args.setTfOption(Boolean.parseBoolean(rbe.getChildText("tfOption")));
 		if (rbe.getChildText("slow") != null)
 			args.setSlow(Double.parseDouble(rbe.getChildText("slow").trim()));
 		if (rbe.getChildText("getImage") != null) {

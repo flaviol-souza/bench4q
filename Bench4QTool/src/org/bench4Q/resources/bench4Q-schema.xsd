@@ -19,6 +19,7 @@
 							<xs:element name="tolerance" type="xs:double" />
 							<xs:element name="retry" type="xs:integer" />
 							<xs:element name="thinktime" type="xs:double" />
+							<xs:element name="tfOption" type="xs:boolean" />
 							<xs:element name="mix">
 								<xs:simpleType>
 									<xs:restriction base="xs:string">

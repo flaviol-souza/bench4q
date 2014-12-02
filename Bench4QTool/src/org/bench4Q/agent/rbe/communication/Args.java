@@ -76,6 +76,7 @@ public class Args implements Sendable {
 	private ArrayList<TestPhase> testPhase;
 
 	private String typeFrenquency;
+	private boolean tfOption;
 
 	/**
 	 * constructor
@@ -94,6 +95,7 @@ public class Args implements Sendable {
 		this.getImage = true;
 		this.tolerance = 1.0D;
 		this.thinktime = 1.0D;
+		this.tfOption = false;
 		this.ttMMPP = true; // with stagger
 		this.baseURL = "http://localhost:8080/jaspte";
 
@@ -539,5 +541,23 @@ public class Args implements Sendable {
 	public void setTypeFrenquency(String typeFrenquency) {
 		this.typeFrenquency = typeFrenquency;
 	}
+
+	public ArrayList<TestPhase> getTestPhase() {
+		return testPhase;
+	}
+
+	public void setTestPhase(ArrayList<TestPhase> testPhase) {
+		this.testPhase = testPhase;
+	}
+
+	public boolean getTfOption() {
+		return tfOption;
+	}
+
+	public void setTfOption(boolean tfOption) {
+		this.tfOption = tfOption;
+	}
+
+	
 
 }

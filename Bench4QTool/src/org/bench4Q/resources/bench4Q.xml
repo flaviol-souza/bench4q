@@ -11,6 +11,7 @@
 		<tolerance>0.0</tolerance>
 		<retry>3</retry>
 		<thinktime>0.1</thinktime>
+		<tfOption>false</tfOption>
 		<mix>shopping</mix>
 		<slow>0.0</slow>
 		<getImage>false</getImage>

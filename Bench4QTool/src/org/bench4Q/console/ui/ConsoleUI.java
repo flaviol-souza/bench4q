@@ -51,10 +51,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -174,8 +177,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 	 * @param processControl
 	 * @throws ConsoleException
 	 */
-	public ConsoleUI(Resources resources, ConsoleProperties consoleProperties,
-			ProcessControl processControl) throws ConsoleException {
+	public ConsoleUI(Resources resources, ConsoleProperties consoleProperties, ProcessControl processControl)
+			throws ConsoleException {
 
 		m_resources = resources;
 		m_properties = consoleProperties;
@@ -184,27 +187,21 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		m_configModel = new ConfigModel();
 		m_resultModel = new ResultModel(m_resources);
 
-		m_serverProcess = new AppMonitorProcessImplementation(
-				m_configModel.getArgs());
-		m_databaseProcess = new DBMonitorProcessImplementation(
-				m_configModel.getArgs());
+		m_serverProcess = new AppMonitorProcessImplementation(m_configModel.getArgs());
+		m_databaseProcess = new DBMonitorProcessImplementation(m_configModel.getArgs());
 
 		// Create the frame to contain the a menu and the top level pane.
 		// Do before actions are constructed as we use the frame to create
 		// dialogs.
 		m_frame = new JFrame(m_resources.getString("title"));
 
-		final ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler(
-				m_frame, m_resources);
+		final ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler(m_frame, m_resources);
 
-		m_errorHandler = (ErrorHandler) new SwingDispatcherFactoryImplementation(
-				null).create(errorDialogHandler);
+		m_errorHandler = (ErrorHandler) new SwingDispatcherFactoryImplementation(null).create(errorDialogHandler);
 
-		m_swingDispatcherFactory = new SwingDispatcherFactoryImplementation(
-				m_errorHandler);
+		m_swingDispatcherFactory = new SwingDispatcherFactoryImplementation(m_errorHandler);
 
-		m_optionalConfirmDialog = new OptionalConfirmDialog(m_frame,
-				m_resources, m_properties);
+		m_optionalConfirmDialog = new OptionalConfirmDialog(m_frame, m_resources, m_properties);
 
 		m_collectingResultAction = new CollectingResultAction();
 
@@ -235,8 +232,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		m_actionTable.add(new ReplayProcessAction());
 		m_actionTable.add(new ReplayAsProcessAction());
 
-		m_actionTable.add(new AboutAction(m_resources
-				.getImageIcon("logo.image")));
+		m_actionTable.add(new AboutAction(m_resources.getImageIcon("logo.image")));
 		m_actionTable.add(new StartProcessesAction());
 
 		m_actionTable.add(new OptionsAction());
@@ -249,12 +245,10 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		final JSplitPane splitPane;
 
-		m_agentsCollection = new AgentsCollection(m_resources,
-				m_processControl, m_swingDispatcherFactory);
+		m_agentsCollection = new AgentsCollection(m_resources, m_processControl, m_swingDispatcherFactory);
 		m_resultModel.setAgentsCollection(m_agentsCollection);
-		m_treeModel = new Bench4QTreeModel(m_resources, m_processControl,
-				m_swingDispatcherFactory, m_configModel, m_resultModel,
-				m_agentsCollection, m_serverProcess, m_databaseProcess);
+		m_treeModel = new Bench4QTreeModel(m_resources, m_processControl, m_swingDispatcherFactory, m_configModel,
+				m_resultModel, m_agentsCollection, m_serverProcess, m_databaseProcess);
 		m_tree = new JTree(m_treeModel);
 		m_tree.setRootVisible(false);
 		m_tree.setShowsRootHandles(true);
@@ -279,13 +273,11 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		m_mainView = new JScrollPane(m_mainPanel);
 		m_mainView.setPreferredSize(new Dimension(rightWidth, windowHeight));
 
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, m_treeView,
-				m_mainView);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, m_treeView, m_mainView);
 		splitPane.setContinuousLayout(true);
 		splitPane.setDividerLocation(leftWidth);
 
-		m_titleLabelFont = new JLabel().getFont().deriveFont(
-				Font.PLAIN | Font.ITALIC);
+		m_titleLabelFont = new JLabel().getFont().deriveFont(Font.PLAIN | Font.ITALIC);
 
 		final JPanel contentPanel = new JPanel(new BorderLayout());
 		contentPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -298,10 +290,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		toolBarPanel.add(splitPane, BorderLayout.CENTER);
 
 		// set the preferred size of the demo
-		m_frame.setPreferredSize(new Dimension(windowWidth + 10,
-				windowHeight + 10));
-		m_frame.setMinimumSize(new Dimension(windowWidth + 10,
-				windowHeight + 10));
+		m_frame.setPreferredSize(new Dimension(windowWidth + 10, windowHeight + 10));
+		m_frame.setMinimumSize(new Dimension(windowWidth + 10, windowHeight + 10));
 		m_frame.setBackground(Color.lightGray);
 
 		// Center the window
@@ -314,8 +304,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		if (frameSize.width > screenSize.width) {
 			frameSize.width = screenSize.width;
 		}
-		m_frame.setLocation((screenSize.width - frameSize.width) / 2,
-				(screenSize.height - frameSize.height) / 2);
+		m_frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
 
 		m_frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		m_frame.addWindowListener(new WindowCloseAdapter());
@@ -364,8 +353,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 	void controlTreeValueChanged(TreeSelectionEvent e) throws ConsoleException {
 
-		Bench4QTreeNode node = (Bench4QTreeNode) m_tree
-				.getLastSelectedPathComponent();
+		Bench4QTreeNode node = (Bench4QTreeNode) m_tree.getLastSelectedPathComponent();
 		TreePath pathnode = e.getNewLeadSelectionPath();
 
 		if (m_tree.isVisible(pathnode)) {
@@ -387,8 +375,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		public void populate(String key) {
 			final String tokens = m_resources.getString(key);
-			final Iterator iterator = Collections.list(
-					new StringTokenizer(tokens)).iterator();
+			final Iterator iterator = Collections.list(new StringTokenizer(tokens)).iterator();
 
 			while (iterator.hasNext()) {
 				final String itemKey = (String) iterator.next();
@@ -438,8 +425,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 			final Icon icon = menuItem.getIcon();
 
-			final Icon rolloverIcon = (Icon) menuItem.getAction().getValue(
-					CustomAction.ROLLOVER_ICON);
+			final Icon rolloverIcon = (Icon) menuItem.getAction().getValue(CustomAction.ROLLOVER_ICON);
 
 			menuItem.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
@@ -472,21 +458,15 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 					if (e.getChild() instanceof JMenuItem) {
 						final JMenuItem menuItem = (JMenuItem) e.getChild();
 
-						menuItem.setVisible(((CustomAction) menuItem
-								.getAction()).isRelevantToSelection());
+						menuItem.setVisible(((CustomAction) menuItem.getAction()).isRelevantToSelection());
 
-						menuItem.getAction().addPropertyChangeListener(
-								new PropertyChangeListener() {
-									public void propertyChange(
-											PropertyChangeEvent evt) {
-										if (evt.getPropertyName()
-												.equals(CustomAction.RELEVANT_TO_SELECTION)) {
-											menuItem.setVisible(((CustomAction) menuItem
-													.getAction())
-													.isRelevantToSelection());
-										}
-									}
-								});
+						menuItem.getAction().addPropertyChangeListener(new PropertyChangeListener() {
+							public void propertyChange(PropertyChangeEvent evt) {
+								if (evt.getPropertyName().equals(CustomAction.RELEVANT_TO_SELECTION)) {
+									menuItem.setVisible(((CustomAction) menuItem.getAction()).isRelevantToSelection());
+								}
+							}
+						});
 					}
 				}
 			});
@@ -509,8 +489,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		}
 
 		protected void token(String key) {
-			final JMenu menu = new JMenu(m_resources.getString(key
-					+ ".menu.label"));
+			final JMenu menu = new JMenu(m_resources.getString(key + ".menu.label"));
 
 			new MenuAssembler(menu).populate(key + ".menu");
 
@@ -577,11 +556,9 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		public SaveResultsAction() {
 			super(m_resources, "save-results", true);
-			m_processControl
-					.addProcessStatusListener(new EnableIfAgentsFinished(this));
-			m_fileChooser.setDialogTitle(MnemonicHeuristics
-					.removeMnemonicMarkers(m_resources
-							.getString("save-results.label")));
+			m_processControl.addProcessStatusListener(new EnableIfAgentsFinished(this));
+			m_fileChooser.setDialogTitle(MnemonicHeuristics.removeMnemonicMarkers(m_resources
+					.getString("save-results.label")));
 
 			final String Text = m_resources.getString("bench4Q.result.label");
 
@@ -626,8 +603,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			file = new File(file.getPath().concat(File.separator).concat(fname));
 			// picName = file.getPath().concat(File.separator).concat(picName);
 			if (file.exists()) {
-				if (JOptionPane.showConfirmDialog(m_frame,
-						m_resources.getString("saveResultCoverConfirm.text"),
+				if (JOptionPane.showConfirmDialog(m_frame, m_resources.getString("saveResultCoverConfirm.text"),
 						(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 					return;
 
@@ -656,8 +632,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		OptionsAction() {
 			super(m_resources, "options", true);
 
-			m_optionsDialogHandler = new OptionsDialogHandler(m_frame,
-					m_properties, m_resources) {
+			m_optionsDialogHandler = new OptionsDialogHandler(m_frame, m_properties, m_resources) {
 				protected void setNewOptions(ConsoleProperties newOptions) {
 					m_properties.set(newOptions);
 					// m_samplingControlPanel.refresh();
@@ -683,18 +658,15 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 			final Resources resources = m_resources;
 
-			final String title = MnemonicHeuristics
-					.removeMnemonicMarkers(resources.getString("about.label"));
-			final String aboutText = resources.getStringFromFile("about.text",
-					true);
+			final String title = MnemonicHeuristics.removeMnemonicMarkers(resources.getString("about.label"));
+			final String aboutText = resources.getStringFromFile("about.text", true);
 
 			final JEditorPane htmlPane = new JEditorPane("text/html", aboutText);
 			htmlPane.setEditable(false);
 			htmlPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 			htmlPane.setBackground(new JLabel().getBackground());
 
-			final JScrollPane contents = new JScrollPane(htmlPane,
-					JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+			final JScrollPane contents = new JScrollPane(htmlPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) {
 				public Dimension getPreferredSize() {
 					final Dimension d = super.getPreferredSize();
@@ -706,8 +678,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 			htmlPane.setCaretPosition(0);
 
-			JOptionPane.showMessageDialog(m_frame, contents, title,
-					JOptionPane.PLAIN_MESSAGE, m_logoIcon);
+			JOptionPane.showMessageDialog(m_frame, contents, title, JOptionPane.PLAIN_MESSAGE, m_logoIcon);
 		}
 	}
 
@@ -761,8 +732,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 	private final class CollectingResultAction extends CustomAction {
 		CollectingResultAction() {
 			super(m_resources, "collecting-result");
-			m_processControl
-					.addProcessStatusListener(new EnableIfAgentsFinished(this));
+			m_processControl.addProcessStatusListener(new EnableIfAgentsFinished(this));
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -777,12 +747,10 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		public NewPlanAction() {
 			super(m_resources, "new-plan");
-			m_fileChooser.setDialogTitle(MnemonicHeuristics
-					.removeMnemonicMarkers(m_resources
-							.getString("new-plan.label")));
+			m_fileChooser.setDialogTitle(MnemonicHeuristics.removeMnemonicMarkers(m_resources
+					.getString("new-plan.label")));
 
-			final String XMLFilesText = m_resources
-					.getString("bench4Q.configXML.label");
+			final String XMLFilesText = m_resources.getString("bench4Q.configXML.label");
 
 			m_fileChooser.addChoosableFileFilter(new FileFilter() {
 				public boolean accept(File file) {
@@ -806,8 +774,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				return;
 			}
 			final File file = m_fileChooser.getSelectedFile();
-			if (JOptionPane.showConfirmDialog(m_frame,
-					m_resources.getString("NewConfirmation.text"),
+			if (JOptionPane.showConfirmDialog(m_frame, m_resources.getString("NewConfirmation.text"),
 					(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 				return;
 			}
@@ -821,12 +788,10 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		public OpenPlanAction() {
 			super(m_resources, "open-plan");
-			m_fileChooser.setDialogTitle(MnemonicHeuristics
-					.removeMnemonicMarkers(m_resources
-							.getString("open-plan.label")));
+			m_fileChooser.setDialogTitle(MnemonicHeuristics.removeMnemonicMarkers(m_resources
+					.getString("open-plan.label")));
 
-			final String XMLFilesText = m_resources
-					.getString("bench4Q.configXML.label");
+			final String XMLFilesText = m_resources.getString("bench4Q.configXML.label");
 
 			m_fileChooser.addChoosableFileFilter(new FileFilter() {
 				public boolean accept(File file) {
@@ -850,21 +815,14 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				return;
 			}
 			final File file = m_fileChooser.getSelectedFile();
-			if (JOptionPane.showConfirmDialog(m_frame,
-					m_resources.getString("openConfirmation.text"),
+			if (JOptionPane.showConfirmDialog(m_frame, m_resources.getString("openConfirmation.text"),
 					(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 				return;
 			}
 			m_configModel.setSelectedFile(file);
 			if (!m_configModel.initRBEWithXMLFile()) {
-				JOptionPane
-						.showMessageDialog(
-								m_frame,
-								m_resources
-										.getString("OpenPlanERRORFile.warningtext"),
-								m_resources
-										.getString("OpenPlanERRORFile.warningtitle"),
-								JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(m_frame, m_resources.getString("OpenPlanERRORFile.warningtext"),
+						m_resources.getString("OpenPlanERRORFile.warningtitle"), JOptionPane.WARNING_MESSAGE);
 				m_configModel.setSelectedFile(null);
 			}
 
@@ -884,14 +842,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		public void actionPerformed(ActionEvent event) {
 			if (m_configModel.getSelectedFile() == null) {
-				JOptionPane
-						.showMessageDialog(
-								m_frame,
-								m_resources
-										.getString("SavePlanNoRelatedFile.warningtext"),
-								m_resources
-										.getString("SavePlanNoRelatedFile.warningtitle"),
-								JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(m_frame, m_resources.getString("SavePlanNoRelatedFile.warningtext"),
+						m_resources.getString("SavePlanNoRelatedFile.warningtitle"), JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 			m_configModel.SaveToFile();
@@ -905,12 +857,10 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		public SavePlanAsAction() {
 			super(m_resources, "save-plan-as", true);
 
-			m_fileChooser.setDialogTitle(MnemonicHeuristics
-					.removeMnemonicMarkers(m_resources
-							.getString("save-plan-as.label")));
+			m_fileChooser.setDialogTitle(MnemonicHeuristics.removeMnemonicMarkers(m_resources
+					.getString("save-plan-as.label")));
 
-			final String XMLFilesText = m_resources
-					.getString("bench4Q.configXML.label");
+			final String XMLFilesText = m_resources.getString("bench4Q.configXML.label");
 
 			m_fileChooser.addChoosableFileFilter(new FileFilter() {
 				public boolean accept(File file) {
@@ -937,8 +887,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			}
 
 			final File file = m_fileChooser.getSelectedFile();
-			if (JOptionPane.showConfirmDialog(m_frame,
-					m_resources.getString("saveConfirmation.text"),
+			if (JOptionPane.showConfirmDialog(m_frame, m_resources.getString("saveConfirmation.text"),
 					(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 				return;
 			}
@@ -1010,8 +959,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		}
 
 		protected boolean shouldEnable() {
-			return m_processControl.getNumberOfLiveAgents() > 0
-					&& m_configModel.getArgs().isRecord();
+			return m_processControl.getNumberOfLiveAgents() > 0 && m_configModel.getArgs().isRecord();
 		}
 
 	}
@@ -1020,14 +968,33 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		StartProcessesAction() {
 			super(m_resources, "start-processes");
-			m_processControl
-					.addProcessStatusListener(new EnableIfAgentsConnected(this));
+			m_processControl.addProcessStatusListener(new EnableIfAgentsConnected(this));
 		}
 
 		public void actionPerformed(final ActionEvent event) {
+			
+			// modelagem da funcao de tranferencia
+			if (m_configModel.getArgs().getTfOption()) {
+				new Thread(new Runnable() {
 
-			int isRecord = JOptionPane.showConfirmDialog(m_frame,
-					m_resources.getString("RecordConfirmation.text"), "",
+					public void run() {
+						try {
+							int sleeptime = (int)(m_configModel.getArgs().getEbs().get(0).getStdyTime() / 2);
+							Thread.sleep(sleeptime * 1000);
+							Logger.getLogger().info("Enviando mensagem para o LB depois de: "+ sleeptime+" segs");
+							modelingVMlistener();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				}).start();
+			} else {
+				Logger.getLogger().debug("TF desativado ");
+			}
+
+			int isRecord = JOptionPane.showConfirmDialog(m_frame, m_resources.getString("RecordConfirmation.text"), "",
 					JOptionPane.YES_NO_CANCEL_OPTION);
 			if (isRecord == JOptionPane.YES_OPTION) {
 				m_configModel.getArgs().setRecord(true);
@@ -1046,11 +1013,10 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			} else {
 				return;
 			}
-			m_processControl
-					.startWorkerProcesses(null, m_configModel.getArgs());
+			m_processControl.startWorkerProcesses(null, m_configModel.getArgs());
 			m_resultModel.restartTest();
-			ProgressBarFrame pbBarFrame = new ProgressBarFrame(m_frame,
-					m_configModel.getArgs(), m_processControl, m_resources);
+			ProgressBarFrame pbBarFrame = new ProgressBarFrame(m_frame, m_configModel.getArgs(), m_processControl,
+					m_resources);
 
 			pbBarFrame.setVisible(true);
 			if (m_configModel.getArgs().isMoniWeb()) {
@@ -1071,6 +1037,32 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			}
 
 		}
+
+		private void modelingVMlistener() {
+
+			String hostNB = m_configModel.getArgs().getLbHost();
+			int portNB = m_configModel.getArgs().getLbPort();
+			String message = "{\"expmanager\":\"shutdown\",\"vms\":\"0\"}";
+
+			Socket client = null;
+			PrintStream out = null;
+			Logger.getLogger().debug(hostNB + ":" + portNB + "/" + message);
+
+			try {
+				client = new Socket(hostNB, portNB);
+				out = new PrintStream(client.getOutputStream());
+
+				out.print(message);
+				out.close();
+				client.close();
+			} catch (UnknownHostException ex) {
+				Logger.getLogger().error("Couldn't connect to the LB server: "+ex.getMessage());
+			} catch (IOException ex) {
+				Logger.getLogger().error(ex.getMessage());
+			}
+
+		}
+
 	}
 
 	private class ReplayProcessAction extends CustomAction {
@@ -1078,8 +1070,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		ReplayProcessAction() {
 			super(m_resources, "replay-processes");
 
-			m_processControl.addProcessStatusListener(new EnableIfDataRecorded(
-					this));
+			m_processControl.addProcessStatusListener(new EnableIfDataRecorded(this));
 		}
 
 		@Override
@@ -1091,14 +1082,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			}
 			m_configModel.setSelectedFile(file);
 			if (!m_configModel.initRBEWithXMLFile()) {
-				JOptionPane
-						.showMessageDialog(
-								m_frame,
-								m_resources
-										.getString("OpenPlanERRORFile.warningtext"),
-								m_resources
-										.getString("OpenPlanERRORFile.warningtitle"),
-								JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(m_frame, m_resources.getString("OpenPlanERRORFile.warningtext"),
+						m_resources.getString("OpenPlanERRORFile.warningtitle"), JOptionPane.WARNING_MESSAGE);
 				m_configModel.setSelectedFile(null);
 				return;
 			}
@@ -1106,8 +1091,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			m_configModel.getArgs().setRecord(true);
 
 			m_configModel.getArgs().setTime(time);
-			m_processControl
-					.startWorkerProcesses(null, m_configModel.getArgs());
+			m_processControl.startWorkerProcesses(null, m_configModel.getArgs());
 
 		}
 
@@ -1119,12 +1103,10 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		public ReplayAsProcessAction() {
 			super(m_resources, "replay-as-processes");
 
-			m_fileChooser.setDialogTitle(MnemonicHeuristics
-					.removeMnemonicMarkers(m_resources
-							.getString("replay-as-processes.label")));
+			m_fileChooser.setDialogTitle(MnemonicHeuristics.removeMnemonicMarkers(m_resources
+					.getString("replay-as-processes.label")));
 
-			final String XMLFilesText = m_resources
-					.getString("bench4Q.configXML.label");
+			final String XMLFilesText = m_resources.getString("bench4Q.configXML.label");
 
 			m_fileChooser.addChoosableFileFilter(new FileFilter() {
 				public boolean accept(File file) {
@@ -1135,8 +1117,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 					return XMLFilesText;
 				}
 			});
-			m_processControl
-					.addProcessStatusListener(new EnableIfAgentsConnected(this));
+			m_processControl.addProcessStatusListener(new EnableIfAgentsConnected(this));
 
 		}
 
@@ -1153,21 +1134,14 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				return;
 			}
 			final File file = m_fileChooser.getSelectedFile();
-			if (JOptionPane.showConfirmDialog(m_frame,
-					m_resources.getString("openConfirmation.text"),
+			if (JOptionPane.showConfirmDialog(m_frame, m_resources.getString("openConfirmation.text"),
 					(String) getValue(NAME), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 				return;
 			}
 			m_configModel.setSelectedFile(file);
 			if (!m_configModel.initRBEWithXMLFile()) {
-				JOptionPane
-						.showMessageDialog(
-								m_frame,
-								m_resources
-										.getString("OpenPlanERRORFile.warningtext"),
-								m_resources
-										.getString("OpenPlanERRORFile.warningtitle"),
-								JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(m_frame, m_resources.getString("OpenPlanERRORFile.warningtext"),
+						m_resources.getString("OpenPlanERRORFile.warningtitle"), JOptionPane.WARNING_MESSAGE);
 				m_configModel.setSelectedFile(null);
 				return;
 			}
@@ -1183,8 +1157,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			m_configModel.getArgs().setTime(name);
 
 			time = name;
-			m_processControl
-					.startWorkerProcesses(null, m_configModel.getArgs());
+			m_processControl.startWorkerProcesses(null, m_configModel.getArgs());
 		}
 
 	}
@@ -1192,8 +1165,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 	private final class ResetProcessesAction extends CustomAction {
 		ResetProcessesAction() {
 			super(m_resources, "reset-processes");
-			m_processControl
-					.addProcessStatusListener(new EnableIfAgentsConnected(this));
+			m_processControl.addProcessStatusListener(new EnableIfAgentsConnected(this));
 		}
 
 		public void actionPerformed(ActionEvent event) {
@@ -1204,22 +1176,17 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 	private final class StopProcessesAction extends CustomAction {
 		StopProcessesAction() {
 			super(m_resources, "stop-processes");
-			m_processControl
-					.addProcessStatusListener(new EnableIfAgentsConnected(this));
+			m_processControl.addProcessStatusListener(new EnableIfAgentsConnected(this));
 		}
 
 		public void actionPerformed(ActionEvent event) {
 
 			try {
-				final int chosen = m_optionalConfirmDialog
-						.show(m_resources
-								.getString("stopProcessesConfirmation.text"),
-								(String) getValue(NAME),
-								JOptionPane.OK_CANCEL_OPTION,
-								"stopProcessesAsk");
+				final int chosen = m_optionalConfirmDialog.show(
+						m_resources.getString("stopProcessesConfirmation.text"), (String) getValue(NAME),
+						JOptionPane.OK_CANCEL_OPTION, "stopProcessesAsk");
 
-				if (chosen != JOptionPane.OK_OPTION
-						&& chosen != OptionalConfirmDialog.DONT_ASK_OPTION) {
+				if (chosen != JOptionPane.OK_OPTION && chosen != OptionalConfirmDialog.DONT_ASK_OPTION) {
 					return;
 				}
 			} catch (Bench4QException e) {
@@ -1242,12 +1209,10 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 	}
 
 	private boolean isXMLFile(File f) {
-		return f != null && (!f.exists() || f.isFile())
-				&& f.getName().endsWith(".xml");
+		return f != null && (!f.exists() || f.isFile()) && f.getName().endsWith(".xml");
 	}
 
 	private boolean isBQFile(File f) {
-		return f != null && (!f.exists() || f.isFile())
-				&& f.getName().endsWith(".bq");
+		return f != null && (!f.exists() || f.isFile()) && f.getName().endsWith(".bq");
 	}
 }
