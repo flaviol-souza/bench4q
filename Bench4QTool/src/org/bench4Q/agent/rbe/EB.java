@@ -38,13 +38,13 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
 
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.HttpVersion;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.cookie.Cookie;
 import org.bench4Q.agent.rbe.communication.Args;
 import org.bench4Q.agent.rbe.communication.EBStats;
 import org.bench4Q.agent.rbe.trans.Transition;
@@ -72,7 +72,7 @@ public abstract class EB extends Thread {
 
 	protected Args m_args;
 
-	/**
+	/**()
 	 * CUSTOMER_ID. See TPC-W Spec.
 	 */
 	public int cid;
@@ -207,7 +207,7 @@ public abstract class EB extends Thread {
 	 */
 	public static String searchResultURL;
 	/**
-	 * 
+	 * ()
 	 */
 	public static String newProdURL;
 	/**
@@ -257,6 +257,7 @@ public abstract class EB extends Thread {
 	public long start;
 	public long end;
 	public HttpClient m_Client;
+	public HttpClientContext m_Client_context;
 	public boolean joke = false;
 
 	/**
@@ -291,25 +292,30 @@ public abstract class EB extends Thread {
 		double tolerance = tolerance(this.curState);
 		html = "";
 
-		GetMethod httpget = new GetMethod(url);
+		HttpGet httpget = new HttpGet(url);
 		try {
 
 			if (tolerance != 0.0D) {
-				httpget.getParams().setSoTimeout((int) (tolerance * 1000.0D));
+				// XXX: custom() should be accessed in a static way. What does it means? 
+				httpget.getConfig().custom().setSocketTimeout((int) (tolerance * 1000.0D));
+				httpget.getConfig().custom().setConnectTimeout((int) (tolerance * 1000.0D));
+				// TODO: what is setSoTimeout() in HttpClient 3.x ?
+				//httpget.getParams().setSoTimeout((int) (tolerance * 1000.0D));
 			}
 			this.start = System.currentTimeMillis();
-			int statusCode = this.m_Client.executeMethod(httpget);
+			this.m_Client_context = HttpClientContext.create();
+			HttpResponse response = this.m_Client.execute(httpget, this.m_Client_context);
+			int statusCode = response.getStatusLine().getStatusCode();
 			this.end = System.currentTimeMillis();
-			Cookie[] cc = this.m_Client.getState().getCookies();
-			for (int i = 0; i < cc.length; i++) {
-				if (cc[i].getName().equalsIgnoreCase("jsessionid")) {
-					this.sessionID = cc[i].getValue();
+			for (Cookie cookie : this.m_Client_context.getCookieStore().getCookies()) {
+				if (cookie.getName().equalsIgnoreCase("jsessionid")) {
+					this.sessionID = cookie.getValue();
 				}
 			}
 
 			if (sessionID == null) {
 				String cString = null;
-				Header[] header = httpget.getRequestHeaders();
+				Header[] header =	this.m_Client_context.getRequest().getAllHeaders();
 				for (int i = 0; i < header.length; i++) {
 					if (header[i].getName().equalsIgnoreCase("cookie")) {
 						cString = header[i].getValue();
@@ -331,7 +337,8 @@ public abstract class EB extends Thread {
 				return false;
 			}
 
-			BufferedReader bin = new BufferedReader(new InputStreamReader(httpget.getResponseBodyAsStream()));
+				
+			BufferedReader bin = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 			StringBuilder result = new StringBuilder();
 			String s;
 			while ((s = bin.readLine()) != null) {
@@ -346,7 +353,6 @@ public abstract class EB extends Thread {
 			httpget.releaseConnection();
 		}
 
-		int statusCode;
 		httpget.releaseConnection();
 		if (!this.m_args.isGetImage()) {
 			return true;
@@ -374,7 +380,8 @@ public abstract class EB extends Thread {
 						i--;
 						max--;
 					}
-				}
+					int statusCode;
+			}
 			} catch (InterruptedException inte) {
 				EBStats.getEBStats().error(state, "get image ERROR.", url, this.isVIP);
 				return true;

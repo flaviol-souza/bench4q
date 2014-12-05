@@ -132,7 +132,7 @@ public class EBClosed extends EB {
 				// System.out.println(isVIP);
 				this.first = true;
 				test();
-				this.m_Client.getState().clearCookies();
+				this.m_Client_context.getCookieStore().clear();
 			} else {
 				try {
 					Thread.sleep(1000L);
