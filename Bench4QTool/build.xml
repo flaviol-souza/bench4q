@@ -66,6 +66,7 @@
     <target name="Console">
         <java classname="org.bench4Q.Console" failonerror="true" fork="yes">
             <classpath refid="Bench4QTool.classpath"/>
+	    <arg value="${arg0}"/>
         </java>
     </target>
 </project>

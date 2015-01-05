@@ -975,6 +975,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			
 			// modelagem da funcao de tranferencia
 			if (m_configModel.getArgs().getTfOption()) {
+				Logger.getLogger().debug("TF ativado ");
 				new Thread(new Runnable() {
 
 					public void run() {
@@ -1038,6 +1039,9 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		}
 
+		/**
+		 * Permite desligar maquinas virtuais em um tempo x. Pelo geral é na metade do tempo 
+		 * */
 		private void modelingVMlistener() {
 
 			String hostNB = m_configModel.getArgs().getLbHost();
