@@ -102,7 +102,7 @@ public class TransShopCart extends Transition {
 		if (id == EB.ID_UNKNOWN) {
 			EBStats.getEBStats().error(
 					14,
-					"findId: Unable to find " + name
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" findId: Unable to find " + name
 							+ " in shopping cart page.", url, eb.isVIP);
 		}
 
@@ -116,7 +116,7 @@ public class TransShopCart extends Transition {
 		if (id == null) {
 			EBStats.getEBStats().error(
 					14,
-					"findSessionID: Unable to find " + name
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" findSessionID: Unable to find " + name
 							+ " tag in shopping cart page.", url, eb.isVIP);
 		}
 

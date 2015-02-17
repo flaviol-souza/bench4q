@@ -84,7 +84,7 @@ public class TransShopCartRef extends TransShopCart {
 
 		if (c == 0) {
 			EBStats.getEBStats().error(14,
-					"Unable to find QTY in shopping cart page.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find QTY in shopping cart page.", "???", eb.isVIP);
 			return ("");
 		}
 

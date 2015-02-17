@@ -91,7 +91,7 @@ public class TransBuyReq extends Transition {
 			eb.cid = eb.findID(html, URLUtil.yourCID);
 			if (eb.cid == EB.ID_UNKNOWN) {
 				EBStats.getEBStats().error(5,
-						"Unable to find C_ID in buy request page page.",
+						((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find C_ID in buy request page page.",
 						"<???>", eb.isVIP);
 			}
 		}

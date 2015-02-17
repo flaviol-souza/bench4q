@@ -11,8 +11,8 @@
 		<tolerance>0.0</tolerance>
 		<retry>3</retry>
 		<thinktime>0.1</thinktime>
-		<tfOption>false</tfOption>
-		<mix>shopping</mix>
+		<tfOption>true</tfOption>
+		<mix>browsing</mix>
 		<slow>0.0</slow>
 		<getImage>false</getImage>
 		<baseURL>http://10.0.0.120:8181/bench4q</baseURL>
@@ -20,10 +20,10 @@
 		<lbPort>8889</lbPort>
 		<nvms>0</nvms>
 		<webport>10724</webport>
-		<databaseURL>133.133.133.135</databaseURL>
+		<databaseURL>10.0.0.231</databaseURL>
 		<dbport>10724</dbport>
 		<ebs>
-			<baseLoad>220</baseLoad>
+			<baseLoad>200</baseLoad>
 			<randomLoad>0</randomLoad>
 			<rate>0</rate>
 			<triggerTime>0</triggerTime>

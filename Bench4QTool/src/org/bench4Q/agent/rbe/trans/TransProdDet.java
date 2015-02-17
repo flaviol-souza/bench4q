@@ -66,7 +66,7 @@ public class TransProdDet extends Transition {
 
 		if (iid.size() == 0) {
 			EBStats.getEBStats().error(11,
-					"Unable to find any items for product detail.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find any items for product detail.", "???", eb.isVIP);
 			return ("");
 		}
 

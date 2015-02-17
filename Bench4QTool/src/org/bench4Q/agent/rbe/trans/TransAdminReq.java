@@ -54,7 +54,7 @@ public class TransAdminReq extends Transition {
 		i = iid.find(html);
 		if (i == -1) {
 			EBStats.getEBStats().error(2,
-					"Unable to find I_ID i n admin request page.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find I_ID i n admin request page.", "???", eb.isVIP);
 			return ("");
 		}
 		i = i + iid.length();
@@ -62,7 +62,7 @@ public class TransAdminReq extends Transition {
 		e = CharSetStrPattern.notDigit.find(html.substring(i));
 		if (e == -1) {
 			EBStats.getEBStats().error(2,
-					"Unable to find end of I_ID in admin request page.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find end of I_ID in admin request page.", "???", eb.isVIP);
 			return ("");
 		}
 		e = e + i;

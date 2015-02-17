@@ -51,7 +51,7 @@ public class TransShopCartAdd extends TransShopCart {
 		i = iid.find(html);
 		if (i == -1) {
 			EBStats.getEBStats().error(14,
-					"Unable to find I_ID in product detail page.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find I_ID in product detail page.", "???", eb.isVIP);
 			return ("");
 		}
 		i = i + iid.length();
@@ -59,7 +59,7 @@ public class TransShopCartAdd extends TransShopCart {
 		e = CharSetStrPattern.notDigit.find(html.substring(i));
 		if (e == -1) {
 			EBStats.getEBStats().error(14,
-					"Unable to find I_ID in product detail page.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find I_ID in product detail page.", "???", eb.isVIP);
 			return ("");
 		}
 		e = e + i;

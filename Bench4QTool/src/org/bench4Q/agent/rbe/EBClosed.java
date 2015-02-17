@@ -126,6 +126,7 @@ public class EBClosed extends EB {
 	}
 
 	public void run() {
+		this.startExp = System.currentTimeMillis();
 		while (!this.terminate) {
 			if (this.test) {
 				this.isVIP = this.rand.nextDouble() < this.rate ? true : false;
@@ -150,15 +151,18 @@ public class EBClosed extends EB {
 		long startGet = System.currentTimeMillis();
 		long currentTimeMillis = System.currentTimeMillis();
 		this.sessionStart = startGet;
-
+		
+		
 		while ((this.maxTrans == -1) || (this.maxTrans > 0)) {
 			currentTimeMillis = System.currentTimeMillis();
 			// permite terminar as requisicoes antes do fim do experimento
 			if (currentTimeMillis > this.propertiesEB.getTimeEnd() && this.propertiesEB.isFrenquency()) {
 				Logger.getLogger().debug(
-						this.cid + " is ENDING ... " + (this.propertiesEB.getTimeEnd() - currentTimeMillis));
+						this.getName() + " is ENDING ... " + (currentTimeMillis - startExp)/1000);
 				this.test = false;
 			}
+			
+			
 
 			if (currentTimeMillis >= this.propertiesEB.getTimeStart()) {
 				if (this.terminate || !this.test) {
@@ -167,7 +171,9 @@ public class EBClosed extends EB {
 							this.Ordered, this.isVIP);
 					return;
 				}
-
+				
+				
+				
 				long endGet;
 				if (this.nextReq != null) {
 					// Check if user session is finished.
@@ -204,13 +210,14 @@ public class EBClosed extends EB {
 					}
 
 					startGet = System.currentTimeMillis();
-					sign = getHTML(this.curState, this.nextReq);	
+					sign = getHTML(this.curState, this.nextReq, (currentTimeMillis - startExp)/1000);	
 					
 					endGet = System.currentTimeMillis();
 
 					if (!sign) {
 						EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 						initialize();
+						
 						continue;
 					}
 					this.first = false;

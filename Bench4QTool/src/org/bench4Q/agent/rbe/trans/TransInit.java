@@ -62,7 +62,7 @@ public class TransInit extends Transition {
 					URLUtil.endSessionID);
 			if (eb.sessionID == null) {
 				EBStats.getEBStats().error(0,
-						"findSessionID: Unable to find sessionid",
+						((System.currentTimeMillis() - eb.getStartExp())/1000)+" findSessionID: Unable to find sessionid",
 						"<TransInit>", eb.isVIP);
 			}
 		}

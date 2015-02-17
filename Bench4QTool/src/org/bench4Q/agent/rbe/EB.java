@@ -35,6 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Vector;
 
@@ -259,6 +260,8 @@ public abstract class EB extends Thread {
 	public HttpClient m_Client;
 	public boolean joke = false;
 
+	public long startExp = 0L;
+	
 	/**
 	 * 
 	 */
@@ -280,13 +283,21 @@ public abstract class EB extends Thread {
 	 * 
 	 */
 	public final CharStrPattern quotePat = new CharStrPattern('\"');
+	
+	public long getStartExp() {
+		return startExp;
+	}
+
+	public void setStartExp(long startExp) {
+		this.startExp = startExp;
+	}
 
 	/**
 	 * @param state
 	 * @param url
 	 * @return boolean
 	 */
-	public synchronized boolean getHTML(int state, String url) {
+	public synchronized boolean getHTML(int state, String url, long expTime) {
 
 		double tolerance = tolerance(this.curState);
 		html = "";
@@ -327,7 +338,8 @@ public abstract class EB extends Thread {
 			}
 
 			if (statusCode != HttpStatus.SC_OK) {
-				EBStats.getEBStats().error(state, "HTTP response ERROR: " + statusCode, url, isVIP);
+				
+				EBStats.getEBStats().error(state, " "+String.valueOf(expTime)+ " " + statusCode, url, isVIP);
 				return false;
 			}
 
@@ -339,8 +351,8 @@ public abstract class EB extends Thread {
 			}
 			this.html = new String(result);
 		} catch (Exception e) {
-			EBStats.getEBStats().error(state, "get methed ERROR.", url, isVIP);
-			Logger.getLogger().debug("get methed ERROR. " + e.toString());
+			EBStats.getEBStats().error(state, " "+String.valueOf(expTime)+" ", url, isVIP);
+			Logger.getLogger().debug("getHTML method ERROR: " + e.toString());
 			return false;
 		} finally {
 			httpget.releaseConnection();
@@ -356,8 +368,8 @@ public abstract class EB extends Thread {
 		try {
 			u = new URL(url);
 		} catch (MalformedURLException e) {
-			EBStats.getEBStats().error(state, "get image ERROR.", url, this.isVIP);
-			Logger.getLogger().debug("get image ERROR. "+e.toString());
+			EBStats.getEBStats().error(state, " "+String.valueOf(expTime)+" ", url, this.isVIP);
+			Logger.getLogger().debug("getHTML image ERROR. "+e.toString());
 			return false;
 		}
 

@@ -77,11 +77,9 @@ public class FrequencySettings implements Serializable {
 			if (index >= testPhase.getFrequency().getQuantity()) {
 				propertiesEB.setTimeStart(0);
 				propertiesEB.setTimeEnd(testPhase.getStdyTime());
-				Logger.getLogger().debug("normal: " + index);
 			} else {
 				propertiesEB.setTimeStart(testPhase.getFrequency().getStartTime());
 				propertiesEB.setTimeEnd(testPhase.getFrequency().getDurationTime());
-				Logger.getLogger().debug("special: " + index);
 			}
 		}
 

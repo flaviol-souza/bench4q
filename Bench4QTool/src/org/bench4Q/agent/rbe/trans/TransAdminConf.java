@@ -56,7 +56,7 @@ public class TransAdminConf extends Transition {
 		i = iid.find(html);
 		if (i == -1) {
 			EBStats.getEBStats().error(1,
-					"Unable to find I_ID in admin confirm page.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find I_ID in admin confirm page.", "???", eb.isVIP);
 			return ("");
 		}
 		i = i + iid.length();
@@ -64,7 +64,7 @@ public class TransAdminConf extends Transition {
 		e = CharSetStrPattern.notDigit.find(html.substring(i));
 		if (e == -1) {
 			EBStats.getEBStats().error(1,
-					"Unable to find end of I_ID in admin confirm page.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find end of I_ID in admin confirm page.", "???", eb.isVIP);
 			return ("");
 		}
 		e = e + i;

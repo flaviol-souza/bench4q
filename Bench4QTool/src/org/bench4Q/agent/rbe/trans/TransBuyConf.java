@@ -62,19 +62,19 @@ public class TransBuyConf extends Transition {
 
 		}
 
-		n = findName(fnamePat, html, eb.fname, "First name", eb.isVIP);
+		n = findName(eb, fnamePat, html, eb.fname, "First name", eb.isVIP);
 		if (eb.fname == null) {
 			eb.fname = n;
 		}
 
-		n = findName(lnamePat, html, eb.lname, "Last name", eb.isVIP);
+		n = findName(eb, lnamePat, html, eb.lname, "Last name", eb.isVIP);
 		if (eb.lname == null) {
 			eb.lname = n;
 		}
 
 		if (eb.cid == EB.ID_UNKNOWN) {
 			EBStats.getEBStats().error(4,
-					"CID not known transitioning to buy confirm page.", "???", eb.isVIP);
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" CID not known transitioning to buy confirm page.", "???", eb.isVIP);
 		}
 		url = url + "?" + URLUtil.field_cctype + "="
 				+ URLUtil.unifCCType(eb.rand);
@@ -119,7 +119,7 @@ public class TransBuyConf extends Transition {
 		return (eb.addIDs(url));
 	}
 
-	private String findName(StrStrPattern namePat, String html, String prev,
+	private String findName(EB eb, StrStrPattern namePat, String html, String prev,
 			String nameType, boolean isVIP) {
 		String name;
 
@@ -127,7 +127,7 @@ public class TransBuyConf extends Transition {
 		if (i == -1) {
 			EBStats.getEBStats().error(
 					4,
-					"Unable to find " + nameType
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find " + nameType
 							+ " in HTML for buy request page.", "???", isVIP);
 			return ("");
 		}
@@ -137,7 +137,7 @@ public class TransBuyConf extends Transition {
 		if (j == -1) {
 			EBStats.getEBStats().error(
 					4,
-					"Unable to find " + nameType
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Unable to find " + nameType
 							+ " in HTML for buy request page.", "???", isVIP);
 			return ("");
 		}
@@ -153,7 +153,7 @@ public class TransBuyConf extends Transition {
 		if ((prev != null) && (!prev.equals(name))) {
 			EBStats.getEBStats().error(
 					4,
-					"Known " + nameType + " (" + prev
+					((System.currentTimeMillis() - eb.getStartExp())/1000)+" Known " + nameType + " (" + prev
 							+ ") does not equal name found in HTML (" + name
 							+ ") in buy request page.", "????", isVIP);
 		}

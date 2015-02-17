@@ -124,7 +124,9 @@ public class EBOpen extends EB {
 		}
 	}
 
+	
 	public void run() {
+		this.startExp = System.currentTimeMillis(); 
 		long tt = 0L; // Think Time.
 		boolean sign = true;
 		long wirt_t1 = System.currentTimeMillis();
@@ -170,7 +172,7 @@ public class EBOpen extends EB {
 				}
 
 				wirt_t1 = System.currentTimeMillis();
-				sign = getHTML(this.curState, this.nextReq);
+				sign = getHTML(this.curState, this.nextReq, (currentTimeMillis - startExp)/1000);
 				if (sign == false) {
 					EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 					return;
