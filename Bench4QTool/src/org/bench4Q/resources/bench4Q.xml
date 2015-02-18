@@ -23,7 +23,7 @@
 		<databaseURL>10.0.0.231</databaseURL>
 		<dbport>10724</dbport>
 		<ebs>
-			<baseLoad>200</baseLoad>
+			<baseLoad>190</baseLoad>
 			<randomLoad>0</randomLoad>
 			<rate>0</rate>
 			<triggerTime>0</triggerTime>

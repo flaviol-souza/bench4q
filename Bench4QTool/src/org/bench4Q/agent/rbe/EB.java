@@ -261,7 +261,7 @@ public abstract class EB extends Thread {
 	public boolean joke = false;
 
 	public long startExp = 0L;
-	
+
 	/**
 	 * 
 	 */
@@ -283,7 +283,7 @@ public abstract class EB extends Thread {
 	 * 
 	 */
 	public final CharStrPattern quotePat = new CharStrPattern('\"');
-	
+
 	public long getStartExp() {
 		return startExp;
 	}
@@ -338,8 +338,8 @@ public abstract class EB extends Thread {
 			}
 
 			if (statusCode != HttpStatus.SC_OK) {
-				
-				EBStats.getEBStats().error(state, " "+String.valueOf(expTime)+ " " + statusCode, url, isVIP);
+
+				EBStats.getEBStats().error(state, " " + String.valueOf(expTime) + " " + statusCode, url, isVIP);
 				return false;
 			}
 
@@ -351,8 +351,8 @@ public abstract class EB extends Thread {
 			}
 			this.html = new String(result);
 		} catch (Exception e) {
-			EBStats.getEBStats().error(state, " "+String.valueOf(expTime)+" ", url, isVIP);
-			Logger.getLogger().debug("getHTML method ERROR: " + e.toString());
+			EBStats.getEBStats().error(state, " " + String.valueOf(expTime) + " ", url, isVIP);
+			Logger.getLogger().debug("getHTML ERROR: " + e.toString());
 			return false;
 		} finally {
 			httpget.releaseConnection();
@@ -368,8 +368,8 @@ public abstract class EB extends Thread {
 		try {
 			u = new URL(url);
 		} catch (MalformedURLException e) {
-			EBStats.getEBStats().error(state, " "+String.valueOf(expTime)+" ", url, this.isVIP);
-			Logger.getLogger().debug("getHTML image ERROR. "+e.toString());
+			EBStats.getEBStats().error(state, " " + String.valueOf(expTime) + " ", url, this.isVIP);
+			Logger.getLogger().debug("getHTML new URL " + e.toString());
 			return false;
 		}
 
@@ -388,7 +388,7 @@ public abstract class EB extends Thread {
 					}
 				}
 			} catch (InterruptedException inte) {
-				EBStats.getEBStats().error(state, "get image ERROR.", url, this.isVIP);
+				EBStats.getEBStats().error(state, "getHTML image ERROR.", url, this.isVIP);
 				return true;
 			}
 		}
@@ -454,7 +454,7 @@ public abstract class EB extends Thread {
 			// tt_scale)+"\tscale:\t"+tt_scale);
 			return ((long) (result * tt_scale));
 		} else {
-			//XXX nao é o lugar para este tipo de think time
+			// XXX nao é o lugar para este tipo de think time
 			/****************************************************
 			 * generate the user think times from a 2-state MAP e.g., the MAP
 			 * has mean = 7second, so r=1000*mean(ms)

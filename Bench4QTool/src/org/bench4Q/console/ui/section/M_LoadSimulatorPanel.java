@@ -707,6 +707,12 @@ public class M_LoadSimulatorPanel extends JPanel {
 		}
 	}
 
+	/***
+	 * XXX: Definir melhor este metodo, porque nao e posivel ativalo quando o experimento esta
+	 * executando 
+	 *  
+	 * @param evt
+	 */
 	private void modelingVMlistener(java.awt.event.ActionEvent evt) {
 
 		String hostNB = m_configModel.getArgs().getLbHost();
