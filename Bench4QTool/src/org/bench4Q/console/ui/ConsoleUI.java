@@ -1040,7 +1040,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 		}
 
 		/**
-		 * Permite desligar maquinas virtuais em um tempo x. Pelo geral é na metade do tempo 
+		 * Permite desligar maquinas virtuais em um tempo x. Pelo geral e na metade do tempo 
 		 * */
 		private void modelingVMlistener() {
 
