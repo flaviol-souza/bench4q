@@ -973,28 +973,6 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		public void actionPerformed(final ActionEvent event) {
 			
-			// modelagem da funcao de tranferencia
-			if (m_configModel.getArgs().getTfOption()) {
-				Logger.getLogger().debug("TF ativado ");
-				new Thread(new Runnable() {
-
-					public void run() {
-						try {
-							int sleeptime = (int)(m_configModel.getArgs().getEbs().get(0).getStdyTime() / 2);
-							Thread.sleep(sleeptime * 1000);
-							Logger.getLogger().info("Enviando mensagem para o LB depois de: "+ sleeptime+" segs");
-							modelingVMlistener();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
-				}).start();
-			} else {
-				Logger.getLogger().debug("TF desativado ");
-			}
-
 			int isRecord = JOptionPane.showConfirmDialog(m_frame, m_resources.getString("RecordConfirmation.text"), "",
 					JOptionPane.YES_NO_CANCEL_OPTION);
 			if (isRecord == JOptionPane.YES_OPTION) {
@@ -1014,6 +992,29 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			} else {
 				return;
 			}
+			
+			// modelagem da funcao de tranferencia
+			if (m_configModel.getArgs().getTfOption()) {
+				Logger.getLogger().debug("TF ativado ");
+				new Thread(new Runnable() {
+
+					public void run() {
+						try {
+							int sleeptime = (int)(m_configModel.getArgs().getEbs().get(0).getStdyTime() / 2);
+							Thread.sleep(sleeptime * 1000);
+							Logger.getLogger().info("Enviando mensagem ao LB depois de: "+ sleeptime+" segs");
+							modelingVMlistener();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				}).start();
+			} else {
+				Logger.getLogger().debug("TF desativado ");
+			}
+			
 			m_processControl.startWorkerProcesses(null, m_configModel.getArgs());
 			m_resultModel.restartTest();
 			ProgressBarFrame pbBarFrame = new ProgressBarFrame(m_frame, m_configModel.getArgs(), m_processControl,
@@ -1046,7 +1047,8 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 			String hostNB = m_configModel.getArgs().getLbHost();
 			int portNB = m_configModel.getArgs().getLbPort();
-			String message = "{\"expmanager\":\"shutdown\",\"vms\":\"0\"}";
+			int nvms = m_configModel.getArgs().getNvms();
+			String message = "{\"expmanager\":\"shutdown\",\"vms\":\""+nvms+"\"}";
 
 			Socket client = null;
 			PrintStream out = null;

@@ -33,7 +33,7 @@
 			<br>
 			<br>
 			<h1>
-				Bench4Q version 1.0
+				Bench4Q version 1.0 PostgreSQL
 			</h1>
 			<br>
 			<br>

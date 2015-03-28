@@ -30,13 +30,13 @@
 package org.bench4Q.servlet;
 
 import java.sql.Connection;
-
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Enumeration;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.naming.InitialContext;
@@ -116,6 +116,18 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Permite gerar um processamento e tempo adicional
+	 * */
+	public static void waitCustom(){
+		String s = "first";
+        Random r = new Random();
+        int end = r.nextInt(1000);
+        for (int i = 0; i < end; i++) {
+            s += "root";
+        }
+	}
 
 	public static String[] getName(int c_id) {
 		String name[] = new String[2];
@@ -155,6 +167,7 @@ public class Database {
 	}
 
 	public static Book getBook(int i_id) {
+		waitCustom();
 		Book book = null;
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -182,6 +195,7 @@ public class Database {
 	}
 
 	public static Customer getCustomer(String UNAME) {
+		waitCustom();
 		Customer cust = null;
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -215,6 +229,7 @@ public class Database {
 	}
 
 	public static Vector doSubjectSearch(String search_key) {
+		waitCustom();
 		Vector vec = new Vector();
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -245,6 +260,7 @@ public class Database {
 	}
 
 	public static Vector doTitleSearch(String search_key) {
+		waitCustom();
 		Vector vec = new Vector();
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -275,6 +291,7 @@ public class Database {
 	}
 
 	public static Vector doAuthorSearch(String search_key) {
+		waitCustom();
 		Vector vec = new Vector();
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -305,6 +322,7 @@ public class Database {
 	}
 
 	public static Vector getNewProducts(String subject) {
+		waitCustom();
 		Vector vec = new Vector(); // Vector of Books
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -338,6 +356,7 @@ public class Database {
 	}
 
 	public static Vector getBestSellers(String subject) {
+		waitCustom();
 		Vector vec = new Vector(); // Vector of Books
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -373,6 +392,7 @@ public class Database {
 	}
 
 	public static void getRelated(int i_id, Vector i_id_vec, Vector i_thumbnail_vec) {
+		waitCustom();
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -406,6 +426,7 @@ public class Database {
 	}
 
 	public static void adminUpdate(int i_id, double cost, String image, String thumbnail) {
+		waitCustom();
 		Connection con = null;
 		PreparedStatement statement = null;
 		PreparedStatement related = null;
@@ -484,6 +505,7 @@ public class Database {
 	}
 
 	public static String GetUserName(int C_ID) {
+		waitCustom();
 		String u_name = null;
 		Connection con = null;
 		PreparedStatement get_user_name = null;
@@ -512,6 +534,7 @@ public class Database {
 	}
 
 	public static String GetPassword(String C_UNAME) {
+		waitCustom();
 		String passwd = null;
 		Connection con = null;
 		PreparedStatement get_passwd = null;
@@ -541,6 +564,7 @@ public class Database {
 	// This function gets the value of I_RELATED1 for the row of
 	// the item table corresponding to I_ID
 	private static int getRelated1(int I_ID, Connection con) {
+		waitCustom();
 		int related1 = -1;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -563,6 +587,7 @@ public class Database {
 	}
 
 	public static Order GetMostRecentOrder(String c_uname, Vector order_lines) {
+		waitCustom();
 		Connection con = null;
 		PreparedStatement get_most_recent_order_id = null;
 		PreparedStatement get_order = null;
@@ -661,6 +686,7 @@ public class Database {
 
 	// Called from: TPCW_shopping_cart_interaction
 	public static int createEmptyCart() {
+		waitCustom();
 		Connection con = null;
 		Statement insert_cart = null;
 		ResultSet rs = null;
@@ -691,6 +717,7 @@ public class Database {
 	}
 
 	public static Cart doCart(int SHOPPING_ID, Integer I_ID, Vector ids, Vector quantities) {
+		waitCustom();
 		Cart cart = null;
 		Connection con = null;
 
@@ -720,6 +747,7 @@ public class Database {
 	// otherwise we increment the quantity.
 
 	private static void addItem(Connection con, int SHOPPING_ID, int I_ID) {
+		waitCustom();
 		PreparedStatement find_entry = null;
 		ResultSet rs = null;
 		try {
@@ -765,6 +793,7 @@ public class Database {
 	}
 
 	private static void refreshCart(Connection con, int SHOPPING_ID, Vector ids, Vector quantities) {
+		waitCustom();
 		PreparedStatement statement = null;
 		int i;
 		try {
@@ -799,6 +828,7 @@ public class Database {
 	}
 
 	private static void addRandomItemToCartIfNecessary(Connection con, int SHOPPING_ID) {
+		waitCustom();
 		// check and see if the cart is empty. If it's not, we do
 		// nothing.
 		int related_item = 0;
@@ -830,6 +860,7 @@ public class Database {
 
 	// Only called from this class
 	private static void resetCartTime(Connection con, int SHOPPING_ID) {
+		waitCustom();
 		PreparedStatement statement = null;
 		try {
 			statement = con
@@ -847,6 +878,7 @@ public class Database {
 	}
 
 	public static Cart getCart(int SHOPPING_ID, double c_discount) {
+		waitCustom();
 		Cart mycart = null;
 		Connection con = null;
 		try {
@@ -863,6 +895,7 @@ public class Database {
 
 	// time .05s
 	private static Cart getCart(Connection con, int SHOPPING_ID, double c_discount) {
+		waitCustom();
 		Cart mycart = null;
 		PreparedStatement get_cart = null;
 		ResultSet rs = null;
@@ -886,6 +919,7 @@ public class Database {
 	// This should probably return an error code if the customer
 	// doesn't exist, but ...
 	public static void refreshSession(int C_ID) {
+		waitCustom();
 		Connection con = null;
 		PreparedStatement updateLogin = null;
 		try {
@@ -908,6 +942,7 @@ public class Database {
 	}
 
 	public static Customer createNewCustomer(Customer cust) {
+		waitCustom();
 		Connection con = null;
 		PreparedStatement insert_customer_row = null;
 		ResultSet rs = null;
@@ -977,7 +1012,7 @@ public class Database {
 
 	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type,
 			long cc_number, String cc_name, Date cc_expiry, String shipping) {
-
+		waitCustom();
 		BuyConfirmResult result = new BuyConfirmResult();
 		Connection con = null;
 
@@ -1003,7 +1038,7 @@ public class Database {
 	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type,
 			long cc_number, String cc_name, Date cc_expiry, String shipping, String street_1,
 			String street_2, String city, String state, String zip, String country) {
-
+		waitCustom();
 		BuyConfirmResult result = new BuyConfirmResult();
 		Connection con = null;
 		try {
@@ -1028,6 +1063,7 @@ public class Database {
 
 	// DB query time: .05s
 	public static double getCDiscount(Connection con, int c_id) {
+		waitCustom();
 		double c_discount = 0.0;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -1055,6 +1091,7 @@ public class Database {
 
 	// DB time: .05s
 	public static int getCAddrID(Connection con, int c_id) {
+		waitCustom();
 		int c_addr_id = 0;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -1080,6 +1117,7 @@ public class Database {
 	}
 
 	public static int getCAddr(Connection con, int c_id) {
+		waitCustom();
 		int c_addr_id = 0;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -1110,6 +1148,7 @@ public class Database {
 			// shopping
 			// cart
 			int ship_addr_id) {
+		waitCustom();
 		PreparedStatement statement = null;
 
 		// Updates the CC_XACTS table
@@ -1146,6 +1185,7 @@ public class Database {
 	public static void clearCart(Connection con, int shopping_id) {
 		// Empties all the lines from the shopping_cart_line for the
 		// shopping id. Does not remove the actually shopping cart
+		waitCustom();
 		PreparedStatement statement = null;
 		try {
 			// Prepare SQL
@@ -1168,6 +1208,7 @@ public class Database {
 			String street1, String street2, String city, String state, String zip, String country) {
 		// returns the address id of the specified address. Adds a
 		// new address to the table if needed
+		waitCustom();
 		int addr_id = 0;
 		PreparedStatement get_co_id = null;
 		PreparedStatement match_address = null;
@@ -1231,6 +1272,7 @@ public class Database {
 
 	public static int enterOrder(Connection con, int customer_id, Cart cart, int ship_addr_id,
 			String shipping, double c_discount) {
+		waitCustom();
 		int o_id = 0;
 		PreparedStatement insert_row = null;
 		ResultSet rs = null;
@@ -1282,6 +1324,7 @@ public class Database {
 
 	public static void addOrderLine(Connection con, int ol_id, int ol_o_id, int ol_i_id,
 			int ol_qty, double ol_discount, String ol_comment) {
+		waitCustom();
 		int success = 0;
 		PreparedStatement insert_row = null;
 		try {
@@ -1306,6 +1349,7 @@ public class Database {
 	}
 
 	public static int getStock(Connection con, int i_id) {
+		waitCustom();
 		int stock = 0;
 		PreparedStatement get_stock = null;
 		ResultSet rs = null;
@@ -1329,6 +1373,7 @@ public class Database {
 	}
 
 	public static void setStock(Connection con, int i_id, int new_stock) {
+		waitCustom();
 		PreparedStatement update_row = null;
 		try {
 			update_row = con.prepareStatement("UPDATE item SET i_stock = ? WHERE i_id = ? ;");
@@ -1345,6 +1390,7 @@ public class Database {
 	}
 
 	public static void verifyDBConsistency() {
+		waitCustom();
 		Connection con = null;
 		PreparedStatement get_ids = null;
 		ResultSet rs = null;
@@ -1400,5 +1446,5 @@ public class Database {
 			closeConnection(con);
 		}
 	}
-
+	
 }

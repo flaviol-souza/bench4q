@@ -189,6 +189,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		interval.getDocument().addDocumentListener(new Intervallistener());
 
 		n_vms = new JTextField(String.valueOf(fileLoader.getArgs().getNvms()));
+		n_vms.getDocument().addDocumentListener(new VMNumberListener());
 
 		URL = new JTextField(fileLoader.getArgs().getBaseURL());
 		URL.getDocument().addDocumentListener(new URLListener());
@@ -435,6 +436,36 @@ public class M_LoadSimulatorPanel extends JPanel {
 		public void changedUpdate(DocumentEvent event) {
 			String URLValue = URL.getText().trim();
 			m_configModel.getArgs().setBaseURL(URLValue);
+		}
+	}
+	
+	private class VMNumberListener implements DocumentListener {
+
+		public void insertUpdate(DocumentEvent event) {
+			int nvms = 0; // to shutdown number/2
+			if ((n_vms.getText().trim() != null) && (!n_vms.getText().equals(""))) {
+				nvms = Integer.parseInt(n_vms.getText().trim());
+			}
+			System.out.println("insert: "+ nvms);
+			m_configModel.getArgs().setNvms(nvms);
+		}
+
+		public void removeUpdate(DocumentEvent event) {
+			int nvms = 0;
+			if ((n_vms.getText().trim() != null) && (!n_vms.getText().equals(""))) {
+				nvms = Integer.parseInt(n_vms.getText().trim());
+			}
+			System.out.println("remove: "+ nvms);
+			m_configModel.getArgs().setNvms(nvms);
+		}
+
+		public void changedUpdate(DocumentEvent event) {
+			int nvms = 0;
+			if ((n_vms.getText().trim() != null) && (!n_vms.getText().equals(""))) {
+				nvms = Integer.parseInt(n_vms.getText().trim());
+			}
+			System.out.println("change: "+ nvms);
+			m_configModel.getArgs().setNvms(nvms);
 		}
 	}
 
@@ -717,7 +748,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		String hostNB = m_configModel.getArgs().getLbHost();
 		int portNB = m_configModel.getArgs().getLbPort();
-		int nvms = Integer.parseInt(n_vms.getText());
+		int nvms = m_configModel.getArgs().getNvms();
 		String message = "{\"expmanager\":\"shutdown\",\"vms\":\"" + nvms + "\"}";
 
 		Socket client = null;

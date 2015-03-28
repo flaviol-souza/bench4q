@@ -52,6 +52,7 @@ public class Args implements Sendable {
 	private double slow;
 	private boolean getImage;
 	private String baseURL;
+	private int n_vms;
 	private String DBURL;
 	private int WebPort;
 	private int DBPort;
@@ -98,9 +99,9 @@ public class Args implements Sendable {
 		this.tfOption = false;
 		this.ttMMPP = true; // with stagger
 		this.baseURL = "http://localhost:8080/jaspte";
-
 	}
 
+	
 	/**
 	 * @return rbe type
 	 */
