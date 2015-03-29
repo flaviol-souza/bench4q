@@ -19,6 +19,7 @@
 		<lbHost>bench4qbalancer</lbHost>
 		<lbPort>8889</lbPort>
 		<nvms>0</nvms>
+		<tstep>0.5</tstep>
 		<webport>10724</webport>
 		<databaseURL>10.0.0.231</databaseURL>
 		<dbport>10724</dbport>
@@ -31,3 +32,4 @@
 		</ebs>
 	</rbe>
 </bench4Q>
+

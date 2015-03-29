@@ -1000,9 +1000,11 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 					public void run() {
 						try {
-							int sleeptime = (int)(m_configModel.getArgs().getEbs().get(0).getStdyTime() / 2);
+							double tstep = m_configModel.getArgs().getTstep(); // tempo da perturbacao <0.1 - 1.0>
+							long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
+							int sleeptime = (int)(texp * tstep);
 							Thread.sleep(sleeptime * 1000);
-							Logger.getLogger().info("Enviando mensagem ao LB depois de: "+ sleeptime+" segs");
+							Logger.getLogger().info("Enviando mensagem ao LB depois de: " + sleeptime + " segs");
 							modelingVMlistener();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
@@ -1048,7 +1050,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 			String hostNB = m_configModel.getArgs().getLbHost();
 			int portNB = m_configModel.getArgs().getLbPort();
 			int nvms = m_configModel.getArgs().getNvms();
-			String message = "{\"expmanager\":\"shutdown\",\"vms\":\""+nvms+"\"}";
+			String message = "{\"expmanager\":\"shutdown\",\"vms\":\""+nvms+"\", \"safe\":\"1\"}";
 
 			Socket client = null;
 			PrintStream out = null;

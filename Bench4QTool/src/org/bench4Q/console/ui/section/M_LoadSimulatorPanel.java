@@ -110,10 +110,11 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JTextField interval;
 
 	private JLabel l_resetEnvironment;
-	private JLabel l_lbModeling;
+	private JLabel l_lbModelingTStep;
+	private JLabel l_lbModelingNVMs;
 	private JButton bt_reset;
 	private JButton bt_shutdown;
-	private JButton bt_modeling;
+	private JTextField t_step;
 	private JTextField n_vms;
 
 	/**
@@ -129,10 +130,10 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		typeLabel = new JLabel(m_resources.getString("GenelPanel.typeLabel"), SwingConstants.RIGHT);
 		l_resetEnvironment = new JLabel(m_resources.getString("GenelPanel.resetEnvLabel"), SwingConstants.RIGHT);
-		l_lbModeling = new JLabel(m_resources.getString("GenelPanel.lbModelingLabel"), SwingConstants.RIGHT);
+		l_lbModelingTStep = new JLabel(m_resources.getString("GenelPanel.lbModelingLabelTstep"), SwingConstants.RIGHT);
+		l_lbModelingNVMs = new JLabel(m_resources.getString("GenelPanel.lbModelingLabelNVMs"), SwingConstants.RIGHT);
 		bt_reset = new JButton(m_resources.getString("GenelPanel.resetEnvLabelBt"));
 		bt_shutdown = new JButton(m_resources.getString("GenelPanel.shutdownEnvLabelBt"));
-		bt_modeling = new JButton(m_resources.getString("GenelPanel.modelingEnvLabelBt"));
 
 		intervalLabel = new JLabel(m_resources.getString("GenelPanel.intervalLabel"), SwingConstants.RIGHT);
 		URLLabel = new JLabel(m_resources.getString("GenelPanel.URLLabel"), SwingConstants.RIGHT);
@@ -190,6 +191,9 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		n_vms = new JTextField(String.valueOf(fileLoader.getArgs().getNvms()));
 		n_vms.getDocument().addDocumentListener(new VMNumberListener());
+		
+		t_step = new JTextField(String.valueOf(fileLoader.getArgs().getTstep()));
+		t_step.getDocument().addDocumentListener(new TStepListener());
 
 		URL = new JTextField(fileLoader.getArgs().getBaseURL());
 		URL.getDocument().addDocumentListener(new URLListener());
@@ -333,21 +337,19 @@ public class M_LoadSimulatorPanel extends JPanel {
 		});
 
 		
-		this.add(l_lbModeling, new GridBagConstraints(0, 22, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+		this.add(l_lbModelingNVMs, new GridBagConstraints(0, 22, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 		
-		
+		this.add(n_vms, new GridBagConstraints(1, 22, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 
-		this.add(n_vms, new GridBagConstraints(2, 22, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
+		this.add(l_lbModelingTStep , new GridBagConstraints(0, 23, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		
+		this.add(t_step, new GridBagConstraints(1, 23, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 		
-		this.add(bt_modeling, new GridBagConstraints(1, 22, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		bt_modeling.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				modelingVMlistener(evt);
-			}
-		});
+		
 	}
 
 	protected void resetConfig() {
@@ -442,33 +444,66 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private class VMNumberListener implements DocumentListener {
 
 		public void insertUpdate(DocumentEvent event) {
-			int nvms = 0; // to shutdown number/2
-			if ((n_vms.getText().trim() != null) && (!n_vms.getText().equals(""))) {
+			int nvms = 0; // = to shutdown vms number * 0.5 
+			String text = n_vms.getText().trim(); 
+			if (( text != null) && (!text.equals(""))) {
 				nvms = Integer.parseInt(n_vms.getText().trim());
 			}
-			System.out.println("insert: "+ nvms);
 			m_configModel.getArgs().setNvms(nvms);
 		}
 
 		public void removeUpdate(DocumentEvent event) {
 			int nvms = 0;
-			if ((n_vms.getText().trim() != null) && (!n_vms.getText().equals(""))) {
+			String text = n_vms.getText().trim(); 
+			if (( text != null) && (!text.equals(""))) {
 				nvms = Integer.parseInt(n_vms.getText().trim());
 			}
-			System.out.println("remove: "+ nvms);
 			m_configModel.getArgs().setNvms(nvms);
 		}
 
 		public void changedUpdate(DocumentEvent event) {
 			int nvms = 0;
-			if ((n_vms.getText().trim() != null) && (!n_vms.getText().equals(""))) {
+			String text = n_vms.getText().trim(); 
+			if (( text != null) && (!text.equals(""))) {
 				nvms = Integer.parseInt(n_vms.getText().trim());
 			}
-			System.out.println("change: "+ nvms);
 			m_configModel.getArgs().setNvms(nvms);
 		}
 	}
 
+	private class TStepListener implements DocumentListener {
+
+		public void insertUpdate(DocumentEvent event) {
+			double tstep = 0.5D; // to shutdown in the middle of experiment
+			String text = t_step.getText().trim();
+			if (( text != null) && (!text.equals(""))) {
+				tstep = Double.parseDouble(t_step.getText().trim());
+			}
+			System.out.println(tstep);
+			m_configModel.getArgs().setTstep(tstep);
+		}
+
+		public void removeUpdate(DocumentEvent event) {
+			double tstep = 0.5D; // to shutdown in the middle of experiment
+			String text = t_step.getText().trim();
+			if (( text != null) && (!text.equals(""))) {
+				tstep = Double.parseDouble(t_step.getText().trim());
+			}
+			System.out.println(tstep);
+			m_configModel.getArgs().setTstep(tstep);
+		}
+
+		public void changedUpdate(DocumentEvent event) {
+			double tstep = 0.5D; // to shutdown in the middle of experiment
+			String text = t_step.getText().trim();
+			if (( text != null) && (!text.equals(""))) {
+				tstep = Double.parseDouble(t_step.getText().trim());
+			}
+			System.out.println(tstep);
+			m_configModel.getArgs().setTstep(tstep);
+		}
+	}
+	
 	private class DBURLListener implements DocumentListener {
 
 		public void insertUpdate(DocumentEvent event) {
@@ -736,38 +771,6 @@ public class M_LoadSimulatorPanel extends JPanel {
 		} catch (IOException ex) {
 			System.err.println(ex.toString());
 		}
-	}
-
-	/***
-	 * XXX: Definir melhor este metodo, porque nao e posivel ativalo quando o experimento esta
-	 * executando 
-	 *  
-	 * @param evt
-	 */
-	private void modelingVMlistener(java.awt.event.ActionEvent evt) {
-
-		String hostNB = m_configModel.getArgs().getLbHost();
-		int portNB = m_configModel.getArgs().getLbPort();
-		int nvms = m_configModel.getArgs().getNvms();
-		String message = "{\"expmanager\":\"shutdown\",\"vms\":\"" + nvms + "\"}";
-
-		Socket client = null;
-		PrintStream out = null;
-		System.out.println(hostNB + ":" + portNB + "/" + message);
-
-		try {
-			client = new Socket(hostNB, portNB);
-			out = new PrintStream(client.getOutputStream());
-
-			out.print(message);
-			out.close();
-			client.close();
-		} catch (UnknownHostException ex) {
-			System.out.println("Couldn't connect to the server");
-		} catch (IOException ex) {
-			System.err.println(ex.toString());
-		}
-
 	}
 
 }

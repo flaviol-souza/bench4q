@@ -45,6 +45,7 @@ public class Args implements Sendable {
 	private String lbHost;
 	private int lbPort;
 	private int nvms;
+	private double tstep;
 	private int prepair;
 	private int cooldown;
 	private String out;
@@ -52,7 +53,6 @@ public class Args implements Sendable {
 	private double slow;
 	private boolean getImage;
 	private String baseURL;
-	private int n_vms;
 	private String DBURL;
 	private int WebPort;
 	private int DBPort;
@@ -88,6 +88,7 @@ public class Args implements Sendable {
 		this.rbetype = "closed";
 		this.interval = 1.0D;
 		this.nvms = 0;
+		this.tstep = 0.5D;
 		this.prepair = 600;
 		this.cooldown = 300;
 		this.out = "out";
@@ -305,6 +306,17 @@ public class Args implements Sendable {
 	public void setInterval(double interval) {
 		this.interval = interval;
 	}
+
+	
+	public double getTstep() {
+		return tstep;
+	}
+
+
+	public void setTstep(double tstep) {
+		this.tstep = tstep;
+	}
+
 
 	/**
 	 * @return number of machines

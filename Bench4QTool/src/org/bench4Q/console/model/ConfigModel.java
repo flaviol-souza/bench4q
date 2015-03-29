@@ -358,6 +358,7 @@ public final class ConfigModel {
 		args.setLbHost(rbe.getChildText("lbHost").trim());
 		args.setLbPort(Integer.parseInt(rbe.getChildText("lbPort").trim()));
 		args.setNvms(Integer.parseInt(rbe.getChildText("nvms").trim()));
+		args.setTstep(Double.parseDouble(rbe.getChildText("tstep").trim()));
 		args.setWebPort(Integer.parseInt(rbe.getChildText("webport").trim()));
 		args.setDBURL(rbe.getChildText("databaseURL").trim());
 		args.setDBPort(Integer.parseInt(rbe.getChildText("dbport").trim()));
