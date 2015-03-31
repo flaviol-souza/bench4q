@@ -63,6 +63,18 @@ public class execute_search_servlet extends HttpServlet {
 
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
+		
+		String sLoad = req.getParameter("bench4q_add_load");
+		String sOpt = req.getParameter("bench4q_add_load_opt");
+		
+		if(sLoad == null || sOpt == null) {
+			sLoad = "0";
+			sOpt = "0";
+		}
+			
+		int iLoad = Integer.parseInt(sLoad);
+		int iOpt = Integer.parseInt(sOpt);	
+		
 		String url;
 		PrintWriter out = res.getWriter();
 		res.setContentType("text/plain");
@@ -82,12 +94,16 @@ public class execute_search_servlet extends HttpServlet {
 
 		Vector books = null; // placate javac
 		// Display new products
-		if (search_type.equals("author"))
+		if (search_type.equals("author")){
+			Database.waitCustom(iLoad, iOpt);
 			books = Database.doAuthorSearch(search_string);
-		else if (search_type.equals("title"))
+		}else if (search_type.equals("title")){
+			Database.waitCustom(iLoad, iOpt);
 			books = Database.doTitleSearch(search_string);
-		else if (search_type.equals("subject"))
+		}else if (search_type.equals("subject")){
+			Database.waitCustom(iLoad, iOpt);
 			books = Database.doSubjectSearch(search_string);
+		}
 
 		out.print("<TABLE BORDER=\"1\" CELLPADDING=\"1\" CELLSPACING=\"1\">\n");
 		out.print("<TR> <TD WIDTH=\"30\"></TD>\n");
@@ -140,6 +156,12 @@ public class execute_search_servlet extends HttpServlet {
 
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
+		
+		out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+		out.println("<TR><TD>Load:</TD> <TD> 1 * "+sLoad+" </TD> </TR>");
+		out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+		out.println("</TABLE>");
+		
 		out.print("</BODY> </HTML>\n");
 		out.close();
 		return;

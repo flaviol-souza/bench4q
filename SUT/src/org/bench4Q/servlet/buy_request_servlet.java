@@ -61,6 +61,17 @@ public class buy_request_servlet extends HttpServlet {
 
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 		String RETURNING_FLAG = req.getParameter("RETURNING_FLAG");
+		
+		String sLoad = req.getParameter("bench4q_add_load");
+		String sOpt = req.getParameter("bench4q_add_load_opt");
+		
+		if(sLoad == null || sOpt == null) {
+			sLoad = "0";
+			sOpt = "0";
+		}
+		
+		int iLoad = Integer.parseInt(sLoad);
+		int iOpt = Integer.parseInt(sOpt);
 
 		Customer cust = null;
 
@@ -83,8 +94,9 @@ public class buy_request_servlet extends HttpServlet {
 				out.print("Error: Invalid Input</BODY></HTML>");
 				return;
 			}
-
+			Database.waitCustom(iLoad, iOpt);
 			cust = Database.getCustomer(UNAME);
+			Database.waitCustom(iLoad, iOpt);
 			Database.refreshSession(cust.c_id);
 			if (!PASSWD.equals(cust.c_passwd)) {
 				out.print("Error: Incorrect Password</BODY></HTML>");
@@ -104,6 +116,7 @@ public class buy_request_servlet extends HttpServlet {
 			cust.c_email = req.getParameter("EMAIL");
 			cust.c_birthdate = new Date(req.getParameter("BIRTHDATE"));
 			cust.c_data = req.getParameter("DATA");
+			Database.waitCustom(iLoad, iOpt);
 			cust = Database.createNewCustomer(cust);
 		} else
 			out.print("ERROR: RETURNING_FLAG not set to Y or N!\n");
@@ -113,6 +126,7 @@ public class buy_request_servlet extends HttpServlet {
 			return;
 		}
 		// Update the shopping cart cost and get the current contents
+		Database.waitCustom(iLoad, iOpt);
 		Cart mycart = Database.getCart(Integer.parseInt(SHOPPING_ID), cust.c_discount);
 
 		// Print out the web page
@@ -242,6 +256,12 @@ public class buy_request_servlet extends HttpServlet {
 
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/order_status_B.gif\" " + "ALT=\"Order Status\"></A>\n");
+		
+		out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+		out.println("<TR><TD>Load:</TD> <TD> 4 * "+sLoad+" </TD> </TR>");
+		out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+		out.println("</TABLE>\n");
+		
 		out.print("</P></CENTER></BODY></HTML>");
 		out.close();
 		return;

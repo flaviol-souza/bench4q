@@ -258,6 +258,8 @@ public final class ConfigModel {
 		rbe.addContent(vIPrate);
 		Element thinktime = new Element("thinktime").setText(String.valueOf(m_args.getThinktime()));
 		rbe.addContent(thinktime);
+		Element tfOption = new Element("tfOption").setText(String.valueOf(m_args.getTfOption()));
+		rbe.addContent(tfOption);
 		Element mix = new Element("mix").setText(m_args.getMix());
 		rbe.addContent(mix);
 		Element slow = new Element("slow").setText(String.valueOf(m_args.getSlow()));
@@ -266,6 +268,20 @@ public final class ConfigModel {
 		rbe.addContent(getImage);
 		Element baseURL = new Element("baseURL").setText(m_args.getBaseURL());
 		rbe.addContent(baseURL);
+		
+		Element lbHost = new Element("lbHost").setText(m_args.getLbHost());
+		rbe.addContent(lbHost);
+		Element lbPort = new Element("lbPort").setText(String.valueOf(m_args.getLbPort()));
+		rbe.addContent(lbPort);
+		Element nvms = new Element("nvms").setText(String.valueOf(m_args.getNvms()));
+		rbe.addContent(nvms);
+		Element tstep = new Element("tstep").setText(String.valueOf(m_args.getTstep()));
+		rbe.addContent(tstep);
+		Element addload = new Element("addload").setText(String.valueOf(m_args.getAddLoad()));
+		rbe.addContent(addload);
+		Element addloadopt = new Element("addloadopt").setText(String.valueOf(m_args.getAddLoadOpt()));
+		rbe.addContent(addloadopt);
+		
 		Element webport = new Element("webport").setText(String.valueOf(m_args.getWebPort()));
 		rbe.addContent(webport);
 
@@ -359,6 +375,8 @@ public final class ConfigModel {
 		args.setLbPort(Integer.parseInt(rbe.getChildText("lbPort").trim()));
 		args.setNvms(Integer.parseInt(rbe.getChildText("nvms").trim()));
 		args.setTstep(Double.parseDouble(rbe.getChildText("tstep").trim()));
+		args.setAddLoad(Integer.parseInt(rbe.getChildText("addload").trim()));
+		args.setAddLoadOpt(Integer.parseInt(rbe.getChildText("addloadopt").trim()));
 		args.setWebPort(Integer.parseInt(rbe.getChildText("webport").trim()));
 		args.setDBURL(rbe.getChildText("databaseURL").trim());
 		args.setDBPort(Integer.parseInt(rbe.getChildText("dbport").trim()));

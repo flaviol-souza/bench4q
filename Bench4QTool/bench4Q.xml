@@ -20,6 +20,8 @@
 		<lbPort>8889</lbPort>
 		<nvms>0</nvms>
 		<tstep>0.5</tstep>
+		<addload>1000</addload>
+		<addloadopt>0</addloadopt>
 		<webport>10724</webport>
 		<databaseURL>10.0.0.231</databaseURL>
 		<dbport>10724</dbport>

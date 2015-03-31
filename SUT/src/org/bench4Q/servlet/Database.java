@@ -116,17 +116,39 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Permite gerar um processamento e tempo adicional
 	 * */
-	public static void waitCustom(){
-		String s = "first";
-        Random r = new Random();
-        int end = r.nextInt(1000);
-        for (int i = 0; i < end; i++) {
-            s += "root";
-        }
+	public static void waitCustom(int load, int opt) {
+		if (load > 0) {
+			String s = "first";
+			Random r = new Random();
+			int end = r.nextInt(load);
+
+			if (opt == 0) {
+				try {
+					Thread.sleep((int) (end / 2));
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				for (int i = 0; i < end; i++) {
+					s += "root";
+				}
+			}
+			if (opt > 1) {
+				for (int i = 0; i < end; i++) {
+					s += "root";
+					try {
+						Thread.sleep(opt);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
 	public static String[] getName(int c_id) {
@@ -167,7 +189,6 @@ public class Database {
 	}
 
 	public static Book getBook(int i_id) {
-		waitCustom();
 		Book book = null;
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -195,7 +216,6 @@ public class Database {
 	}
 
 	public static Customer getCustomer(String UNAME) {
-		waitCustom();
 		Customer cust = null;
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -229,7 +249,6 @@ public class Database {
 	}
 
 	public static Vector doSubjectSearch(String search_key) {
-		waitCustom();
 		Vector vec = new Vector();
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -260,7 +279,6 @@ public class Database {
 	}
 
 	public static Vector doTitleSearch(String search_key) {
-		waitCustom();
 		Vector vec = new Vector();
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -291,7 +309,6 @@ public class Database {
 	}
 
 	public static Vector doAuthorSearch(String search_key) {
-		waitCustom();
 		Vector vec = new Vector();
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -322,7 +339,6 @@ public class Database {
 	}
 
 	public static Vector getNewProducts(String subject) {
-		waitCustom();
 		Vector vec = new Vector(); // Vector of Books
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -330,11 +346,10 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con.prepareStatement("SELECT i_id, i_title, a_fname, a_lname "
-					+ "FROM item, author " + "WHERE item.i_a_id = author.a_id "
-					+ "AND item.i_subject = ? " + "ORDER BY item.i_pub_date DESC,item.i_title "
-					+ "LIMIT 50 ;");
-//					+ "FETCH FIRST 50 ROWS ONLY");
+			statement = con.prepareStatement("SELECT i_id, i_title, a_fname, a_lname " + "FROM item, author "
+					+ "WHERE item.i_a_id = author.a_id " + "AND item.i_subject = ? "
+					+ "ORDER BY item.i_pub_date DESC,item.i_title " + "LIMIT 50 ;");
+			// + "FETCH FIRST 50 ROWS ONLY");
 
 			// Set parameter
 			statement.setString(1, subject);
@@ -356,7 +371,6 @@ public class Database {
 	}
 
 	public static Vector getBestSellers(String subject) {
-		waitCustom();
 		Vector vec = new Vector(); // Vector of Books
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -367,8 +381,7 @@ public class Database {
 			// The following is the original, unoptimized best sellers query.
 			statement = con.prepareStatement("SELECT i_id, i_title, a_fname, a_lname "
 					+ "FROM item, author, order_line " + "WHERE item.i_id = order_line.ol_i_id "
-					+ "AND item.i_a_id = author.a_id "
-					+ "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)"
+					+ "AND item.i_a_id = author.a_id " + "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)"
 					+ "AND item.i_subject = ? " + "GROUP BY i_id, i_title, a_fname, a_lname "
 					+ "ORDER BY SUM(ol_qty) DESC " + "LIMIT 50 ;");
 
@@ -392,7 +405,6 @@ public class Database {
 	}
 
 	public static void getRelated(int i_id, Vector i_id_vec, Vector i_thumbnail_vec) {
-		waitCustom();
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -426,7 +438,6 @@ public class Database {
 	}
 
 	public static void adminUpdate(int i_id, double cost, String image, String thumbnail) {
-		waitCustom();
 		Connection con = null;
 		PreparedStatement statement = null;
 		PreparedStatement related = null;
@@ -444,18 +455,13 @@ public class Database {
 			statement.setInt(4, i_id);
 			statement.executeUpdate();
 			statement.close();
-			related = con
-					.prepareStatement("SELECT ol_i_id "
-							+ "FROM orders, order_line "
-							+ "WHERE orders.o_id = order_line.ol_o_id "
-							+ "AND NOT (order_line.ol_i_id = ?) "
-							+ "AND orders.o_c_id IN (SELECT o_c_id "
-							+ "                      FROM orders, order_line "
-							+ "                      WHERE orders.o_id = order_line.ol_o_id "
-							+ "                      AND orders.o_id > (SELECT MAX(o_id)-10000 FROM orders)"
-							+ "                      AND order_line.ol_i_id = ?) "
-							+ "GROUP BY ol_i_id " + "ORDER BY SUM(ol_qty) DESC "
-							+ "LIMIT 5 ;");
+			related = con.prepareStatement("SELECT ol_i_id " + "FROM orders, order_line "
+					+ "WHERE orders.o_id = order_line.ol_o_id " + "AND NOT (order_line.ol_i_id = ?) "
+					+ "AND orders.o_c_id IN (SELECT o_c_id " + "                      FROM orders, order_line "
+					+ "                      WHERE orders.o_id = order_line.ol_o_id "
+					+ "                      AND orders.o_id > (SELECT MAX(o_id)-10000 FROM orders)"
+					+ "                      AND order_line.ol_i_id = ?) " + "GROUP BY ol_i_id "
+					+ "ORDER BY SUM(ol_qty) DESC " + "LIMIT 5 ;");
 
 			// Set parameter
 			related.setInt(1, i_id);
@@ -505,7 +511,6 @@ public class Database {
 	}
 
 	public static String GetUserName(int C_ID) {
-		waitCustom();
 		String u_name = null;
 		Connection con = null;
 		PreparedStatement get_user_name = null;
@@ -534,7 +539,6 @@ public class Database {
 	}
 
 	public static String GetPassword(String C_UNAME) {
-		waitCustom();
 		String passwd = null;
 		Connection con = null;
 		PreparedStatement get_passwd = null;
@@ -564,7 +568,6 @@ public class Database {
 	// This function gets the value of I_RELATED1 for the row of
 	// the item table corresponding to I_ID
 	private static int getRelated1(int I_ID, Connection con) {
-		waitCustom();
 		int related1 = -1;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -587,7 +590,6 @@ public class Database {
 	}
 
 	public static Order GetMostRecentOrder(String c_uname, Vector order_lines) {
-		waitCustom();
 		Connection con = null;
 		PreparedStatement get_most_recent_order_id = null;
 		PreparedStatement get_order = null;
@@ -604,10 +606,9 @@ public class Database {
 			con = getConnection();
 
 			// *** Get the o_id of the most recent order for this user
-			get_most_recent_order_id = con.prepareStatement("SELECT o_id "
-					+ "FROM customer, orders " + "WHERE customer.c_id = orders.o_c_id "
-					+ "AND c_uname = ? " + "ORDER BY o_date, orders.o_id DESC "
-					+ "LIMIT 1 ;");
+			get_most_recent_order_id = con.prepareStatement("SELECT o_id " + "FROM customer, orders "
+					+ "WHERE customer.c_id = orders.o_c_id " + "AND c_uname = ? "
+					+ "ORDER BY o_date, orders.o_id DESC " + "LIMIT 1 ;");
 
 			// Set parameter
 			get_most_recent_order_id.setString(1, c_uname);
@@ -621,23 +622,17 @@ public class Database {
 			}
 
 			// *** Get the order info for this o_id
-			get_order = con.prepareStatement("SELECT orders.*, customer.*, "
-					+ "  cc_xacts.cx_type, " + "  ship.addr_street1 AS ship_addr_street1, "
-					+ "  ship.addr_street2 AS ship_addr_street2, "
-					+ "  ship.addr_state AS ship_addr_state, "
-					+ "  ship.addr_zip AS ship_addr_zip, " + "  ship_co.co_name AS ship_co_name, "
-					+ "  bill.addr_street1 AS bill_addr_street1, "
-					+ "  bill.addr_street2 AS bill_addr_street2, "
-					+ "  bill.addr_state AS bill_addr_state, "
+			get_order = con.prepareStatement("SELECT orders.*, customer.*, " + "  cc_xacts.cx_type, "
+					+ "  ship.addr_street1 AS ship_addr_street1, " + "  ship.addr_street2 AS ship_addr_street2, "
+					+ "  ship.addr_state AS ship_addr_state, " + "  ship.addr_zip AS ship_addr_zip, "
+					+ "  ship_co.co_name AS ship_co_name, " + "  bill.addr_street1 AS bill_addr_street1, "
+					+ "  bill.addr_street2 AS bill_addr_street2, " + "  bill.addr_state AS bill_addr_state, "
 					+ "  bill.addr_zip AS bill_addr_zip, " + "  bill_co.co_name AS bill_co_name "
-					+ "FROM customer, orders, cc_xacts," + "  address AS ship, "
-					+ "  country AS ship_co, " + "  address AS bill,  " + "  country AS bill_co "
-					+ "WHERE orders.o_id = ? " + "  AND cx_o_id = orders.o_id "
-					+ "  AND customer.c_id = orders.o_c_id "
-					+ "  AND orders.o_bill_addr_id = bill.addr_id "
-					+ "  AND bill.addr_co_id = bill_co.co_id "
-					+ "  AND orders.o_ship_addr_id = ship.addr_id "
-					+ "  AND ship.addr_co_id = ship_co.co_id "
+					+ "FROM customer, orders, cc_xacts," + "  address AS ship, " + "  country AS ship_co, "
+					+ "  address AS bill,  " + "  country AS bill_co " + "WHERE orders.o_id = ? "
+					+ "  AND cx_o_id = orders.o_id " + "  AND customer.c_id = orders.o_c_id "
+					+ "  AND orders.o_bill_addr_id = bill.addr_id " + "  AND bill.addr_co_id = bill_co.co_id "
+					+ "  AND orders.o_ship_addr_id = ship.addr_id " + "  AND ship.addr_co_id = ship_co.co_id "
 					+ "  AND orders.o_c_id = customer.c_id ;");
 
 			// Set parameter
@@ -654,8 +649,8 @@ public class Database {
 			order = new Order(rs2);
 
 			// *** Get the order_lines for this o_id
-			get_order_lines = con.prepareStatement("SELECT * " + "FROM order_line, item "
-					+ "WHERE ol_o_id = ? " + "AND ol_i_id = i_id ;");
+			get_order_lines = con.prepareStatement("SELECT * " + "FROM order_line, item " + "WHERE ol_o_id = ? "
+					+ "AND ol_i_id = i_id ;");
 
 			// Set parameter
 			get_order_lines.setInt(1, order_id);
@@ -686,7 +681,6 @@ public class Database {
 
 	// Called from: TPCW_shopping_cart_interaction
 	public static int createEmptyCart() {
-		waitCustom();
 		Connection con = null;
 		Statement insert_cart = null;
 		ResultSet rs = null;
@@ -696,9 +690,8 @@ public class Database {
 			insert_cart = null;
 			rs = null;
 			insert_cart = con.createStatement();
-			insert_cart.executeUpdate(
-					"INSERT INTO shopping_cart (sc_time) VALUES (CURRENT_TIMESTAMP) ;",
-					//"INSERT INTO shopping_cart (sc_time) VALUES (CURRENT TIMESTAMP )",
+			insert_cart.executeUpdate("INSERT INTO shopping_cart (sc_time) VALUES (CURRENT_TIMESTAMP) ;",
+			// "INSERT INTO shopping_cart (sc_time) VALUES (CURRENT TIMESTAMP )",
 					Statement.RETURN_GENERATED_KEYS);
 			rs = insert_cart.getGeneratedKeys();
 			if (rs.next()) {
@@ -717,7 +710,6 @@ public class Database {
 	}
 
 	public static Cart doCart(int SHOPPING_ID, Integer I_ID, Vector ids, Vector quantities) {
-		waitCustom();
 		Cart cart = null;
 		Connection con = null;
 
@@ -747,7 +739,6 @@ public class Database {
 	// otherwise we increment the quantity.
 
 	private static void addItem(Connection con, int SHOPPING_ID, int I_ID) {
-		waitCustom();
 		PreparedStatement find_entry = null;
 		ResultSet rs = null;
 		try {
@@ -793,7 +784,6 @@ public class Database {
 	}
 
 	private static void refreshCart(Connection con, int SHOPPING_ID, Vector ids, Vector quantities) {
-		waitCustom();
 		PreparedStatement statement = null;
 		int i;
 		try {
@@ -828,7 +818,6 @@ public class Database {
 	}
 
 	private static void addRandomItemToCartIfNecessary(Connection con, int SHOPPING_ID) {
-		waitCustom();
 		// check and see if the cart is empty. If it's not, we do
 		// nothing.
 		int related_item = 0;
@@ -837,8 +826,7 @@ public class Database {
 
 		try {
 			// Check to see if the cart is empty
-			get_cart = con
-					.prepareStatement("SELECT COUNT(*) from shopping_cart_line where scl_sc_id = ? ;");
+			get_cart = con.prepareStatement("SELECT COUNT(*) from shopping_cart_line where scl_sc_id = ? ;");
 			get_cart.setInt(1, SHOPPING_ID);
 			rs = get_cart.executeQuery();
 			rs.next();
@@ -860,12 +848,10 @@ public class Database {
 
 	// Only called from this class
 	private static void resetCartTime(Connection con, int SHOPPING_ID) {
-		waitCustom();
 		PreparedStatement statement = null;
 		try {
-			statement = con
-					.prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT_TIMESTAMP WHERE sc_id = ? ;");
-			//.prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT TIMESTAMP WHERE sc_id = ?");
+			statement = con.prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT_TIMESTAMP WHERE sc_id = ? ;");
+			// .prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT TIMESTAMP WHERE sc_id = ?");
 			// Set parameter
 			statement.setInt(1, SHOPPING_ID);
 			statement.executeUpdate();
@@ -878,7 +864,6 @@ public class Database {
 	}
 
 	public static Cart getCart(int SHOPPING_ID, double c_discount) {
-		waitCustom();
 		Cart mycart = null;
 		Connection con = null;
 		try {
@@ -895,7 +880,6 @@ public class Database {
 
 	// time .05s
 	private static Cart getCart(Connection con, int SHOPPING_ID, double c_discount) {
-		waitCustom();
 		Cart mycart = null;
 		PreparedStatement get_cart = null;
 		ResultSet rs = null;
@@ -919,7 +903,6 @@ public class Database {
 	// This should probably return an error code if the customer
 	// doesn't exist, but ...
 	public static void refreshSession(int C_ID) {
-		waitCustom();
 		Connection con = null;
 		PreparedStatement updateLogin = null;
 		try {
@@ -927,7 +910,7 @@ public class Database {
 			con = getConnection();
 			updateLogin = con
 					.prepareStatement("UPDATE customer SET c_login = CURRENT_TIMESTAMP, c_expiration = (CURRENT_TIMESTAMP + INTERVAL '2 HOUR') WHERE c_id = ? ;");
-			//.prepareStatement("UPDATE customer SET c_login = CURRENT TIMESTAMP, c_expiration = CURRENT TIMESTAMP + 2 HOURS WHERE c_id = ?");
+			// .prepareStatement("UPDATE customer SET c_login = CURRENT TIMESTAMP, c_expiration = CURRENT TIMESTAMP + 2 HOURS WHERE c_id = ?");
 
 			// Set parameter
 			updateLogin.setInt(1, C_ID);
@@ -942,7 +925,6 @@ public class Database {
 	}
 
 	public static Customer createNewCustomer(Customer cust) {
-		waitCustom();
 		Connection con = null;
 		PreparedStatement insert_customer_row = null;
 		ResultSet rs = null;
@@ -978,8 +960,8 @@ public class Database {
 			insert_customer_row.setDate(15, new java.sql.Date(cust.c_birthdate.getTime()));
 			insert_customer_row.setString(16, cust.c_data);
 
-			cust.addr_id = enterAddress(con, cust.addr_street1, cust.addr_street2, cust.addr_city,
-					cust.addr_state, cust.addr_zip, cust.co_name);
+			cust.addr_id = enterAddress(con, cust.addr_street1, cust.addr_street2, cust.addr_city, cust.addr_state,
+					cust.addr_zip, cust.co_name);
 
 			insert_customer_row.setString(1, cust.c_uname);
 			insert_customer_row.setString(2, cust.c_passwd);
@@ -1010,9 +992,8 @@ public class Database {
 
 	// BUY CONFIRM
 
-	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type,
-			long cc_number, String cc_name, Date cc_expiry, String shipping) {
-		waitCustom();
+	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type, long cc_number,
+			String cc_name, Date cc_expiry, String shipping) {
 		BuyConfirmResult result = new BuyConfirmResult();
 		Connection con = null;
 
@@ -1021,10 +1002,9 @@ public class Database {
 			double c_discount = getCDiscount(con, customer_id);
 			result.cart = getCart(con, shopping_id, c_discount);
 			int ship_addr_id = getCAddr(con, customer_id);
-			result.order_id = enterOrder(con, customer_id, result.cart, ship_addr_id, shipping,
-					c_discount);
-			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry,
-					result.cart.SC_TOTAL, ship_addr_id);
+			result.order_id = enterOrder(con, customer_id, result.cart, ship_addr_id, shipping, c_discount);
+			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry, result.cart.SC_TOTAL,
+					ship_addr_id);
 			clearCart(con, shopping_id);
 			con.commit();
 		} catch (java.lang.Exception ex) {
@@ -1035,10 +1015,9 @@ public class Database {
 		return result;
 	}
 
-	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type,
-			long cc_number, String cc_name, Date cc_expiry, String shipping, String street_1,
-			String street_2, String city, String state, String zip, String country) {
-		waitCustom();
+	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type, long cc_number,
+			String cc_name, Date cc_expiry, String shipping, String street_1, String street_2, String city,
+			String state, String zip, String country) {
 		BuyConfirmResult result = new BuyConfirmResult();
 		Connection con = null;
 		try {
@@ -1046,10 +1025,9 @@ public class Database {
 			double c_discount = getCDiscount(con, customer_id);
 			result.cart = getCart(con, shopping_id, c_discount);
 			int ship_addr_id = enterAddress(con, street_1, street_2, city, state, zip, country);
-			result.order_id = enterOrder(con, customer_id, result.cart, ship_addr_id, shipping,
-					c_discount);
-			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry,
-					result.cart.SC_TOTAL, ship_addr_id);
+			result.order_id = enterOrder(con, customer_id, result.cart, ship_addr_id, shipping, c_discount);
+			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry, result.cart.SC_TOTAL,
+					ship_addr_id);
 			clearCart(con, shopping_id);
 			con.commit();
 
@@ -1063,14 +1041,12 @@ public class Database {
 
 	// DB query time: .05s
 	public static double getCDiscount(Connection con, int c_id) {
-		waitCustom();
 		double c_discount = 0.0;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		try {
 			// Prepare SQL
-			statement = con
-					.prepareStatement("SELECT c_discount FROM customer WHERE customer.c_id = ? ;");
+			statement = con.prepareStatement("SELECT c_discount FROM customer WHERE customer.c_id = ? ;");
 
 			// Set parameter
 			statement.setInt(1, c_id);
@@ -1091,14 +1067,12 @@ public class Database {
 
 	// DB time: .05s
 	public static int getCAddrID(Connection con, int c_id) {
-		waitCustom();
 		int c_addr_id = 0;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		try {
 			// Prepare SQL
-			statement = con
-					.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ? ;");
+			statement = con.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ? ;");
 
 			// Set parameter
 			statement.setInt(1, c_id);
@@ -1117,14 +1091,12 @@ public class Database {
 	}
 
 	public static int getCAddr(Connection con, int c_id) {
-		waitCustom();
 		int c_addr_id = 0;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
 		try {
 			// Prepare SQL
-			statement = con
-					.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ? ;");
+			statement = con.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ? ;");
 
 			// Set parameter
 			statement.setInt(1, c_id);
@@ -1148,7 +1120,6 @@ public class Database {
 			// shopping
 			// cart
 			int ship_addr_id) {
-		waitCustom();
 		PreparedStatement statement = null;
 
 		// Updates the CC_XACTS table
@@ -1171,8 +1142,10 @@ public class Database {
 			statement.setDate(5, cc_expiry); // cx_expiry
 			statement.setDouble(6, total); // cx_xact_amount
 			statement.setInt(7, ship_addr_id); // ship_addr_id
-			/*System.out.println("UM: "+statement.getClass().getField("sql").toString());
-			System.out.println("DOIS: "+statement);*/
+			/*
+			 * System.out.println("UM: "+statement.getClass().getField("sql").
+			 * toString()); System.out.println("DOIS: "+statement);
+			 */
 			statement.executeUpdate();
 			con.commit();
 		} catch (java.lang.Exception ex) {
@@ -1185,7 +1158,6 @@ public class Database {
 	public static void clearCart(Connection con, int shopping_id) {
 		// Empties all the lines from the shopping_cart_line for the
 		// shopping id. Does not remove the actually shopping cart
-		waitCustom();
 		PreparedStatement statement = null;
 		try {
 			// Prepare SQL
@@ -1208,7 +1180,6 @@ public class Database {
 			String street1, String street2, String city, String state, String zip, String country) {
 		// returns the address id of the specified address. Adds a
 		// new address to the table if needed
-		waitCustom();
 		int addr_id = 0;
 		PreparedStatement get_co_id = null;
 		PreparedStatement match_address = null;
@@ -1230,9 +1201,9 @@ public class Database {
 
 			// Get address id for this customer, possible insert row in
 			// address table
-			match_address = con.prepareStatement("SELECT addr_id FROM address "
-					+ "WHERE addr_street1 = ? " + "AND addr_street2 = ? " + "AND addr_city = ? "
-					+ "AND addr_state = ? " + "AND addr_zip = ? " + "AND addr_co_id = ? ;");
+			match_address = con.prepareStatement("SELECT addr_id FROM address " + "WHERE addr_street1 = ? "
+					+ "AND addr_street2 = ? " + "AND addr_city = ? " + "AND addr_state = ? " + "AND addr_zip = ? "
+					+ "AND addr_co_id = ? ;");
 			match_address.setString(1, street1);
 			match_address.setString(2, street2);
 			match_address.setString(3, city);
@@ -1270,9 +1241,8 @@ public class Database {
 		return addr_id;
 	}
 
-	public static int enterOrder(Connection con, int customer_id, Cart cart, int ship_addr_id,
-			String shipping, double c_discount) {
-		waitCustom();
+	public static int enterOrder(Connection con, int customer_id, Cart cart, int ship_addr_id, String shipping,
+			double c_discount) {
 		int o_id = 0;
 		PreparedStatement insert_row = null;
 		ResultSet rs = null;
@@ -1289,7 +1259,7 @@ public class Database {
 			insert_row.setInt(5, Util.getRandom(7));
 			insert_row.setInt(6, getCAddrID(con, customer_id));
 			insert_row.setInt(7, ship_addr_id);
-			
+
 			insert_row.executeUpdate();
 			rs = insert_row.getGeneratedKeys();
 			if (rs.next()) {
@@ -1322,9 +1292,8 @@ public class Database {
 		return o_id;
 	}
 
-	public static void addOrderLine(Connection con, int ol_id, int ol_o_id, int ol_i_id,
-			int ol_qty, double ol_discount, String ol_comment) {
-		waitCustom();
+	public static void addOrderLine(Connection con, int ol_id, int ol_o_id, int ol_i_id, int ol_qty,
+			double ol_discount, String ol_comment) {
 		int success = 0;
 		PreparedStatement insert_row = null;
 		try {
@@ -1349,7 +1318,6 @@ public class Database {
 	}
 
 	public static int getStock(Connection con, int i_id) {
-		waitCustom();
 		int stock = 0;
 		PreparedStatement get_stock = null;
 		ResultSet rs = null;
@@ -1373,7 +1341,6 @@ public class Database {
 	}
 
 	public static void setStock(Connection con, int i_id, int new_stock) {
-		waitCustom();
 		PreparedStatement update_row = null;
 		try {
 			update_row = con.prepareStatement("UPDATE item SET i_stock = ? WHERE i_id = ? ;");
@@ -1390,7 +1357,6 @@ public class Database {
 	}
 
 	public static void verifyDBConsistency() {
-		waitCustom();
 		Connection con = null;
 		PreparedStatement get_ids = null;
 		ResultSet rs = null;
@@ -1446,5 +1412,5 @@ public class Database {
 			closeConnection(con);
 		}
 	}
-	
+
 }

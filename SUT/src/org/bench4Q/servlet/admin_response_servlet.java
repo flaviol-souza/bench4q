@@ -61,7 +61,19 @@ public class admin_response_servlet extends HttpServlet {
 
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
+		
+		String sLoad = req.getParameter("bench4q_add_load");
+		String sOpt = req.getParameter("bench4q_add_load_opt");
+		
+		if(sLoad == null || sOpt == null) {
+			sLoad = "0";
+			sOpt = "0";
+		}
+			
+		int iLoad = Integer.parseInt(sLoad);
+		int iOpt = Integer.parseInt(sOpt);	
 
+		Database.waitCustom(iLoad, iOpt);
 		// Get this book out of the database
 		Book book = Database.getBook(I_ID);
 
@@ -77,6 +89,7 @@ public class admin_response_servlet extends HttpServlet {
 				|| I_NEW_THUMBNAIL.length() == 0) {
 			out.print("<H2>Invalid Input</H2>");
 		} else {
+			Database.waitCustom(iLoad, iOpt);
 			// Update the database
 			Database.adminUpdate(I_ID, I_NEW_COSTdbl.doubleValue(), I_NEW_IMAGE, I_NEW_THUMBNAIL);
 
@@ -126,6 +139,11 @@ public class admin_response_servlet extends HttpServlet {
 			out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
 
 			out.print("</FORM>\n");
+			
+			out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+			out.println("<TR><TD>Load:</TD> <TD> 2 * "+sLoad+" </TD> </TR>");
+			out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+			out.println("</TABLE>");
 		}
 		out.print("</BODY></HTML>");
 		out.close();

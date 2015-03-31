@@ -60,6 +60,17 @@ public class new_products_servlet extends HttpServlet {
 		String subject = req.getParameter("subject");
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
+		
+		String sLoad = req.getParameter("bench4q_add_load");
+		String sOpt = req.getParameter("bench4q_add_load_opt");
+		
+		if(sLoad == null || sOpt == null) {
+			sLoad = "0";
+			sOpt = "0";
+		}
+			
+		int iLoad = Integer.parseInt(sLoad);
+		int iOpt = Integer.parseInt(sOpt);
 
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
@@ -82,7 +93,7 @@ public class new_products_servlet extends HttpServlet {
 
 		// Need to insert code here to get new products from the database,
 		// and then spit them out in html to complete the table
-
+		Database.waitCustom(iLoad, iOpt);
 		Vector books = Database.getNewProducts(subject);
 		for (i = 0; i < books.size(); i++) {
 			ShortBook book = (ShortBook) books.elementAt(i);
@@ -127,6 +138,12 @@ public class new_products_servlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
+		
+		out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+		out.println("<TR><TD>Load:</TD> <TD> 1 * "+sLoad+" </TD> </TR>");
+		out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+		out.println("</TABLE>");
+		
 		out.print("</BODY> </HTML>\n");
 		out.close();
 		return;

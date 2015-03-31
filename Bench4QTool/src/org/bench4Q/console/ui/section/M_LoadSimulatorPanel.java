@@ -447,7 +447,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 			int nvms = 0; // = to shutdown vms number * 0.5 
 			String text = n_vms.getText().trim(); 
 			if (( text != null) && (!text.equals(""))) {
-				nvms = Integer.parseInt(n_vms.getText().trim());
+				nvms = Integer.parseInt(text);
 			}
 			m_configModel.getArgs().setNvms(nvms);
 		}
@@ -456,7 +456,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 			int nvms = 0;
 			String text = n_vms.getText().trim(); 
 			if (( text != null) && (!text.equals(""))) {
-				nvms = Integer.parseInt(n_vms.getText().trim());
+				nvms = Integer.parseInt(text);
 			}
 			m_configModel.getArgs().setNvms(nvms);
 		}
@@ -465,7 +465,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 			int nvms = 0;
 			String text = n_vms.getText().trim(); 
 			if (( text != null) && (!text.equals(""))) {
-				nvms = Integer.parseInt(n_vms.getText().trim());
+				nvms = Integer.parseInt(text);
 			}
 			m_configModel.getArgs().setNvms(nvms);
 		}
@@ -477,9 +477,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 			double tstep = 0.5D; // to shutdown in the middle of experiment
 			String text = t_step.getText().trim();
 			if (( text != null) && (!text.equals(""))) {
-				tstep = Double.parseDouble(t_step.getText().trim());
+				tstep = Double.parseDouble(text);
 			}
-			System.out.println(tstep);
 			m_configModel.getArgs().setTstep(tstep);
 		}
 
@@ -487,9 +486,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 			double tstep = 0.5D; // to shutdown in the middle of experiment
 			String text = t_step.getText().trim();
 			if (( text != null) && (!text.equals(""))) {
-				tstep = Double.parseDouble(t_step.getText().trim());
+				tstep = Double.parseDouble(text);
 			}
-			System.out.println(tstep);
 			m_configModel.getArgs().setTstep(tstep);
 		}
 
@@ -497,9 +495,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 			double tstep = 0.5D; // to shutdown in the middle of experiment
 			String text = t_step.getText().trim();
 			if (( text != null) && (!text.equals(""))) {
-				tstep = Double.parseDouble(t_step.getText().trim());
+				tstep = Double.parseDouble(text);
 			}
-			System.out.println(tstep);
 			m_configModel.getArgs().setTstep(tstep);
 		}
 	}

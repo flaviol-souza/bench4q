@@ -51,6 +51,17 @@ public class order_display_servlet extends HttpServlet {
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 		String url;
+		
+		String sLoad = req.getParameter("bench4q_add_load");
+		String sOpt = req.getParameter("bench4q_add_load_opt");
+		
+		if(sLoad == null || sOpt == null) {
+			sLoad = "0";
+			sOpt = "0";
+		}
+			
+		int iLoad = Integer.parseInt(sLoad);
+		int iOpt = Integer.parseInt(sOpt);
 
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
@@ -66,12 +77,13 @@ public class order_display_servlet extends HttpServlet {
 		String uname = req.getParameter("UNAME");
 		String passwd = req.getParameter("PASSWD");
 		if (uname != null && passwd != null) {
-
+			Database.waitCustom(iLoad, iOpt);
 			String storedpasswd = Database.GetPassword(uname);
 			if (!storedpasswd.equals(passwd)) {
 				out.print("Error: Incorrect password.\n");
 			} else {
 				Vector lines = new Vector();
+				Database.waitCustom(iLoad, iOpt);
 				Order order = Database.GetMostRecentOrder(uname, lines);
 				if (order != null)
 					printOrder(order, lines, out);
@@ -105,7 +117,20 @@ public class order_display_servlet extends HttpServlet {
 
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
-		out.print("</CENTER></FORM></BODY></HTML>");
+		out.print("</CENTER></FORM>");
+		
+		if (uname != null && passwd != null) {
+			out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+			out.println("<TR><TD>Load:</TD> <TD> 1 * "+sLoad+" </TD> </TR>");
+			out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+			out.println("</TABLE>");
+		}else{
+			out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+			out.println("<TR><TD>Load:</TD> <TD> 0 * "+sLoad+" </TD> </TR>");
+			out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+			out.println("</TABLE>");
+		}
+		out.print("</BODY></HTML>");
 	}
 
 	private void printOrder(Order order, Vector lines, PrintWriter out) {

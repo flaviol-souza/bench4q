@@ -78,6 +78,9 @@ public class Args implements Sendable {
 
 	private String typeFrenquency;
 	private boolean tfOption;
+	
+	private int addLoad;
+	private int addLoadOpt;
 
 	/**
 	 * constructor
@@ -101,8 +104,28 @@ public class Args implements Sendable {
 		this.ttMMPP = true; // with stagger
 		this.baseURL = "http://localhost:8080/jaspte";
 	}
-
 	
+		
+	public int getAddLoad() {
+		return addLoad;
+	}
+
+
+	public void setAddLoad(int addLoad) {
+		this.addLoad = addLoad;
+	}
+
+
+	public int getAddLoadOpt() {
+		return addLoadOpt;
+	}
+
+
+	public void setAddLoadOpt(int addLoadOpt) {
+		this.addLoadOpt = addLoadOpt;
+	}
+
+
 	/**
 	 * @return rbe type
 	 */

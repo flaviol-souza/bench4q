@@ -61,6 +61,9 @@ public class EBClosed extends EB {
 		this.lname = null;
 		this.toHome = false;
 		this.rate = (args.getRate() / 100.0D);
+		
+		this.addLoad = args.getAddLoad();
+		this.addLoadOpt = args.getAddLoadOpt();
 
 		this.p_s_to_l = args.getP_s_to_l();
 		this.p_l_to_s = args.getP_l_to_s();
@@ -204,6 +207,22 @@ public class EBClosed extends EB {
 							this.nextReq += "?bench4q_session_priority=1";
 						}
 					}
+					
+					// additional load
+					if(this.addLoad > 0 && this.addLoadOpt >= 0) {
+						if (this.nextReq.contains("?")) {
+							this.nextReq += "&bench4q_add_load=" + this.addLoad + "&bench4q_add_load_opt=" +this.addLoadOpt;
+						} else {
+							this.nextReq += "?bench4q_add_load=" + this.addLoad + "&bench4q_add_load_opt=" +this.addLoadOpt;
+						}
+					} else {
+						if (this.nextReq.contains("?")) {
+							this.nextReq += "&bench4q_add_load=0&bench4q_add_load_opt=0";
+						} else {
+							this.nextReq += "?bench4q_add_load=0&bench4q_add_load_opt=0";
+						}
+					}
+					
 					if (this.first) {
 						this.m_Client = HttpClientFactory.getInstance();
 						this.m_Client.getParams().setCookiePolicy(CookiePolicy.RFC_2965);

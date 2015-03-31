@@ -87,6 +87,11 @@ public class M_UserSettingPanel extends JPanel {
 	private JTextField VIPrate;
 	private JLabel percent;
 	private JCheckBox ttMMPP;
+	
+	private JLabel addLoadlabel;
+	private JTextField addLoad;
+	private JLabel addLoadOptlabel;
+	private JTextField addLoadOpt;
 
 	/**
 	 * @param resources
@@ -138,6 +143,19 @@ public class M_UserSettingPanel extends JPanel {
 		VIPrate = new JTextField(String.valueOf(fileLoader.getArgs().getRate()));
 		VIPrate.getDocument().addDocumentListener(new VIPrateListener());
 		percent = new JLabel("%", SwingConstants.RIGHT);
+		
+		
+		addLoadlabel = new JLabel(
+				m_resources.getString("MessSection.addLoadLabel"),
+				SwingConstants.RIGHT);
+		addLoad = new JTextField(String.valueOf(fileLoader.getArgs().getAddLoad()));
+		addLoad.getDocument().addDocumentListener(new addLoadListener());
+		
+		addLoadOptlabel = new JLabel(
+				m_resources.getString("MessSection.addLoadOptLabel"),
+				SwingConstants.RIGHT);
+		addLoadOpt = new JTextField(String.valueOf(fileLoader.getArgs().getAddLoadOpt()));
+		addLoadOpt.getDocument().addDocumentListener(new addLoadOptListener());
 
 		toleranceLabel = new JLabel(
 				m_resources.getString("GenelPanel.toleranceLabel"),
@@ -218,8 +236,22 @@ public class M_UserSettingPanel extends JPanel {
 		this.add(VIPrateExplain, new GridBagConstraints(0, 9, 3, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
 						5, 5, 5), 1, 1));
+		
+		
+		this.add(addLoadlabel, new GridBagConstraints(0, 10, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(addLoad, new GridBagConstraints(1, 10, 2, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(addLoadOptlabel, new GridBagConstraints(0, 11, 1, 1, 0.0, 0.0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
+		this.add(addLoadOpt, new GridBagConstraints(1, 11, 2, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,
+						5, 5, 5), 1, 1));
 
-		this.add(new JLabel(), new GridBagConstraints(0, 11, 3, 1, 100.0,
+		this.add(new JLabel(), new GridBagConstraints(0, 12, 3, 1, 100.0,
 				100.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
 				new Insets(5, 5, 5, 5), 1, 1));
 
@@ -350,6 +382,69 @@ public class M_UserSettingPanel extends JPanel {
 		}
 	}
 
+	private class addLoadListener implements DocumentListener {
+		public void insertUpdate(DocumentEvent event) {
+			changeText();
+		}
+
+		public void removeUpdate(DocumentEvent event) {
+			changeText();
+		}
+
+		public void changedUpdate(DocumentEvent event) {
+			changeText();
+		}
+		
+		private void changeText(){
+			int addLoadValue = 1000;
+			String text = addLoad.getText().trim();
+			try {
+				if (( text != null) && (!text.equals(""))) {
+					addLoadValue = Integer.parseInt(text);
+				}
+			} catch (NumberFormatException e) {
+				// TODO: handle exception
+				addLoadValue = 1000;
+				System.err.println(e.getMessage());
+			}finally{
+				System.out.println("addLoadListener: "+addLoadValue);
+				m_configModel.getArgs().setAddLoad(addLoadValue);
+			}
+		}
+	}
+	
+	private class addLoadOptListener implements DocumentListener {
+		public void insertUpdate(DocumentEvent event) {
+			changeText();
+		}
+
+		public void removeUpdate(DocumentEvent event) {
+			changeText();
+		}
+
+		public void changedUpdate(DocumentEvent event) {
+			changeText();
+		}
+		
+		private void changeText(){
+			int addLoadOptValue = 0;
+			String text = addLoadOpt.getText().trim();
+			try {
+				if (( text != null) && (!text.equals(""))) {
+					addLoadOptValue = Integer.parseInt(text);
+				}
+			} catch (NumberFormatException e) {
+				// TODO: handle exception
+				addLoadOptValue = 0;
+				System.err.println(e.getMessage());
+			}finally{
+				System.out.println("addLoadOptListener: "+addLoadOptValue);
+				m_configModel.getArgs().setAddLoadOpt(addLoadOptValue);
+			}
+		}
+	}
+	
+	
 	private class ToleranceListener implements DocumentListener {
 		public void insertUpdate(DocumentEvent event) {
 			double toleranceValue = 0;

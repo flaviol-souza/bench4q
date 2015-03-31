@@ -254,6 +254,10 @@ public abstract class EB extends Thread {
 
 	public boolean first;
 	public double rate;
+	
+	public int addLoad;
+	public int addLoadOpt;
+	
 	Cookie[] cookies;
 	public long start;
 	public long end;

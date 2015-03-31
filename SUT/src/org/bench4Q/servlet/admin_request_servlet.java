@@ -62,9 +62,21 @@ public class admin_request_servlet extends HttpServlet {
 		String I_IDstr = req.getParameter("I_ID");
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
+		
+		String sLoad = req.getParameter("bench4q_add_load");
+		String sOpt = req.getParameter("bench4q_add_load_opt");
+		
+		if(sLoad == null || sOpt == null) {
+			sLoad = "0";
+			sOpt = "0";
+		}
+			
+		int iLoad = Integer.parseInt(sLoad);
+		int iOpt = Integer.parseInt(sOpt);	
 
 		int I_ID = Integer.parseInt(I_IDstr, 10);
-
+		
+		Database.waitCustom(iLoad, iOpt);
 		Book book = Database.getBook(I_ID);
 
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
@@ -123,7 +135,12 @@ public class admin_request_servlet extends HttpServlet {
 
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P>\n");
-
+		
+		out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+		out.println("<TR><TD>Load:</TD> <TD> 1 * "+sLoad+" </TD> </TR>");
+		out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+		out.println("</TABLE>");
+		
 		out.print("</FORM></BODY></HTML>");
 		out.close();
 		return;

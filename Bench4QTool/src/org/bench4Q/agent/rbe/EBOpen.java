@@ -156,6 +156,22 @@ public class EBOpen extends EB {
 					EBStats.getEBStats().addErrorSession(this.curState, this.isVIP);
 					return;
 				}
+				
+				// additional load
+				if(this.addLoad > 0 && this.addLoadOpt >= 0) {
+					if (this.nextReq.contains("?")) {
+						this.nextReq += "&bench4q_add_load=" + this.addLoad + "&bench4q_add_load_opt=" +this.addLoadOpt;
+					} else {
+						this.nextReq += "?bench4q_add_load=" + this.addLoad + "&bench4q_add_load_opt=" +this.addLoadOpt;
+					}
+				} else {
+					if (this.nextReq.contains("?")) {
+						this.nextReq += "&bench4q_add_load=0&bench4q_add_load_opt=0";
+					} else {
+						this.nextReq += "?bench4q_add_load=0&bench4q_add_load_opt=0";
+					}
+				}
+				
 				// Send HTTP request.
 				URL httpReq;
 				try {

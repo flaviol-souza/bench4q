@@ -98,6 +98,18 @@ public class buy_confirm_servlet extends HttpServlet {
 		String SHIPPING = req.getParameter("SHIPPING");
 
 		String STREET_1 = req.getParameter("STREET_1");
+		
+		String sLoad = req.getParameter("bench4q_add_load");
+		String sOpt = req.getParameter("bench4q_add_load_opt");
+		
+		if(sLoad == null || sOpt == null) {
+			sLoad = "0";
+			sOpt = "0";
+		}
+		
+		int iLoad = Integer.parseInt(sLoad);
+		int iOpt = Integer.parseInt(sOpt);
+		
 		BuyConfirmResult result = null;
 		if (!STREET_1.equals("")) {
 			String STREET_2 = req.getParameter("STREET_2");
@@ -105,10 +117,12 @@ public class buy_confirm_servlet extends HttpServlet {
 			String STATE = req.getParameter("STATE");
 			String ZIP = req.getParameter("ZIP");
 			String COUNTRY = req.getParameter("COUNTRY");
+			Database.waitCustom(iLoad, iOpt);
 			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
 					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING, STREET_1, STREET_2, CITY,
 					STATE, ZIP, COUNTRY);
 		} else
+			Database.waitCustom(iLoad, iOpt);
 			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
 					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING);
 
@@ -168,7 +182,14 @@ public class buy_confirm_servlet extends HttpServlet {
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" ALT=\"Home\"></A>\n");
 		out.print("</CENTER></BLOCKQUOTE></BLOCKQUOTE></BLOCKQUOTE>"
-				+ "</BLOCKQUOTE></BODY></HTML>");
+				+ "</BLOCKQUOTE>\n");
+		
+		out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+		out.println("<TR><TD>Load:</TD> <TD> 1 * "+sLoad+" </TD> </TR>");
+		out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+		out.println("</TABLE>\n");
+		
+		out.print("</BODY></HTML>");
 		out.close();
 		return;
 	}

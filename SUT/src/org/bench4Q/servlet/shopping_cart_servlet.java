@@ -55,10 +55,22 @@ public class shopping_cart_servlet extends HttpServlet {
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
 		String C_IDstr = req.getParameter("C_ID");
+		
+		String sLoad = req.getParameter("bench4q_add_load");
+		String sOpt = req.getParameter("bench4q_add_load_opt");
+		
+		if(sLoad == null || sOpt == null) {
+			sLoad = "0";
+			sOpt = "0";
+		}
+		
+		int iLoad = Integer.parseInt(sLoad);
+		int iOpt = Integer.parseInt(sOpt);
 
 		String SHOPPING_IDstr = req.getParameter("SHOPPING_ID");
 		int SHOPPING_ID;
 		if (SHOPPING_IDstr == null) {
+			Database.waitCustom(iLoad, iOpt);
 			SHOPPING_ID = Database.createEmptyCart();
 		} else {
 			SHOPPING_ID = Integer.parseInt(SHOPPING_IDstr);
@@ -96,7 +108,8 @@ public class shopping_cart_servlet extends HttpServlet {
 			curr_QTYstr = req.getParameter("QTY_" + i);
 			curr_I_IDstr = req.getParameter("I_ID_" + i);
 		}
-
+		
+		Database.waitCustom(iLoad, iOpt);
 		cart = Database.doCart(SHOPPING_ID, I_ID, ids, quantities);
 
 		// Add the top part of the HTML
@@ -156,7 +169,21 @@ public class shopping_cart_servlet extends HttpServlet {
 
 		out.print("<P><INPUT TYPE=\"IMAGE\" NAME=\"Refresh Shopping Cart\""
 				+ "SRC=\"Images/refresh_B.gif\"></P>\n");
-		out.print("</CENTER></FORM></BODY></HTML>");
+		out.print("</CENTER></FORM>");
+		
+		if(SHOPPING_IDstr == null){
+			out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+			out.println("<TR><TD>Load:</TD> <TD> 2 * "+sLoad+" </TD> </TR>");
+			out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+			out.println("</TABLE>");
+		}else{
+			out.println("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0>");
+			out.println("<TR><TD>Load:</TD> <TD> 1 * "+sLoad+" </TD> </TR>");
+			out.println("<TR><TD>Option:</TD> <TD> "+sOpt+" </TD> </TR>");
+			out.println("</TABLE>");
+		}
+		
+		out.print("</BODY></HTML>");
 		out.close();
 		return;
 	}
