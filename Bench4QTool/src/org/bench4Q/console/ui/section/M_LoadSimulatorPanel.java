@@ -96,6 +96,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JCheckBox EJB;
 	private JCheckBox MoniWeb;
 	private JCheckBox MoniDB;
+	private JCheckBox ModelingSys;
 
 	private JComboBox type;
 	private JTextField URL;
@@ -148,6 +149,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		EJB = new JCheckBox(m_resources.getString("GenelPanel.EJBLabel"));
 		MoniWeb = new JCheckBox(m_resources.getString("GenelPanel.MoniWeb"));
 		MoniDB = new JCheckBox(m_resources.getString("GenelPanel.MoniDB"));
+		ModelingSys = new JCheckBox(m_resources.getString("GenelPanel.ModelingSys"));
 
 		typeExplain1 = new JLabel(m_resources.getString("GenelPanel.typeExplain1"), SwingConstants.RIGHT);
 		// typeExplain1.setFont();
@@ -231,9 +233,21 @@ public class M_LoadSimulatorPanel extends JPanel {
 			DBPortExplain.setVisible(false);
 			DBURLExplain.setVisible(false);
 		}
+		
+		
+		
+		ModelingSys.setSelected(m_configModel.getArgs().getTfOption());
+		if (!ModelingSys.isSelected()) {
+			n_vms.setEnabled(false);
+			t_step.setEnabled(false);
+			l_lbModelingTStep.setEnabled(false);
+			l_lbModelingNVMs.setEnabled(false);
+		}
+		
 		EJB.addActionListener(new EJBlistener());
 		MoniWeb.addActionListener(new MoniWeblistener());
 		MoniDB.addActionListener(new MoniDBlistener());
+		ModelingSys.addActionListener(new ModelingSyslistener());
 
 		this.add(typeLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
@@ -320,7 +334,15 @@ public class M_LoadSimulatorPanel extends JPanel {
 		this.add(l_resetEnvironment, new GridBagConstraints(0, 21, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 		
-		this.add(bt_reset, new GridBagConstraints(1, 21, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
+		this.add(bt_shutdown, new GridBagConstraints(1, 21, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		bt_shutdown.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				shutdownVMlistener(evt);
+			}
+		});
+		
+		this.add(bt_reset, new GridBagConstraints(2, 21, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 		bt_reset.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,25 +350,19 @@ public class M_LoadSimulatorPanel extends JPanel {
 			}
 		});
 
-		this.add(bt_shutdown, new GridBagConstraints(2, 21, 4, 1, 100.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		bt_shutdown.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				shutdownVMlistener(evt);
-			}
-		});
-
-		
-		this.add(l_lbModelingNVMs, new GridBagConstraints(0, 22, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+		this.add(ModelingSys, new GridBagConstraints(0, 22, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 		
-		this.add(n_vms, new GridBagConstraints(1, 22, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
+		this.add(l_lbModelingNVMs, new GridBagConstraints(0, 23, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		
+		this.add(n_vms, new GridBagConstraints(1, 23, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 
-		this.add(l_lbModelingTStep , new GridBagConstraints(0, 23, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+		this.add(l_lbModelingTStep , new GridBagConstraints(0, 24, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 		
-		this.add(t_step, new GridBagConstraints(1, 23, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
+		this.add(t_step, new GridBagConstraints(1, 24, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 		
 		
@@ -724,6 +740,28 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 	}
 
+	private class ModelingSyslistener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (ModelingSys.isSelected()) {
+				n_vms.setEnabled(true);
+				t_step.setEnabled(true);
+				l_lbModelingTStep.setEnabled(true);
+				l_lbModelingNVMs.setEnabled(true);
+				m_configModel.getArgs().setTfOption(true);
+			} else {
+				n_vms.setEnabled(false);
+				t_step.setEnabled(false);
+				l_lbModelingTStep.setEnabled(false);
+				l_lbModelingNVMs.setEnabled(false);
+				m_configModel.getArgs().setTfOption(false);
+			}
+
+		}
+
+	}
+	
 	private void resetVMlistener(java.awt.event.ActionEvent evt) {
 
 		String hostNB = m_configModel.getArgs().getLbHost();

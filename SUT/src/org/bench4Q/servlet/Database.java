@@ -128,7 +128,7 @@ public class Database {
 
 			if (opt == 0) {
 				try {
-					Thread.sleep((int) (end / 2));
+					Thread.sleep((int) (end * 0.75));
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -137,7 +137,7 @@ public class Database {
 					s += "root";
 				}
 			}
-			if (opt > 1) {
+			if (opt >= 1) {
 				for (int i = 0; i < end; i++) {
 					s += "root";
 					try {

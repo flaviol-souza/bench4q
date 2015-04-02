@@ -10,7 +10,7 @@
 		<out>out</out>
 		<tolerance>0.0</tolerance>
 		<retry>3</retry>
-		<thinktime>0.1</thinktime>
+		<thinktime>0.11</thinktime>
 		<tfOption>true</tfOption>
 		<mix>browsing</mix>
 		<slow>0.0</slow>

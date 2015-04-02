@@ -86,7 +86,7 @@ public class M_UserSettingPanel extends JPanel {
 	private JLabel VIPrateExplain;
 	private JTextField VIPrate;
 	private JLabel percent;
-	private JCheckBox ttMMPP;
+	//private JCheckBox ttMMPP;
 	
 	private JLabel addLoadlabel;
 	private JTextField addLoad;
@@ -168,7 +168,7 @@ public class M_UserSettingPanel extends JPanel {
 		ttExplain = new JLabel(m_resources.getString("GenelPanel.ttExplain"),
 				SwingConstants.LEFT);
 
-		ttMMPP = new JCheckBox(m_resources.getString("GenelPanel.ttMMPP"));
+		//ttMMPP = new JCheckBox(m_resources.getString("GenelPanel.ttMMPP"));
 
 		tolerance = new JTextField(String.valueOf(fileLoader.getArgs()
 				.getTolerance()));
@@ -176,7 +176,7 @@ public class M_UserSettingPanel extends JPanel {
 
 		tt = new JTextField(String.valueOf(fileLoader.getArgs().getThinktime()));
 		tt.getDocument().addDocumentListener(new TTListener());
-		ttMMPP.addActionListener(new TT_MMPP());
+		//ttMMPP.addActionListener(new TT_MMPP());
 
 		this.add(imageLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
@@ -207,9 +207,9 @@ public class M_UserSettingPanel extends JPanel {
 		this.add(tt, new GridBagConstraints(1, 4, 2, 1, 100.0, 0.0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 5, 5, 5), 1, 1));
-		this.add(ttMMPP, new GridBagConstraints(3, 4, 2, 1, 0.0, 0.0,
+		/*this.add(ttMMPP, new GridBagConstraints(3, 4, 2, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,
-						5, 5, 5), 1, 1));
+						5, 5, 5), 1, 1));*/
 		this.add(ttExplain, new GridBagConstraints(0, 5, 3, 1, 0.0, 0.0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,
 						5, 5, 5), 1, 1));
@@ -407,7 +407,7 @@ public class M_UserSettingPanel extends JPanel {
 				addLoadValue = 1000;
 				System.err.println(e.getMessage());
 			}finally{
-				System.out.println("addLoadListener: "+addLoadValue);
+				//System.out.println("addLoadListener: "+addLoadValue);
 				m_configModel.getArgs().setAddLoad(addLoadValue);
 			}
 		}
@@ -438,7 +438,7 @@ public class M_UserSettingPanel extends JPanel {
 				addLoadOptValue = 0;
 				System.err.println(e.getMessage());
 			}finally{
-				System.out.println("addLoadOptListener: "+addLoadOptValue);
+				//System.out.println("addLoadOptListener: "+addLoadOptValue);
 				m_configModel.getArgs().setAddLoadOpt(addLoadOptValue);
 			}
 		}
@@ -477,33 +477,33 @@ public class M_UserSettingPanel extends JPanel {
 	private class TTListener implements DocumentListener {
 		public void insertUpdate(DocumentEvent event) {
 			double ttValue = 0;
-			if ((tt.getText().trim() != null)
-					&& (!tt.getText().trim().equals(""))) {
-				ttValue = Double.parseDouble(tt.getText().trim());
+			String text = tt.getText().trim(); 
+			if (( text != null) && (!text.equals(""))) {
+				ttValue = Double.parseDouble(text);
 			}
 			m_configModel.getArgs().setThinktime(ttValue);
 		}
 
 		public void removeUpdate(DocumentEvent event) {
 			double ttValue = 0;
-			if ((tt.getText().trim() != null)
-					&& (!tt.getText().trim().equals(""))) {
-				ttValue = Double.parseDouble(tt.getText().trim());
+			String text = tt.getText().trim(); 
+			if (( text != null) && (!text.equals(""))) {
+				ttValue = Double.parseDouble(text);
 			}
 			m_configModel.getArgs().setThinktime(ttValue);
 		}
 
 		public void changedUpdate(DocumentEvent event) {
 			double ttValue = 0;
-			if ((tt.getText().trim() != null)
-					&& (!tt.getText().trim().equals(""))) {
-				ttValue = Double.parseDouble(tt.getText().trim());
+			String text = tt.getText().trim(); 
+			if (( text != null) && (!text.equals(""))) {
+				ttValue = Double.parseDouble(text);
 			}
 			m_configModel.getArgs().setThinktime(ttValue);
 		}
 	}
 
-	private class TT_MMPP implements ActionListener {
+	/*private class TT_MMPP implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -516,6 +516,6 @@ public class M_UserSettingPanel extends JPanel {
 			}
 		}
 
-	}
+	}*/
 
 }
