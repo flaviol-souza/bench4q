@@ -45,7 +45,8 @@ public class Args implements Sendable {
 	private String lbHost;
 	private int lbPort;
 	private int nvms;
-	private double tstep;
+	private double downStep;
+	private double upStep;
 	private int prepair;
 	private int cooldown;
 	private String out;
@@ -91,7 +92,8 @@ public class Args implements Sendable {
 		this.rbetype = "closed";
 		this.interval = 1.0D;
 		this.nvms = 0;
-		this.tstep = 0.5D;
+		this.downStep = 0.5D;
+		this.upStep = 0.75D;
 		this.prepair = 600;
 		this.cooldown = 300;
 		this.out = "out";
@@ -252,7 +254,7 @@ public class Args implements Sendable {
 		this.thinktime = thinktime;
 	}
 
-	public boolean isTtMMPP() {
+	public boolean isTtMMPP() {downstep = Double.parseDouble(text);
 		return this.ttMMPP;
 	}
 
@@ -331,13 +333,22 @@ public class Args implements Sendable {
 	}
 
 	
-	public double getTstep() {
-		return tstep;
+	public double getDownStep() {
+		return downStep;
 	}
 
 
-	public void setTstep(double tstep) {
-		this.tstep = tstep;
+	public void setDownStep(double downStep) {
+		this.downStep = downStep;
+	}
+
+	public double getUpStep() {
+		return upStep;
+	}
+
+
+	public void setUpStep(double upStep) {
+		this.upStep = upStep;
 	}
 
 

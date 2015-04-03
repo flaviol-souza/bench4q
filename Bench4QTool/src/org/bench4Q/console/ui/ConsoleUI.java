@@ -1000,19 +1000,36 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 					public void run() {
 						try {
-							double tstep = m_configModel.getArgs().getTstep(); // tempo da perturbacao <0.1 - 1.0>
+							double downstep = m_configModel.getArgs().getDownStep(); // tempo da perturbacao <0.1 - 1.0>
 							long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
-							int sleeptime = (int)(texp * tstep);
-							Thread.sleep(sleeptime * 1000);
-							Logger.getLogger().info("Enviando mensagem ao LB depois de: " + sleeptime + " segs");
-							modelingVMlistener();
+							int timeToDown = (int)(texp * downstep);
+							Thread.sleep(timeToDown * 1000);
+							Logger.getLogger().info("Enviando mensagem ao LB depois de: " + timeToDown + " segs");
+							modelingVMlistener(0);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-
 					}
 				}).start();
+				
+				new Thread(new Runnable() {
+
+					public void run() {
+						try {
+							double upstep = m_configModel.getArgs().getUpStep(); // tempo da perturbacao <0.1 - 1.0>
+							long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
+							int timeToUp = (int)(texp * upstep);
+							Thread.sleep(timeToUp * 1000);
+							Logger.getLogger().info("Enviando mensagem ao LB depois de: " + timeToUp + " segs");
+							modelingVMlistener(1);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}).start();
+				
 			} else {
 				Logger.getLogger().debug("TF desativado ");
 			}
@@ -1044,13 +1061,19 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 
 		/**
 		 * Permite desligar maquinas virtuais em um tempo x. Pelo geral e na metade do tempo 
+		 * @param typeStep Se 0, entao é para desligar maquinas virtuais. Se 1, e para ligar maquinas virtuais
+		 *  
 		 * */
-		private void modelingVMlistener() {
+		private void modelingVMlistener(int typeStep) {
 
 			String hostNB = m_configModel.getArgs().getLbHost();
 			int portNB = m_configModel.getArgs().getLbPort();
 			int nvms = m_configModel.getArgs().getNvms();
-			String message = "{\"expmanager\":\"shutdown\",\"vms\":\""+nvms+"\", \"safe\":\"1\"}";
+			String message = "";
+			if (typeStep == 0)
+				message = "{\"expmanager\":\"shutdown\",\"vms\":\""+nvms+"\", \"safe\":\"1\"}";
+			if (typeStep == 1)
+				message = "{\"expmanager\":\"start\",\"vms\":\""+nvms+"\", \"safe\":\"1\"}";
 
 			Socket client = null;
 			PrintStream out = null;

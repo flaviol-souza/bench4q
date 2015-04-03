@@ -275,8 +275,10 @@ public final class ConfigModel {
 		rbe.addContent(lbPort);
 		Element nvms = new Element("nvms").setText(String.valueOf(m_args.getNvms()));
 		rbe.addContent(nvms);
-		Element tstep = new Element("tstep").setText(String.valueOf(m_args.getTstep()));
-		rbe.addContent(tstep);
+		Element downstep = new Element("downstep").setText(String.valueOf(m_args.getDownStep()));
+		rbe.addContent(downstep);
+		Element upstep = new Element("upstep").setText(String.valueOf(m_args.getUpStep()));
+		rbe.addContent(upstep);
 		Element addload = new Element("addload").setText(String.valueOf(m_args.getAddLoad()));
 		rbe.addContent(addload);
 		Element addloadopt = new Element("addloadopt").setText(String.valueOf(m_args.getAddLoadOpt()));
@@ -374,7 +376,8 @@ public final class ConfigModel {
 		args.setLbHost(rbe.getChildText("lbHost").trim());
 		args.setLbPort(Integer.parseInt(rbe.getChildText("lbPort").trim()));
 		args.setNvms(Integer.parseInt(rbe.getChildText("nvms").trim()));
-		args.setTstep(Double.parseDouble(rbe.getChildText("tstep").trim()));
+		args.setDownStep(Double.parseDouble(rbe.getChildText("downstep").trim()));
+		args.setUpStep(Double.parseDouble(rbe.getChildText("upstep").trim()));
 		args.setAddLoad(Integer.parseInt(rbe.getChildText("addload").trim()));
 		args.setAddLoadOpt(Integer.parseInt(rbe.getChildText("addloadopt").trim()));
 		args.setWebPort(Integer.parseInt(rbe.getChildText("webport").trim()));

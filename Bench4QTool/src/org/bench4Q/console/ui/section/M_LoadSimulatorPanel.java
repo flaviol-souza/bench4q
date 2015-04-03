@@ -115,7 +115,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JLabel l_lbModelingNVMs;
 	private JButton bt_reset;
 	private JButton bt_shutdown;
-	private JTextField t_step;
+	private JTextField down_step;
+	private JTextField up_step;
 	private JTextField n_vms;
 
 	/**
@@ -194,8 +195,11 @@ public class M_LoadSimulatorPanel extends JPanel {
 		n_vms = new JTextField(String.valueOf(fileLoader.getArgs().getNvms()));
 		n_vms.getDocument().addDocumentListener(new VMNumberListener());
 		
-		t_step = new JTextField(String.valueOf(fileLoader.getArgs().getTstep()));
-		t_step.getDocument().addDocumentListener(new TStepListener());
+		down_step = new JTextField(String.valueOf(fileLoader.getArgs().getDownStep()));
+		down_step.getDocument().addDocumentListener(new DownStepListener());
+		
+		up_step = new JTextField(String.valueOf(fileLoader.getArgs().getUpStep()));
+		up_step.getDocument().addDocumentListener(new DownStepListener());
 
 		URL = new JTextField(fileLoader.getArgs().getBaseURL());
 		URL.getDocument().addDocumentListener(new URLListener());
@@ -239,7 +243,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		ModelingSys.setSelected(m_configModel.getArgs().getTfOption());
 		if (!ModelingSys.isSelected()) {
 			n_vms.setEnabled(false);
-			t_step.setEnabled(false);
+			down_step.setEnabled(false);
 			l_lbModelingTStep.setEnabled(false);
 			l_lbModelingNVMs.setEnabled(false);
 		}
@@ -362,7 +366,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		this.add(l_lbModelingTStep , new GridBagConstraints(0, 24, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 		
-		this.add(t_step, new GridBagConstraints(1, 24, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
+		this.add(down_step, new GridBagConstraints(1, 24, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 		
 		
@@ -487,33 +491,63 @@ public class M_LoadSimulatorPanel extends JPanel {
 		}
 	}
 
-	private class TStepListener implements DocumentListener {
+	private class DownStepListener implements DocumentListener {
 
 		public void insertUpdate(DocumentEvent event) {
-			double tstep = 0.5D; // to shutdown in the middle of experiment
-			String text = t_step.getText().trim();
-			if (( text != null) && (!text.equals(""))) {
-				tstep = Double.parseDouble(text);
-			}
-			m_configModel.getArgs().setTstep(tstep);
+			changeValue();
 		}
 
 		public void removeUpdate(DocumentEvent event) {
-			double tstep = 0.5D; // to shutdown in the middle of experiment
-			String text = t_step.getText().trim();
-			if (( text != null) && (!text.equals(""))) {
-				tstep = Double.parseDouble(text);
-			}
-			m_configModel.getArgs().setTstep(tstep);
+			changeValue();
 		}
 
 		public void changedUpdate(DocumentEvent event) {
-			double tstep = 0.5D; // to shutdown in the middle of experiment
-			String text = t_step.getText().trim();
+			changeValue();
+		}
+		
+		private void changeValue(){
+			double downstep = 0.5D; // to shutdown in the middle of experiment
+			String text = down_step.getText().trim();
 			if (( text != null) && (!text.equals(""))) {
-				tstep = Double.parseDouble(text);
+				try {
+					downstep = Double.parseDouble(text);
+				} catch (Exception e) {
+					// TODO: handle exception
+					downstep = 0.5D;
+				}
 			}
-			m_configModel.getArgs().setTstep(tstep);
+			System.out.println(downstep);
+			m_configModel.getArgs().setDownStep(downstep);
+		}
+	}
+	
+	private class UpStepListener implements DocumentListener {
+
+		public void insertUpdate(DocumentEvent event) {
+			changeValue();
+		}
+
+		public void removeUpdate(DocumentEvent event) {
+			changeValue();
+		}
+
+		public void changedUpdate(DocumentEvent event) {
+			changeValue();
+		}
+		
+		private void changeValue(){
+			double upstep = 0.75D; // to shutdown in the middle of experiment
+			String text = up_step.getText().trim();
+			if (( text != null) && (!text.equals(""))) {
+				try {
+					upstep = Double.parseDouble(text);
+				} catch (Exception e) {
+					// TODO: handle exception
+					upstep = 0.75D;
+				}
+			}
+			System.out.println(upstep);
+			m_configModel.getArgs().setUpStep(upstep);
 		}
 	}
 	
@@ -746,13 +780,13 @@ public class M_LoadSimulatorPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (ModelingSys.isSelected()) {
 				n_vms.setEnabled(true);
-				t_step.setEnabled(true);
+				down_step.setEnabled(true);
 				l_lbModelingTStep.setEnabled(true);
 				l_lbModelingNVMs.setEnabled(true);
 				m_configModel.getArgs().setTfOption(true);
 			} else {
 				n_vms.setEnabled(false);
-				t_step.setEnabled(false);
+				down_step.setEnabled(false);
 				l_lbModelingTStep.setEnabled(false);
 				l_lbModelingNVMs.setEnabled(false);
 				m_configModel.getArgs().setTfOption(false);
