@@ -15,22 +15,23 @@
 		<mix>browsing</mix>
 		<slow>0.0</slow>
 		<getImage>false</getImage>
-		<baseURL>http://10.0.0.120:8181/bench4q</baseURL>
+		<baseURL>http://192.168.0.1:8181/bench4q</baseURL>
 		<lbHost>bench4qbalancer</lbHost>
 		<lbPort>8889</lbPort>
 		<nvms>0</nvms>
-		<tstep>0.5</tstep>
+		<downstep>0.5</downstep>
+		<upstep>0.75</upstep>
 		<addload>1000</addload>
 		<addloadopt>0</addloadopt>
 		<webport>10724</webport>
 		<databaseURL>10.0.0.231</databaseURL>
 		<dbport>10724</dbport>
 		<ebs>
-			<baseLoad>200</baseLoad>
+			<baseLoad>90</baseLoad>
 			<randomLoad>0</randomLoad>
 			<rate>0</rate>
 			<triggerTime>0</triggerTime>
-			<stdyTime>500</stdyTime>
+			<stdyTime>100</stdyTime>
 		</ebs>
 	</rbe>
 </bench4Q>
