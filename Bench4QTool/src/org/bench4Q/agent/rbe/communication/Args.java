@@ -254,7 +254,7 @@ public class Args implements Sendable {
 		this.thinktime = thinktime;
 	}
 
-	public boolean isTtMMPP() {downstep = Double.parseDouble(text);
+	public boolean isTtMMPP() {
 		return this.ttMMPP;
 	}
 
