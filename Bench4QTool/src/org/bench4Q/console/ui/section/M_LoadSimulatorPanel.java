@@ -111,7 +111,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JTextField interval;
 
 	private JLabel l_resetEnvironment;
-	private JLabel l_lbModelingTStep;
+	private JLabel l_lbModelingDownStep;
+	private JLabel l_lbModelingUpStep;
 	private JLabel l_lbModelingNVMs;
 	private JButton bt_reset;
 	private JButton bt_shutdown;
@@ -132,7 +133,8 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		typeLabel = new JLabel(m_resources.getString("GenelPanel.typeLabel"), SwingConstants.RIGHT);
 		l_resetEnvironment = new JLabel(m_resources.getString("GenelPanel.resetEnvLabel"), SwingConstants.RIGHT);
-		l_lbModelingTStep = new JLabel(m_resources.getString("GenelPanel.lbModelingLabelTstep"), SwingConstants.RIGHT);
+		l_lbModelingDownStep = new JLabel(m_resources.getString("GenelPanel.lbModelingLabelDownStep"), SwingConstants.RIGHT);
+		l_lbModelingUpStep = new JLabel(m_resources.getString("GenelPanel.lbModelingLabelUpStep"), SwingConstants.RIGHT);
 		l_lbModelingNVMs = new JLabel(m_resources.getString("GenelPanel.lbModelingLabelNVMs"), SwingConstants.RIGHT);
 		bt_reset = new JButton(m_resources.getString("GenelPanel.resetEnvLabelBt"));
 		bt_shutdown = new JButton(m_resources.getString("GenelPanel.shutdownEnvLabelBt"));
@@ -244,7 +246,9 @@ public class M_LoadSimulatorPanel extends JPanel {
 		if (!ModelingSys.isSelected()) {
 			n_vms.setEnabled(false);
 			down_step.setEnabled(false);
-			l_lbModelingTStep.setEnabled(false);
+			up_step.setEnabled(false);
+			l_lbModelingDownStep.setEnabled(false);
+			l_lbModelingUpStep.setEnabled(false);
 			l_lbModelingNVMs.setEnabled(false);
 		}
 		
@@ -363,10 +367,16 @@ public class M_LoadSimulatorPanel extends JPanel {
 		this.add(n_vms, new GridBagConstraints(1, 23, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 
-		this.add(l_lbModelingTStep , new GridBagConstraints(0, 24, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+		this.add(l_lbModelingDownStep , new GridBagConstraints(0, 24, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 		
 		this.add(down_step, new GridBagConstraints(1, 24, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
+		
+		this.add(l_lbModelingUpStep, new GridBagConstraints(0, 25, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		
+		this.add(up_step, new GridBagConstraints(1, 25, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 		
 		
@@ -781,13 +791,17 @@ public class M_LoadSimulatorPanel extends JPanel {
 			if (ModelingSys.isSelected()) {
 				n_vms.setEnabled(true);
 				down_step.setEnabled(true);
-				l_lbModelingTStep.setEnabled(true);
+				up_step.setEnabled(true);
+				l_lbModelingDownStep.setEnabled(true);
+				l_lbModelingUpStep.setEnabled(true);
 				l_lbModelingNVMs.setEnabled(true);
 				m_configModel.getArgs().setTfOption(true);
 			} else {
 				n_vms.setEnabled(false);
 				down_step.setEnabled(false);
-				l_lbModelingTStep.setEnabled(false);
+				up_step.setEnabled(false);
+				l_lbModelingDownStep.setEnabled(false);
+				l_lbModelingUpStep.setEnabled(false);
 				l_lbModelingNVMs.setEnabled(false);
 				m_configModel.getArgs().setTfOption(false);
 			}
