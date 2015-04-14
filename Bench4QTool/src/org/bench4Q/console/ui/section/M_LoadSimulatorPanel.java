@@ -201,7 +201,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		down_step.getDocument().addDocumentListener(new DownStepListener());
 		
 		up_step = new JTextField(String.valueOf(fileLoader.getArgs().getUpStep()));
-		up_step.getDocument().addDocumentListener(new DownStepListener());
+		up_step.getDocument().addDocumentListener(new UpStepListener());
 
 		URL = new JTextField(fileLoader.getArgs().getBaseURL());
 		URL.getDocument().addDocumentListener(new URLListener());
