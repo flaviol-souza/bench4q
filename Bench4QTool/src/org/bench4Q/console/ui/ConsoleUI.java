@@ -1001,11 +1001,15 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 					public void run() {
 						try {
 							double downstep = m_configModel.getArgs().getDownStep(); // tempo da perturbacao <0.1 - 1.0>
-							long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
-							int timeToDown = (int)(texp * downstep);
-							Thread.sleep(timeToDown * 1000);
-							Logger.getLogger().info("Enviando mensagem ao LB depois de: " + timeToDown + " segs");
-							modelingVMlistener(0);
+							if(downstep < 1.0 && downstep > 0.0){
+								long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
+								int timeToDown = (int)(texp * downstep);
+								Thread.sleep(timeToDown * 1000);
+								Logger.getLogger().info("SHUTDOWN: Sending to LB after: " + timeToDown + " secs");
+								modelingVMlistener(0);
+							}else{
+								Logger.getLogger().info("SHUTDOWN: Abort the process, " + downstep + " is out of range <0.0 - 1.0>.");
+							}
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -1018,11 +1022,15 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 					public void run() {
 						try {
 							double upstep = m_configModel.getArgs().getUpStep(); // tempo da perturbacao <0.1 - 1.0>
-							long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
-							int timeToUp = (int)(texp * upstep);
-							Thread.sleep(timeToUp * 1000);
-							Logger.getLogger().info("Enviando mensagem ao LB depois de: " + timeToUp + " segs");
-							modelingVMlistener(1);
+							if (upstep < 1.0 && upstep > 0.0){
+								long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
+								int timeToUp = (int)(texp * upstep);
+								Thread.sleep(timeToUp * 1000);
+								Logger.getLogger().info("START: sending to LB after: " + timeToUp + " secs");
+								modelingVMlistener(1);
+							}else{
+								Logger.getLogger().info("START: Abort the process, " + upstep + " is out of range <0.0 - 1.0>.");
+							}
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
