@@ -173,6 +173,10 @@ public final class ConfigModel {
 		rbe.addContent(DBURL);
 		Element DBPort = new Element("dbport").setText(String.valueOf(m_args.getDBPort()));
 		rbe.addContent(DBPort);
+		Element hypbaseURL = new Element("hypbaseURL").setText(m_args.getHyperHost());
+		rbe.addContent(hypbaseURL);
+		Element hypport = new Element("hypport").setText(String.valueOf(m_args.getHyperPort()));
+		rbe.addContent(hypport);
 		if (m_args.getEbs().isEmpty()) {
 			Element ebs = new Element("ebs");
 			rbe.addContent(ebs);
@@ -286,7 +290,12 @@ public final class ConfigModel {
 		
 		Element webport = new Element("webport").setText(String.valueOf(m_args.getWebPort()));
 		rbe.addContent(webport);
-
+		
+		Element hypbaseURL = new Element("hypbaseURL").setText(String.valueOf(m_args.getHyperHost()));
+		rbe.addContent(hypbaseURL);
+		Element hypport = new Element("hypport").setText(String.valueOf(m_args.getHyperPort()));
+		rbe.addContent(hypport);
+		
 		Element DatabaseURL = new Element("databaseURL").setText(m_args.getDBURL());
 		rbe.addContent(DatabaseURL);
 
@@ -383,6 +392,9 @@ public final class ConfigModel {
 		args.setWebPort(Integer.parseInt(rbe.getChildText("webport").trim()));
 		args.setDBURL(rbe.getChildText("databaseURL").trim());
 		args.setDBPort(Integer.parseInt(rbe.getChildText("dbport").trim()));
+		args.setHyperHost(rbe.getChildText("hypbaseURL").trim());
+		args.setHyperPort(Integer.parseInt(rbe.getChildText("hypport").trim()));
+		
 
 		List ebs = rbe.getChildren("ebs");
 		for (int j = 0; j < ebs.size(); j++) {

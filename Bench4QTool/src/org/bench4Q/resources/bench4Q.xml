@@ -11,7 +11,7 @@
 		<tolerance>0.0</tolerance>
 		<retry>3</retry>
 		<thinktime>0.11</thinktime>
-		<tfOption>true</tfOption>
+		<tfOption>false</tfOption>
 		<mix>browsing</mix>
 		<slow>0.0</slow>
 		<getImage>false</getImage>
@@ -26,6 +26,8 @@
 		<webport>10724</webport>
 		<databaseURL>10.0.0.231</databaseURL>
 		<dbport>10724</dbport>
+		<hypbaseURL>lserver</hypbaseURL>
+		<hypport>5000</hypport>
 		<ebs>
 			<baseLoad>90</baseLoad>
 			<randomLoad>0</randomLoad>

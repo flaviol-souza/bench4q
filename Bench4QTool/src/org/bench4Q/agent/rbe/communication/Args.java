@@ -79,9 +79,14 @@ public class Args implements Sendable {
 
 	private String typeFrenquency;
 	private boolean tfOption;
+	private boolean disturbanceOption;
 	
 	private int addLoad;
 	private int addLoadOpt;
+	private String hyperHost;
+	private int hyperPort;
+	private String JSONCommand;
+	private double timeToSendCommand;
 
 	/**
 	 * constructor
@@ -103,6 +108,11 @@ public class Args implements Sendable {
 		this.tolerance = 1.0D;
 		this.thinktime = 1.0D;
 		this.tfOption = false;
+		this.disturbanceOption = false;
+		this.timeToSendCommand = 0.4D;
+		this.hyperHost = "lserver";
+		this.hyperPort = 5000;
+		this.JSONCommand = "{\"control\": {\"kparams\": {\"ki\":\"-0.01\",\"kp\": \"0.0\", \"kd\": \"0.0\"}, \"enable\": \"1\", \"ref\": \"45\"}, \"res\": \"yes\", \"req\": \"update\"}";
 		this.ttMMPP = true; // with stagger
 		this.baseURL = "http://localhost:8080/jaspte";
 	}
@@ -605,6 +615,48 @@ public class Args implements Sendable {
 		this.tfOption = tfOption;
 	}
 
+
+	public boolean getDisturbanceOption() {
+		return this.disturbanceOption;
+	}
+	
+	public void setDisturbanceOption(boolean option){
+		this.disturbanceOption = option;
+	}
+
+	public String getHyperHost() {
+		return this.hyperHost;
+	}
+
+	public int getHyperPort() {
+		return this.hyperPort;
+	}
+
+	public String getJSONCommand() {
+		return this.JSONCommand;
+	}
+	
+	public void setJSONCommand(String jSONCommand) {
+		JSONCommand = jSONCommand;
+	}
+
+	public void setHyperHost(String hyperHost) {
+		this.hyperHost = hyperHost;
+	}
+
+
+	public void setHyperPort(int hyperPort) {
+		this.hyperPort = hyperPort;
+	}
+
+	public double getTimeToSendCommand() {
+		return this.timeToSendCommand;
+	}
+
+
+	public void setTimeToSendCommand(double timeToSendCommand) {
+		this.timeToSendCommand = timeToSendCommand;
+	}
 	
 
 }

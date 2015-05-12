@@ -38,6 +38,8 @@
 							<xs:element name="webport" type="xs:integer" />
 							<xs:element name="databaseURL" type="xs:string" />
 							<xs:element name="dbport" type="xs:integer" />
+							<xs:element name="hypbaseURL" type="xs:string" />
+							<xs:element name="hypport" type="xs:integer" />
 							<xs:element name="ebs" maxOccurs="unbounded">
 								<xs:complexType>
 									<xs:sequence>

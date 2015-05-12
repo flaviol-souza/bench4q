@@ -149,9 +149,9 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 	private DBMonitorProcessImplementation m_databaseProcess;
 
 	private JFrame m_frame;
-	private static final int windowHeight = 700;
+	private static final int windowHeight = 840;
 	private static final int leftWidth = 170;
-	private static final int rightWidth = 730;
+	private static final int rightWidth = 600;
 	private static final int windowWidth = leftWidth + rightWidth;
 	private String time;
 
@@ -1042,6 +1042,33 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				Logger.getLogger().debug("TF desativado ");
 			}
 			
+			// Enviando um comando para o hipervisor
+			if(m_configModel.getArgs().getDisturbanceOption()){
+				Logger.getLogger().debug("Disturbance section ... ");
+				new Thread(new Runnable() {
+
+					public void run() {
+						try {
+							double sendCommand = m_configModel.getArgs().getTimeToSendCommand(); // tempo da perturbacao <0.1 - 1.0>
+							if (sendCommand < 1.0 && sendCommand > 0.0){
+								long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
+								int timeToSend = (int)(texp * sendCommand);
+								Thread.sleep(timeToSend * 1000);
+								Logger.getLogger().info("START: sending to Hipervisor after: " + timeToSend + " secs");
+								sendJSONCommandlistener(1);
+							}else{
+								Logger.getLogger().info("START: Abort the process, " + sendCommand + " is out of range <0.0 - 1.0>.");
+							}
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}).start();
+			}else {
+				Logger.getLogger().debug("Disturbance section disabled ... ");
+			}
+			
 			m_processControl.startWorkerProcesses(null, m_configModel.getArgs());
 			m_resultModel.restartTest();
 			ProgressBarFrame pbBarFrame = new ProgressBarFrame(m_frame, m_configModel.getArgs(), m_processControl,
@@ -1096,6 +1123,36 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 				client.close();
 			} catch (UnknownHostException ex) {
 				Logger.getLogger().error("Couldn't connect to the LB server: "+ex.getMessage());
+			} catch (IOException ex) {
+				Logger.getLogger().error(ex.getMessage());
+			}
+
+		}
+		
+		/**
+		 * Permite desligar maquinas virtuais em um tempo x. Pelo geral e na metade do tempo 
+		 * @param option Sem uso
+		 *  
+		 * */
+		private void sendJSONCommandlistener(int option) {
+
+			String hostHy = m_configModel.getArgs().getHyperHost();
+			int portHy = m_configModel.getArgs().getHyperPort();
+			String command = m_configModel.getArgs().getJSONCommand();
+			
+			Socket client = null;
+			PrintStream out = null;
+			Logger.getLogger().debug(hostHy + ":" + portHy + "/" + command);
+
+			try {
+				client = new Socket(hostHy, portHy);
+				out = new PrintStream(client.getOutputStream());
+
+				out.print(command);
+				out.close();
+				client.close();
+			} catch (UnknownHostException ex) {
+				Logger.getLogger().error("Couldn't connect to the Hypervisor server: "+ex.getMessage());
 			} catch (IOException ex) {
 				Logger.getLogger().error(ex.getMessage());
 			}

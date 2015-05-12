@@ -30,6 +30,7 @@
 package org.bench4Q.console.ui.section;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -42,6 +43,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
@@ -97,6 +100,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JCheckBox MoniWeb;
 	private JCheckBox MoniDB;
 	private JCheckBox ModelingSys;
+	private JCheckBox CommandSys;
 
 	private JComboBox type;
 	private JTextField URL;
@@ -114,11 +118,16 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JLabel l_lbModelingDownStep;
 	private JLabel l_lbModelingUpStep;
 	private JLabel l_lbModelingNVMs;
+	private JLabel l_commandTime;
+	private JLabel l_command;
 	private JButton bt_reset;
 	private JButton bt_shutdown;
 	private JTextField down_step;
 	private JTextField up_step;
 	private JTextField n_vms;
+	private JTextField commandTime;
+	private JTextArea command;
+	private JScrollPane commandScrollPane;
 
 	/**
 	 * @param resources
@@ -138,6 +147,9 @@ public class M_LoadSimulatorPanel extends JPanel {
 		l_lbModelingNVMs = new JLabel(m_resources.getString("GenelPanel.lbModelingLabelNVMs"), SwingConstants.RIGHT);
 		bt_reset = new JButton(m_resources.getString("GenelPanel.resetEnvLabelBt"));
 		bt_shutdown = new JButton(m_resources.getString("GenelPanel.shutdownEnvLabelBt"));
+		
+		l_commandTime = new JLabel(m_resources.getString("GenelPanel.lbCommandTimeLabel"), SwingConstants.RIGHT);
+		l_command = new JLabel(m_resources.getString("GenelPanel.lbCommandLabel"), SwingConstants.RIGHT);
 
 		intervalLabel = new JLabel(m_resources.getString("GenelPanel.intervalLabel"), SwingConstants.RIGHT);
 		URLLabel = new JLabel(m_resources.getString("GenelPanel.URLLabel"), SwingConstants.RIGHT);
@@ -153,6 +165,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		MoniWeb = new JCheckBox(m_resources.getString("GenelPanel.MoniWeb"));
 		MoniDB = new JCheckBox(m_resources.getString("GenelPanel.MoniDB"));
 		ModelingSys = new JCheckBox(m_resources.getString("GenelPanel.ModelingSys"));
+		CommandSys = new JCheckBox(m_resources.getString("GenelPanel.CommandSys"));
 
 		typeExplain1 = new JLabel(m_resources.getString("GenelPanel.typeExplain1"), SwingConstants.RIGHT);
 		// typeExplain1.setFont();
@@ -202,6 +215,14 @@ public class M_LoadSimulatorPanel extends JPanel {
 		
 		up_step = new JTextField(String.valueOf(fileLoader.getArgs().getUpStep()));
 		up_step.getDocument().addDocumentListener(new UpStepListener());
+		
+		commandTime = new JTextField(String.valueOf(fileLoader.getArgs().getTimeToSendCommand()));
+		commandTime.getDocument().addDocumentListener(new CommandTimeListener());
+		command = new JTextArea(String.valueOf(fileLoader.getArgs().getJSONCommand()));
+		command.getDocument().addDocumentListener(new CommandListener());
+		command.setLineWrap(true);
+		commandScrollPane = new JScrollPane(command);
+		commandScrollPane.setPreferredSize(new Dimension(100,50));
 
 		URL = new JTextField(fileLoader.getArgs().getBaseURL());
 		URL.getDocument().addDocumentListener(new URLListener());
@@ -252,10 +273,20 @@ public class M_LoadSimulatorPanel extends JPanel {
 			l_lbModelingNVMs.setEnabled(false);
 		}
 		
+		CommandSys.setSelected(m_configModel.getArgs().getDisturbanceOption());
+		if (!CommandSys.isSelected()) {
+			l_commandTime.setEnabled(false);
+			l_command.setEnabled(false);
+			command.setEnabled(false);
+			commandTime.setEnabled(false);
+			commandScrollPane.setEnabled(false);
+		}
+		
 		EJB.addActionListener(new EJBlistener());
 		MoniWeb.addActionListener(new MoniWeblistener());
 		MoniDB.addActionListener(new MoniDBlistener());
 		ModelingSys.addActionListener(new ModelingSyslistener());
+		CommandSys.addActionListener(new CommandSyslistener());
 
 		this.add(typeLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
@@ -379,6 +410,21 @@ public class M_LoadSimulatorPanel extends JPanel {
 		this.add(up_step, new GridBagConstraints(1, 25, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 		
+		
+		this.add(CommandSys, new GridBagConstraints(0, 26, 5, 1, 0.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+
+		this.add(l_commandTime, new GridBagConstraints(0, 27, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+
+		this.add(commandTime, new GridBagConstraints(1, 27, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
+		
+		this.add(l_command , new GridBagConstraints(0, 28, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
+		
+		this.add(commandScrollPane, new GridBagConstraints(1, 28, 4, 1, 100.0, 0.0, GridBagConstraints.EAST,
+				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
 		
 	}
 
@@ -561,6 +607,65 @@ public class M_LoadSimulatorPanel extends JPanel {
 		}
 	}
 	
+	private class CommandTimeListener implements DocumentListener {
+
+		public void insertUpdate(DocumentEvent event) {
+			changeValue();
+		}
+
+		public void removeUpdate(DocumentEvent event) {
+			changeValue();
+		}
+
+		public void changedUpdate(DocumentEvent event) {
+			changeValue();
+		}
+		
+		private void changeValue(){
+			double commandt = 0.5D; // to shutdown in the middle of experiment
+			String text = commandTime.getText().trim();
+			if (( text != null) && (!text.equals(""))) {
+				try {
+					commandt = Double.parseDouble(text);
+				} catch (Exception e) {
+					// TODO: handle exception
+					commandt = 0.5D;
+				}
+			}
+			System.out.println(commandt);
+			m_configModel.getArgs().setTimeToSendCommand(commandt);
+		}
+	}
+	
+	private class CommandListener implements DocumentListener {
+
+		public void insertUpdate(DocumentEvent event) {
+			changeValue();
+		}
+
+		public void removeUpdate(DocumentEvent event) {
+			changeValue();
+		}
+
+		public void changedUpdate(DocumentEvent event) {
+			changeValue();
+		}
+		
+		private void changeValue(){
+			String mycommand = "{\"control\": {\"enable\": \"1\", \"ref\": \"45\"}, \"res\": \"yes\", \"req\": \"update\"}";
+			String text = command.getText().trim();
+			if (( text != null) && (!text.equals(""))) {
+				try {
+					mycommand = text.trim();
+				} catch (Exception e) {
+					// TODO: handle exception
+					mycommand = "{\"control\": {\"enable\": \"1\", \"ref\": \"45\"}, \"res\": \"yes\", \"req\": \"update\"}";
+				}
+			}
+			System.out.println(mycommand);
+			m_configModel.getArgs().setJSONCommand(mycommand);
+		}
+	}
 	private class DBURLListener implements DocumentListener {
 
 		public void insertUpdate(DocumentEvent event) {
@@ -804,6 +909,28 @@ public class M_LoadSimulatorPanel extends JPanel {
 				l_lbModelingUpStep.setEnabled(false);
 				l_lbModelingNVMs.setEnabled(false);
 				m_configModel.getArgs().setTfOption(false);
+			}
+
+		}
+
+	}
+	
+	private class CommandSyslistener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (CommandSys.isSelected()) {
+				l_commandTime.setEnabled(true);
+				l_command.setEnabled(true);
+				command.setEnabled(true);
+				commandTime.setEnabled(true);
+				commandScrollPane.setEnabled(true);
+			} else {
+				l_commandTime.setEnabled(false);
+				l_command.setEnabled(false);
+				command.setEnabled(false);
+				commandTime.setEnabled(false);
+				commandScrollPane.setEnabled(false);
 			}
 
 		}
