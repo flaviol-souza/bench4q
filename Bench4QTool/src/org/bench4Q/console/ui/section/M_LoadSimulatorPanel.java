@@ -925,12 +925,14 @@ public class M_LoadSimulatorPanel extends JPanel {
 				command.setEnabled(true);
 				commandTime.setEnabled(true);
 				commandScrollPane.setEnabled(true);
+				m_configModel.getArgs().setDisturbanceOption(true);
 			} else {
 				l_commandTime.setEnabled(false);
 				l_command.setEnabled(false);
 				command.setEnabled(false);
 				commandTime.setEnabled(false);
 				commandScrollPane.setEnabled(false);
+				m_configModel.getArgs().setDisturbanceOption(false);
 			}
 
 		}
