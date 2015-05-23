@@ -30,6 +30,7 @@
 package org.bench4Q.agent.rbe.communication;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author duanzhiquan
@@ -88,6 +89,7 @@ public class Args implements Sendable {
 	private String JSONCommand;
 	private double timeToSendCommand;
 
+	private List<Double> intervalMulti;
 	/**
 	 * constructor
 	 */
@@ -605,6 +607,21 @@ public class Args implements Sendable {
 
 	public void setTestPhase(ArrayList<TestPhase> testPhase) {
 		this.testPhase = testPhase;
+	}
+
+	/**
+	 * @return the intervalMulti
+	 */
+	public List<Double> getIntervalMulti() {
+		return intervalMulti;
+	}
+
+	/**
+	 * @param intervalMulti
+	 *            the intervalMulti to set
+	 */
+	public void setIntervalMulti(List<Double> intervalMulti) {
+		this.intervalMulti = intervalMulti;
 	}
 
 	public boolean getTfOption() {

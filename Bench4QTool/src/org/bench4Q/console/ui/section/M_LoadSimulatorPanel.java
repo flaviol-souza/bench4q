@@ -34,13 +34,17 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.List;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -52,6 +56,7 @@ import javax.swing.event.DocumentListener;
 
 import org.bench4Q.console.common.Resources;
 import org.bench4Q.console.model.ConfigModel;
+import org.bench4Q.console.ui.ListModelInterval;
 
 import java.net.Socket;
 import java.io.BufferedReader;
@@ -129,6 +134,10 @@ public class M_LoadSimulatorPanel extends JPanel {
 	private JTextArea command;
 	private JScrollPane commandScrollPane;
 
+	private JButton bt_modeling;
+	private JButton bt_interval_mult;
+	private ListModelInterval listInterval;
+
 	/**
 	 * @param resources
 	 * @param fileLoader
@@ -147,7 +156,13 @@ public class M_LoadSimulatorPanel extends JPanel {
 		l_lbModelingNVMs = new JLabel(m_resources.getString("GenelPanel.lbModelingLabelNVMs"), SwingConstants.RIGHT);
 		bt_reset = new JButton(m_resources.getString("GenelPanel.resetEnvLabelBt"));
 		bt_shutdown = new JButton(m_resources.getString("GenelPanel.shutdownEnvLabelBt"));
+
 		
+		bt_modeling = new JButton(m_resources.getString("GenelPanel.modelingEnvLabelBt"));
+		bt_interval_mult = new JButton(m_resources.getString("GenelPanel.intervalLabelBt"));
+		bt_interval_mult.setPreferredSize(new Dimension(30, 20));
+
+
 		l_commandTime = new JLabel(m_resources.getString("GenelPanel.lbCommandTimeLabel"), SwingConstants.RIGHT);
 		l_command = new JLabel(m_resources.getString("GenelPanel.lbCommandLabel"), SwingConstants.RIGHT);
 
@@ -245,6 +260,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 		if ((type.getSelectedIndex() == 1) && (interval != null)) {
 			interval.setVisible(false);
 			intervalLabel.setVisible(false);
+			bt_interval_mult.setVisible(false);
 		}
 		if (!MoniWeb.isSelected()) {
 			WebPort.setEnabled(false);
@@ -290,13 +306,21 @@ public class M_LoadSimulatorPanel extends JPanel {
 
 		this.add(typeLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
-		this.add(type, new GridBagConstraints(1, 0, 1, 1, 100.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				new Insets(5, 5, 5, 5), 1, 1));
+		this.add(type, new GridBagConstraints(1, 0, 1, 1, 100.0, 0.0, GridBagConstraints.WEST, 
+				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 
 		this.add(intervalLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1));
 		this.add(interval, new GridBagConstraints(3, 0, 1, 1, 50.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1));
+
+		this.add(bt_interval_mult, new GridBagConstraints(4, 0, 1, 1, 50.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
+		bt_interval_mult.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				intervalMultiListener(evt);
+			}
+		});
+
 		this.add(new JLabel(" "), new GridBagConstraints(4, 0, 1, 1, 50.0, 0.0, GridBagConstraints.EAST,
 				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1));
 
@@ -436,6 +460,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 				interval.setText(String.valueOf(m_configModel.getArgs().getInterval()));
 				interval.setVisible(true);
 				intervalLabel.setVisible(true);
+				bt_interval_mult.setVisible(true);
 			}
 
 		} else if (m_configModel.getArgs().getRbetype().equalsIgnoreCase("closed")) {
@@ -444,6 +469,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 				interval.setText(String.valueOf(m_configModel.getArgs().getInterval()));
 				interval.setVisible(false);
 				intervalLabel.setVisible(false);
+				bt_interval_mult.setVisible(false);
 			}
 		}
 
@@ -797,6 +823,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 				if (interval != null) {
 					interval.setVisible(true);
 					intervalLabel.setVisible(true);
+					bt_interval_mult.setVisible(true);
 				}
 
 			} else if (type.getSelectedIndex() == 1) {
@@ -804,6 +831,7 @@ public class M_LoadSimulatorPanel extends JPanel {
 				if (interval != null) {
 					interval.setVisible(false);
 					intervalLabel.setVisible(false);
+					bt_interval_mult.setVisible(false);
 				}
 			} else {
 
@@ -888,6 +916,27 @@ public class M_LoadSimulatorPanel extends JPanel {
 		}
 
 	}
+
+	private void intervalMultiListener(java.awt.event.ActionEvent evt) {
+
+		JFrame frame = new JFrame("Think times list");
+		if (listInterval == null) {
+			listInterval = new ListModelInterval();
+		}
+		frame.setContentPane(listInterval);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setSize(400, 500);
+		frame.setVisible(true);
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				m_configModel.getArgs().setIntervalMulti(listInterval.getListInterval());
+			}
+		});
+
+	}
+
 
 	private class ModelingSyslistener implements ActionListener {
 
