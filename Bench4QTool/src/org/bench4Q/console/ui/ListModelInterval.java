@@ -39,7 +39,7 @@ public class ListModelInterval extends JPanel {
 
 		JScrollPane pane = new JScrollPane(list);
 
-		JButton exportButton = new JButton("Export intervals list");
+		JButton exportButton = new JButton("Export list");
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (model.getSize() > 0) {
@@ -55,13 +55,13 @@ public class ListModelInterval extends JPanel {
 							e1.printStackTrace();
 						}
 					}
-				}else{
+				} else {
 					Logger.getLogger().info("Nothing to export ...");
 				}
 			}
 		});
 
-		JButton importButton = new JButton("Import intervals list");
+		JButton importButton = new JButton("Import list");
 		importButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File file = prepareFile(true);
@@ -74,7 +74,7 @@ public class ListModelInterval extends JPanel {
 						}
 						scanner.close();
 					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
+						Logger.getLogger().error(e1.getMessage());
 					}
 				} else {
 					Logger.getLogger().info("Null file ...");
@@ -82,30 +82,52 @@ public class ListModelInterval extends JPanel {
 			}
 		});
 
-		JButton addButton = new JButton("Add Interval");
+		JButton addButton = new JButton("Add");
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String value = JOptionPane.showInputDialog(ListModelInterval.this, "New interval");
-				model.addElement(Double.valueOf(value));
+				try {
+					String value = JOptionPane.showInputDialog(ListModelInterval.this, "New interval");
+					model.addElement(Double.valueOf(value));
+				} catch (Exception e1) {
+					Logger.getLogger().error(e1.toString());
+				}
+
 			}
 		});
 
-		JButton editButton = new JButton("Edit Selected");
+		JButton editButton = new JButton("Edit");
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if (model.getSize() > 0) {
+				if (model.getSize() > 0 && !list.isSelectionEmpty()) {
 					String value = JOptionPane.showInputDialog(ListModelInterval.this, "Edit interval",
 							list.getSelectedValue());
 					model.setElementAt(value, list.getSelectedIndex());
+				} else {
+					Logger.getLogger().info("No Items selected");
 				}
 			}
 		});
 
-		JButton removeButton = new JButton("Remove Selected");
+		JButton removeButton = new JButton("Delete");
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (model.getSize() > 0)
+				if (model.getSize() > 0 && !list.isSelectionEmpty())
 					model.removeElement(list.getSelectedValue());
+				else
+					Logger.getLogger().info("No Items selected");
+
+			}
+		});
+
+		JButton removeAllButton = new JButton("Clean");
+		removeAllButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (model.getSize() > 0) {
+					model.removeAllElements();
+				}
 			}
 		});
 
@@ -122,6 +144,7 @@ public class ListModelInterval extends JPanel {
 		borderPanel.add(addButton, BorderLayout.CENTER);
 		borderPanel.add(editButton, BorderLayout.LINE_END);
 		borderPanel.add(removeButton, BorderLayout.SOUTH);
+		borderPanel.add(removeAllButton);
 
 		add(borderPanel, BorderLayout.SOUTH);
 	}
@@ -135,11 +158,11 @@ public class ListModelInterval extends JPanel {
 		saveFile.setFileFilter(fileNameExtensionFilter);
 
 		int result = -1;
-		if(toOpen)
+		if (toOpen)
 			result = saveFile.showOpenDialog(this);
 		else
 			result = saveFile.showSaveDialog(this);
-		
+
 		if (result == JFileChooser.CANCEL_OPTION)
 			return null;
 
