@@ -71,7 +71,7 @@ public class RBE implements Runnable {
 		int workerEndTime;
 
 		for (TestPhase testPhase : this.m_args.getEbs()) {
-			workerEndTime = testPhase.getStdyTime() + testPhase.getTriggerTime();
+			workerEndTime = testPhase.getExperimentTime() + testPhase.getTriggerTime();
 			if (workerEndTime > max) {
 				max = workerEndTime;
 			}
@@ -99,7 +99,7 @@ public class RBE implements Runnable {
 		int testPhaseEndTime;
 		int baseLoadEbs = 0;
 		for (TestPhase testPhase : this.m_args.getEbs()) {
-			testPhaseEndTime = testPhase.getTriggerTime() + testPhase.getStdyTime();
+			testPhaseEndTime = testPhase.getTriggerTime() + testPhase.getExperimentTime();
 			if (testPhaseEndTime > testInterval) {
 				testInterval = testPhaseEndTime;
 				Logger.getLogger().debug("testInterval: "+testInterval);
@@ -119,7 +119,7 @@ public class RBE implements Runnable {
 			Logger.getLogger().debug("# EBS Close: " + this.m_args.getEbs().size());
 			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				this.m_workers.add(new WorkersClosed(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
+				this.m_workers.add(new WorkersClosed(startTime, testPhase.getTriggerTime(), testPhase.getExperimentTime(),
 						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
 						this.m_args, identity));
 			}
@@ -127,7 +127,7 @@ public class RBE implements Runnable {
 			Logger.getLogger().debug("# EBS Open: " + this.m_args.getEbs().size());
 			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				this.m_workers.add(new WorkersOpen(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
+				this.m_workers.add(new WorkersOpen(startTime, testPhase.getTriggerTime(), testPhase.getExperimentTime(),
 						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
 						this.m_args, identity));
 			}
@@ -136,7 +136,7 @@ public class RBE implements Runnable {
 			System.out.println("Start closed as default.");
 			for (TestPhase testPhase : this.m_args.getEbs()) {
 				identity++;
-				this.m_workers.add(new WorkersClosed(startTime, testPhase.getTriggerTime(), testPhase.getStdyTime(),
+				this.m_workers.add(new WorkersClosed(startTime, testPhase.getTriggerTime(), testPhase.getExperimentTime(),
 						testPhase.getBaseLoad(), testPhase.getRandomLoad(), testPhase.getRate(), testPhase,
 						this.m_args, identity));
 				Logger.getLogger().debug("Error: " + testPhase.getRate());

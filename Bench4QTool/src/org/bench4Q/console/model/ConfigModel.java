@@ -203,7 +203,7 @@ public final class ConfigModel {
 				ebs.addContent(rate);
 				Element triggerTime = new Element("triggerTime").setText(String.valueOf(testPhase.getTriggerTime()));
 				ebs.addContent(triggerTime);
-				Element stdyTime = new Element("stdyTime").setText(String.valueOf(testPhase.getStdyTime()));
+				Element stdyTime = new Element("stdyTime").setText(String.valueOf(testPhase.getExperimentTime()));
 				ebs.addContent(stdyTime);
 			}
 		}
@@ -313,7 +313,7 @@ public final class ConfigModel {
 			ebs.addContent(rate);
 			Element triggerTime = new Element("triggerTime").setText(String.valueOf(testPhase.getTriggerTime()));
 			ebs.addContent(triggerTime);
-			Element stdyTime = new Element("stdyTime").setText(String.valueOf(testPhase.getStdyTime()));
+			Element stdyTime = new Element("stdyTime").setText(String.valueOf(testPhase.getExperimentTime()));
 			ebs.addContent(stdyTime);
 
 		}
@@ -404,7 +404,7 @@ public final class ConfigModel {
 			testPhase.setRandomLoad(Integer.parseInt(eb.getChildText("randomLoad")));
 			testPhase.setRate(Integer.parseInt(eb.getChildText("rate")));
 			testPhase.setTriggerTime(Integer.parseInt(eb.getChildText("triggerTime")));
-			testPhase.setStdyTime(Integer.parseInt(eb.getChildText("stdyTime")));
+			testPhase.setExperimentTime(Integer.parseInt(eb.getChildText("stdyTime")));
 			args.getEbs().add(testPhase);
 		}
 		this.m_args = args;

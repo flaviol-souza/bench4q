@@ -55,23 +55,20 @@ import org.bench4Q.console.model.ConfigModel;
  */
 public class LW_ConfigLoadSection extends JPanel implements ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1332823870427657782L;
 
 	private final ListenerSupport m_listeners = new ListenerSupport();
 
 	private final Resources m_resources;
-	JTable table = null;
-	JPanel jPanel1 = new JPanel();
-	JScrollPane scrollPane = null;
-	BorderLayout borderLayout1 = new BorderLayout();
-	JButton add = null;
-	JButton delete = null;
-	JButton deleteAll = null;
+	private JTable table = null;
+	private JPanel jPanel1 = new JPanel();
+	private JScrollPane scrollPane = null;
+	private BorderLayout borderLayout1 = new BorderLayout();
+	private JButton add = null;
+	private JButton delete = null;
+	private JButton deleteAll = null;
 
-	ArrayList dataSet = null;
+	private ArrayList dataSet = null;
 	private ConfigModel m_configModel;
 	private AbstractTableModel MyDatamodel;
 
@@ -85,16 +82,11 @@ public class LW_ConfigLoadSection extends JPanel implements ActionListener {
 		m_resources = resources;
 		this.m_configModel = configModel;
 
-		colNames[0] = m_resources
-				.getString("LW_ConfigLoadSection.tableColNameBaseLoad");
-		colNames[1] = m_resources
-				.getString("LW_ConfigLoadSection.tableColNameRandomLoad");
-		colNames[2] = m_resources
-				.getString("LW_ConfigLoadSection.tableColNameRate");
-		colNames[3] = m_resources
-				.getString("LW_ConfigLoadSection.tableColNameTriggerTime");
-		colNames[4] = m_resources
-				.getString("LW_ConfigLoadSection.tableColNameStdyTime");
+		colNames[0] = m_resources.getString("LW_ConfigLoadSection.tableColNameBaseLoad");
+		colNames[1] = m_resources.getString("LW_ConfigLoadSection.tableColNameRandomLoad");
+		colNames[2] = m_resources.getString("LW_ConfigLoadSection.tableColNameRate");
+		colNames[3] = m_resources.getString("LW_ConfigLoadSection.tableColNameTriggerTime");
+		colNames[4] = m_resources.getString("LW_ConfigLoadSection.tableColNameStdyTime");
 
 		this.dataSet = m_configModel.getArgs().getEbs();
 		MyDatamodel = new MyTableModel(this.colNames, this.dataSet);
@@ -105,12 +97,9 @@ public class LW_ConfigLoadSection extends JPanel implements ActionListener {
 		// Create the scroll pane and add the table to it.
 		scrollPane = new JScrollPane(table);
 
-		add = new JButton(m_resources
-				.getString("LW_ConfigLoadSection.increase"));
-		delete = new JButton(m_resources
-				.getString("LW_ConfigLoadSection.delete"));
-		deleteAll = new JButton(m_resources
-				.getString("LW_ConfigLoadSection.deleteAll"));
+		add = new JButton(m_resources.getString("LW_ConfigLoadSection.increase"));
+		delete = new JButton(m_resources.getString("LW_ConfigLoadSection.delete"));
+		deleteAll = new JButton(m_resources.getString("LW_ConfigLoadSection.deleteAll"));
 		add.addActionListener(this);
 		delete.addActionListener(this);
 		deleteAll.addActionListener(this);
@@ -158,35 +147,28 @@ public class LW_ConfigLoadSection extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals(
-				m_resources.getString("LW_ConfigLoadSection.increase"))) {
+		if (e.getActionCommand().equals(m_resources.getString("LW_ConfigLoadSection.increase"))) {
 			((MyTableModel) (this.table.getModel())).addRow(new TestPhase());
 			this.table.revalidate();
-		} else if (e.getActionCommand().equals(
-				m_resources.getString("LW_ConfigLoadSection.delete"))) {
+		} else if (e.getActionCommand().equals(m_resources.getString("LW_ConfigLoadSection.delete"))) {
 			if (table.getSelectedRow() != -1) {
 				int nResult;
-				nResult = JOptionPane.showConfirmDialog(null, m_resources
-						.getString("LW_ConfigLoadSection.delete.confirm"),
-						m_resources.getString("LW_ConfigLoadSection.hint"),
-						JOptionPane.YES_NO_OPTION);
+				nResult = JOptionPane.showConfirmDialog(null,
+						m_resources.getString("LW_ConfigLoadSection.delete.confirm"),
+						m_resources.getString("LW_ConfigLoadSection.hint"), JOptionPane.YES_NO_OPTION);
 				if (nResult == 0) {
-					((MyTableModel) (this.table.getModel())).removeRow(table
-							.getSelectedRow());
+					((MyTableModel) (this.table.getModel())).removeRow(table.getSelectedRow());
 					this.table.revalidate();
 				}
 			}
-		} else if (e.getActionCommand().equals(
-				m_resources.getString("LW_ConfigLoadSection.deleteAll"))) {
+		} else if (e.getActionCommand().equals(m_resources.getString("LW_ConfigLoadSection.deleteAll"))) {
 			if (table.getSelectedRow() != -1) {
 				int nResult;
-				nResult = JOptionPane.showConfirmDialog(null, m_resources
-						.getString("LW_ConfigLoadSection.deleteAll.confirm"),
-						m_resources.getString("LW_ConfigLoadSection.hint"),
-						JOptionPane.YES_NO_OPTION);
+				nResult = JOptionPane.showConfirmDialog(null,
+						m_resources.getString("LW_ConfigLoadSection.deleteAll.confirm"),
+						m_resources.getString("LW_ConfigLoadSection.hint"), JOptionPane.YES_NO_OPTION);
 				if (nResult == 0) {
-					for (int i = 0; i < ((MyTableModel) (this.table.getModel()))
-							.getRowCount(); i++) {
+					for (int i = 0; i < ((MyTableModel) (this.table.getModel())).getRowCount(); i++) {
 						((MyTableModel) (this.table.getModel())).removeRow(i);
 					}
 					this.table.revalidate();
@@ -246,7 +228,7 @@ public class LW_ConfigLoadSection extends JPanel implements ActionListener {
 			} else if (columnIndex == 3) {
 				return ((TestPhase) data.get(rowIndex)).getTriggerTime();
 			} else if (columnIndex == 4) {
-				return ((TestPhase) data.get(rowIndex)).getStdyTime();
+				return ((TestPhase) data.get(rowIndex)).getExperimentTime();
 			} else {
 
 				return null;
@@ -255,20 +237,15 @@ public class LW_ConfigLoadSection extends JPanel implements ActionListener {
 
 		public void setValueAt(Object value, int row, int col) {
 			if (col == 0) {
-				((TestPhase) data.get(row)).setBaseLoad(Integer
-						.valueOf((String) value));
+				((TestPhase) data.get(row)).setBaseLoad(Integer.valueOf((String) value));
 			} else if (col == 1) {
-				((TestPhase) data.get(row)).setRandomLoad(Integer
-						.valueOf((String) value));
+				((TestPhase) data.get(row)).setRandomLoad(Integer.valueOf((String) value));
 			} else if (col == 2) {
-				((TestPhase) data.get(row)).setRate(Integer
-						.valueOf((String) value));
+				((TestPhase) data.get(row)).setRate(Integer.valueOf((String) value));
 			} else if (col == 3) {
-				((TestPhase) data.get(row)).setTriggerTime(Integer
-						.valueOf((String) value));
+				((TestPhase) data.get(row)).setTriggerTime(Integer.valueOf((String) value));
 			} else if (col == 4) {
-				((TestPhase) data.get(row)).setStdyTime(Integer
-						.valueOf((String) value));
+				((TestPhase) data.get(row)).setExperimentTime(Integer.valueOf((String) value));
 			} else {
 			}
 

@@ -56,7 +56,7 @@ public abstract class Workers extends Thread {
 
 	public long m_startTime;
 	public long m_triggerTime;
-	public long m_stdyTime;
+	public long m_experimetTime;
 	public int m_baseLoad;
 	public int m_randomLoad;
 	public int m_rate;
@@ -67,12 +67,12 @@ public abstract class Workers extends Thread {
 	private boolean stop = false;
 	public ArrayList<EB> m_ebs = new ArrayList<EB>();
 
-	public Workers(long startTime, long triggerTime, long stdyTime,
+	public Workers(long startTime, long triggerTime, long experimentTime,
 			int baseLoad, int randomLoad, int rate, TestPhase testPhase,
 			Args args, int identity) {
 		this.m_startTime = startTime;
 		this.m_triggerTime = triggerTime;
-		this.m_stdyTime = stdyTime;
+		this.m_experimetTime = experimentTime;
 		this.m_baseLoad = baseLoad;
 		this.m_randomLoad = randomLoad;
 		this.m_rate = rate;

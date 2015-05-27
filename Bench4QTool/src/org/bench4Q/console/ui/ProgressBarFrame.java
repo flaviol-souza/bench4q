@@ -54,7 +54,7 @@ public class ProgressBarFrame extends JDialog{
 		int testPhaseEndTime;
 		for (TestPhase testPhase : args.getEbs()) {
 			testPhaseEndTime = testPhase.getTriggerTime()
-					+ testPhase.getStdyTime();
+					+ testPhase.getExperimentTime();
 			if (testPhaseEndTime > testInterval) {
 				testInterval = testPhaseEndTime;
 			}

@@ -1002,7 +1002,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 						try {
 							double downstep = m_configModel.getArgs().getDownStep(); // tempo da perturbacao <0.1 - 1.0>
 							if(downstep < 1.0 && downstep > 0.0){
-								long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
+								long texp = m_configModel.getArgs().getEbs().get(0).getExperimentTime();
 								int timeToDown = (int)(texp * downstep);
 								Thread.sleep(timeToDown * 1000);
 								Logger.getLogger().info("SHUTDOWN: Sending to LB after: " + timeToDown + " secs");
@@ -1023,7 +1023,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 						try {
 							double upstep = m_configModel.getArgs().getUpStep(); // tempo da perturbacao <0.1 - 1.0>
 							if (upstep < 1.0 && upstep > 0.0){
-								long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
+								long texp = m_configModel.getArgs().getEbs().get(0).getExperimentTime();
 								int timeToUp = (int)(texp * upstep);
 								Thread.sleep(timeToUp * 1000);
 								Logger.getLogger().info("START: sending to LB after: " + timeToUp + " secs");
@@ -1051,7 +1051,7 @@ public final class ConsoleUI implements ConsoleFoundation.UI {
 						try {
 							double sendCommand = m_configModel.getArgs().getTimeToSendCommand(); // tempo da perturbacao <0.1 - 1.0>
 							if (sendCommand < 1.0 && sendCommand > 0.0){
-								long texp = m_configModel.getArgs().getEbs().get(0).getStdyTime();
+								long texp = m_configModel.getArgs().getEbs().get(0).getExperimentTime();
 								int timeToSend = (int)(texp * sendCommand);
 								Thread.sleep(timeToSend * 1000);
 								Logger.getLogger().info("START: sending to Hipervisor after: " + timeToSend + " secs");

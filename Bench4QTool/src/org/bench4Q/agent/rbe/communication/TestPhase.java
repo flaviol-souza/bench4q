@@ -30,6 +30,8 @@
 
 package org.bench4Q.agent.rbe.communication;
 
+import org.bench4Q.common.util.Logger;
+
 /**
  * @author duanzhiquan
  * 
@@ -43,7 +45,7 @@ public class TestPhase implements Sendable {
 	private int randomLoad;
 
 	private int rate;
-	private int stdyTime;
+	private int experimentTime;
 	private int triggerTime;
 
 	private TestFrequency frequency;
@@ -66,7 +68,15 @@ public class TestPhase implements Sendable {
 	 */
 	public void setFrequency(TestFrequency frequency) {
 		this.frequency = frequency;
+		Logger.getLogger().debug(
+				"TestPhase:\nduration: "+this.frequency.getDurationTime()+
+				"\tduration: "+this.frequency.getStartTime()+
+				"\tduration: "+this.frequency.getEndTime()+
+				"\tduration: "+this.frequency.getPauseTime()+
+				"\tduration: "+this.frequency.getType().getName());
+		
 	}
+	
 	/**
 	 * @return
 	 */
@@ -98,15 +108,15 @@ public class TestPhase implements Sendable {
 	/**
 	 * @return
 	 */
-	public int getStdyTime() {
-		return stdyTime;
+	public int getExperimentTime() {
+		return experimentTime;
 	}
 
 	/**
 	 * @param time
 	 */
-	public void setStdyTime(int time) {
-		this.stdyTime = time;
+	public void setExperimentTime(int time) {
+		this.experimentTime = time;
 	}
 
 	/**

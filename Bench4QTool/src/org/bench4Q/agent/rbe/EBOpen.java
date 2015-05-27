@@ -138,11 +138,11 @@ public class EBOpen extends EB {
 		while ((this.maxTrans == -1) || (this.maxTrans > 0)) {
 			currentTimeMillis = System.currentTimeMillis();
 			// se o tempo do degrao foi alcancado
-			if (currentTimeMillis > this.propertiesEB.getTimeEnd()) {
+			/*if (currentTimeMillis > this.propertiesEB.getEndTime()) {
 				// O EB termina porque ultrapassou o tempo limite do experimento
 				// Logger.getLogger().debug(this.cid + " is ending ...");
 				maxTrans = 0;
-			}
+			}*/
 			if (this.nextReq != null) {
 				// Check if user session is finished.
 				if (this.toHome) {

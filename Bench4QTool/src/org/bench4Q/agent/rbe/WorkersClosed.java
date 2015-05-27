@@ -112,7 +112,7 @@ public class WorkersClosed extends Workers {
 	void StartEB() {
 		int n = 0;
 		long beginTime = System.currentTimeMillis();
-		long endTime = beginTime + this.m_stdyTime * 1000L;
+		long endTime = beginTime + this.m_experimetTime * 1000L;
 
 		int baseLoad = this.m_baseLoad;
 

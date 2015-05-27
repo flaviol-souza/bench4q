@@ -157,25 +157,39 @@ public class EBClosed extends EB {
 		
 		
 		while ((this.maxTrans == -1) || (this.maxTrans > 0)) {
+			
+			//avaliando o EB segundo o tempo percorrido do experimento
 			currentTimeMillis = System.currentTimeMillis();
-			// permite terminar as requisicoes antes do fim do experimento
-			if (currentTimeMillis > this.propertiesEB.getTimeEnd() && this.propertiesEB.isFrenquency()) {
-				Logger.getLogger().debug(
-						this.getName() + " is ENDING ... " + (currentTimeMillis - startExp)/1000);
+			
+			if (currentTimeMillis > this.propertiesEB.getEndExperimentTime()){
+				Logger.getLogger().debug(propertiesEB.getIndexEB() + " is stopping ... " + (currentTimeMillis - startExp)/1000);
 				this.test = false;
 			}
+						
+			if (currentTimeMillis > this.propertiesEB.getEndTime() && this.propertiesEB.isFrenquency()) {
+				//desactivado = -1
+				if(this.propertiesEB.getPauseTime() > 0){
+					long newInit = this.propertiesEB.getEndTime() + this.propertiesEB.getPauseTime();
+					long period = this.propertiesEB.getEndTime() - this.propertiesEB.getStartTime();
+					
+					this.propertiesEB.setStartTime(newInit);
+					this.propertiesEB.setEndTime(period + newInit);
+					
+					Logger.getLogger().debug(propertiesEB.getIndexEB() + " was restarted  ... ");
+				}else{
+					Logger.getLogger().debug(propertiesEB.getIndexEB() + " is ending ... " + (currentTimeMillis - startExp)/1000);
+					this.test = false;
+				}
+			}
 			
-			
-
-			if (currentTimeMillis >= this.propertiesEB.getTimeStart()) {
+			// alguns EBs nao iniciam inmediatamente, porque foram marcados para esperar
+			if (currentTimeMillis >= this.propertiesEB.getStartTime()) {
 				if (this.terminate || !this.test) {
 					this.sessionEnd = System.currentTimeMillis();
 					EBStats.getEBStats().sessionRecorder(this.sessionStart, this.sessionEnd, this.sessionLen,
 							this.Ordered, this.isVIP);
 					return;
 				}
-				
-				
 				
 				long endGet;
 				if (this.nextReq != null) {
@@ -285,6 +299,7 @@ public class EBClosed extends EB {
 					e.printStackTrace();
 				}
 			}
+			
 		}
 	}
 

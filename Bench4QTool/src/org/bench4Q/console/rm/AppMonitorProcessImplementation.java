@@ -80,7 +80,7 @@ public class AppMonitorProcessImplementation implements MonitorProcess {
 
 		// count the time of the whole test
 		for (TestPhase testPhase : m_arg.getEbs()) {
-			workerEndTime = testPhase.getStdyTime()
+			workerEndTime = testPhase.getExperimentTime()
 					+ testPhase.getTriggerTime();
 			if (workerEndTime > max) {
 				max = workerEndTime;

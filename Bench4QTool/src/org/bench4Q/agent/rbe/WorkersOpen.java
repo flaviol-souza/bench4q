@@ -95,61 +95,60 @@ public class WorkersOpen extends Workers {
 				new ThreadPoolExecutor.AbortPolicy());
 
 		long beginTime = System.currentTimeMillis();
-		long endTime = beginTime + this.m_stdyTime * 1000L;
+		long endTime = beginTime + this.m_experimetTime * 1000L;
 		int baseLoad = this.m_baseLoad;
 
 		int realLoad = baseLoad + m_randomLoad;
 		long timeInt = System.currentTimeMillis();
-		
-		Map<Integer, PropertiesEB> mapProperties = new HashMap<Integer, PropertiesEB>();
-		for (int indexEB = 0; indexEB < realLoad; indexEB++) {
-			TypeFrequency type = TypeFrequency.getType(m_args.getTypeFrenquency());
-			PropertiesEB propertiesEB = FrequencySettings.createProperties(indexEB, m_testPhase, type, timeInt);
-			mapProperties.put(indexEB, propertiesEB);
-		}
 
+		//nao usa os properties, porque foi projetado para rajadas 
 		while ((!isStop()) && (System.currentTimeMillis() - endTime < 0L)) {
 			long stime = System.currentTimeMillis();
 			realLoad = baseLoad + this.m_randomLoad;
-
+			
+			//iniciando o grupo
 			for (int j2 = 0; j2 < realLoad; j2++) {
 				ArrayList<Integer> tra = new ArrayList<Integer>();
+				
 				if (this.m_args.isReplay()) {
 					tra = (ArrayList<Integer>) this.trace.get(j2);
 				} else {
 					this.trace.add(tra);
 				}
+				
 				boolean isVIP = Math.random() < this.m_args.getRate() / 100.0D;
 				EB eb = new EBOpen(this.m_args, tra, isVIP);
-				
-				eb.setPropertiesEB(mapProperties.get(j2));
 				eb.setDaemon(true);
+				
 				try {
 					threadPool.execute(eb);
 				} catch (RejectedExecutionException e) {
 					EBStats.getEBStats().addErrorSession(0, eb.isVIP);
 					EBStats.getEBStats().error(0, "Request is rejected!", this.m_args.getBaseURL(), eb.isVIP);
 				}
-				//Iniciando um novo grupo de EBS Segundo um tempo
-				//Logger.getLogger().debug(eb.getName());
+
 			}
+			
 			baseLoad += this.m_rate;
 			long etime = System.currentTimeMillis();
-			double r = mmpp_tt.gen_interval();
 			
 			// XXX para teste com o MMPP
+			//double r = mmpp_tt.gen_interval();
+			
 			long interval;
 			
 			if(m_args.getIntervalMulti() == null || m_args.getIntervalMulti().size() == 0){
+				//no caso de usar um intervalo periodico
 				interval = (long) (1000.0D * this.m_args.getInterval());
 			}else{
+				//percorrendo a lista de think times 
 				interval = (long) (1000.0D * m_args.getIntervalMulti().get(lengthIntervalArray));
 				if(lengthIntervalArray >= m_args.getIntervalMulti().size()-1 )
 					lengthIntervalArray = 0;
 				else
 					lengthIntervalArray++;
 			}
-			//long interval = (long) (50/r);
+
 			
 			if (etime - stime < interval) {
 				try {

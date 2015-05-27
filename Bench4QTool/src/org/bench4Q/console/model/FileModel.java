@@ -178,7 +178,7 @@ public final class FileModel {
 						.valueOf(testPhase.getTriggerTime()));
 				ebs.addContent(triggerTime);
 				Element stdyTime = new Element("stdyTime").setText(String
-						.valueOf(testPhase.getStdyTime()));
+						.valueOf(testPhase.getExperimentTime()));
 				ebs.addContent(stdyTime);
 			}
 		}
@@ -263,7 +263,7 @@ public final class FileModel {
 					.valueOf(testPhase.getTriggerTime()));
 			ebs.addContent(triggerTime);
 			Element stdyTime = new Element("stdyTime").setText(String
-					.valueOf(testPhase.getStdyTime()));
+					.valueOf(testPhase.getExperimentTime()));
 			ebs.addContent(stdyTime);
 
 		}
@@ -325,7 +325,7 @@ public final class FileModel {
 			testPhase.setTriggerTime(Integer.parseInt(eb
 					.getChildText("triggerTime")));
 			testPhase
-					.setStdyTime(Integer.parseInt(eb.getChildText("stdyTime")));
+					.setExperimentTime(Integer.parseInt(eb.getChildText("stdyTime")));
 			args.getEbs().add(testPhase);
 		}
 		this.args = args;

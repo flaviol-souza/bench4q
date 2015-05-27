@@ -9,10 +9,15 @@ public class TestFrequency implements Serializable {
 
 	private int startTime;
 	private int endTime;
+	private int pauseTime;
 	private int durationTime;
 	private boolean polarity;
 	private int quantity;
 
+	public TestFrequency() {
+		// TODO Auto-generated constructor stub
+		pauseTime = -1;
+	}
 	/**
 	 * @return the type
 	 */
@@ -61,7 +66,7 @@ public class TestFrequency implements Serializable {
 	/**
 	 * @return the polarity
 	 */
-	public boolean isPolarity() {
+	public boolean getPolarity() {
 		return polarity;
 	}
 
@@ -89,4 +94,13 @@ public class TestFrequency implements Serializable {
 		this.quantity = quantity;
 	}
 
+	public int getPauseTime() {
+		return pauseTime;
+	}
+
+	public void setPauseTime(int periodTime) {
+		this.pauseTime = periodTime;
+	}
+
+	
 }

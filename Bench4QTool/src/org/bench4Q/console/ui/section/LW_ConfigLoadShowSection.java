@@ -82,10 +82,9 @@ public class LW_ConfigLoadShowSection extends JPanel {
 	 * @param configLoadSection
 	 * @throws ConsoleException
 	 */
-	public LW_ConfigLoadShowSection(Resources resources,
-			ProcessControl processControl,
-			SwingDispatcherFactory dispatcherFactory, ConfigModel configModel,
-			LW_ConfigLoadSection configLoadSection) throws ConsoleException {
+	public LW_ConfigLoadShowSection(Resources resources, ProcessControl processControl,
+			SwingDispatcherFactory dispatcherFactory, ConfigModel configModel, LW_ConfigLoadSection configLoadSection)
+			throws ConsoleException {
 
 		m_resources = resources;
 		m_processControl = processControl;
@@ -99,21 +98,19 @@ public class LW_ConfigLoadShowSection extends JPanel {
 
 		picPanel = new PicPanel(m_args);
 		// JPanel picPanel = new JPanel();
-		this.add(picPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
-						0, 0, 0, 0), 0, 0));
+		this.add(picPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
 		m_configModel.addListener(new ConfigModel.AbstractListener() {
 			public void isArgsChanged() {
 				resetConfig();
 			}
 		});
-		configLoadSection
-				.addListener(new LW_ConfigLoadSection.AbstractListener() {
-					public void isArgsChanged() {
-						resetConfig();
-					}
-				});
+		configLoadSection.addListener(new LW_ConfigLoadSection.AbstractListener() {
+			public void isArgsChanged() {
+				resetConfig();
+			}
+		});
 
 	}
 
@@ -148,9 +145,9 @@ public class LW_ConfigLoadShowSection extends JPanel {
 			series.add(seriesBasic);
 			series.add(seriesRandom);
 			int startTime = prepairTime + phase.getTriggerTime();
-			int endTime = startTime + phase.getStdyTime();
+			int endTime = startTime + phase.getExperimentTime();
 			int startLoad = phase.getBaseLoad();
-			int endLoad = startLoad + phase.getStdyTime() * phase.getRate();
+			int endLoad = startLoad + phase.getExperimentTime() * phase.getRate();
 			int startRadomLoad = startLoad + phase.getRandomLoad();
 			int endRadomLoad = endLoad + phase.getRandomLoad();
 
@@ -161,8 +158,7 @@ public class LW_ConfigLoadShowSection extends JPanel {
 			dataset.addSeries(seriesBasic);
 
 			seriesRandom.add(new Double(startTime), new Integer(endLoad));
-			seriesRandom
-					.add(new Double(startTime), new Integer(startRadomLoad));
+			seriesRandom.add(new Double(startTime), new Integer(startRadomLoad));
 			seriesRandom.add(new Double(endTime), new Integer(endRadomLoad));
 			seriesRandom.add(new Double(endTime), new Integer(0));
 			dataset.addSeries(seriesRandom);
@@ -171,8 +167,7 @@ public class LW_ConfigLoadShowSection extends JPanel {
 
 		}
 
-		final JFreeChart chart = ChartFactory.createXYStepAreaChart(
-				"Stacked Area Chart", // chart
+		final JFreeChart chart = ChartFactory.createXYStepAreaChart("Stacked Area Chart", // chart
 				// title
 				"time", // domain axis label
 				"load", // range axis label
@@ -216,9 +211,8 @@ public class LW_ConfigLoadShowSection extends JPanel {
 				e.printStackTrace();
 			}
 
-			this.add(panel, new GridBagConstraints(0, 0, 1, 1, 100.0, 100.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 0, 0), 0, 0));
+			this.add(panel, new GridBagConstraints(0, 0, 1, 1, 100.0, 100.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
 
 		public void setShowForm(JPanel otherpanel) {
@@ -226,9 +220,8 @@ public class LW_ConfigLoadShowSection extends JPanel {
 			panel = otherpanel;
 			panel.setEnabled(true);
 
-			this.add(panel, new GridBagConstraints(0, 0, 1, 1, 100.0, 100.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 0, 0), 0, 0));
+			this.add(panel, new GridBagConstraints(0, 0, 1, 1, 100.0, 100.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 			this.updateUI();
 		}
 
